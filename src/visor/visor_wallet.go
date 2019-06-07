@@ -286,11 +286,12 @@ func (vs *Visor) WalletCreateTransaction(wltID string, p transaction.Params, wp 
 	var txn *coin.Transaction
 	var inputs []TransactionInput
 
-	txn.MainExpressions = p.MainExpressions
-
 	if err := vs.wallets.View(wltID, func(w *wallet.Wallet) error {
 		var err error
 		txn, inputs, err = vs.walletCreateTransaction("WalletCreateTransaction", w, p, wp, TxnUnsigned)
+
+		txn.MainExpressions = p.MainExpressions
+		
 		return err
 	}); err != nil {
 		return nil, nil, err

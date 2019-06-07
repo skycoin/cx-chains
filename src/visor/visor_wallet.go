@@ -435,9 +435,6 @@ func (vs *Visor) CreateTransaction(p transaction.Params, wp CreateTransactionPar
 	if err := vs.db.View("CreateTransaction", func(tx *dbutil.Tx) error {
 		var err error
 		txn, uxb, err = vs.createTransactionTx(tx, p, wp)
-
-		txn.ProgramState = p.ProgramState
-		
 		return err
 	}); err != nil {
 		return nil, nil, err

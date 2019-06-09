@@ -335,9 +335,6 @@ func (vs *Visor) walletCreateTransaction(methodName string, w *wallet.Wallet, p 
 	if err := vs.db.View(methodName, func(tx *dbutil.Tx) error {
 		var err error
 		txn, uxb, err = vs.walletCreateTransactionTx(tx, methodName, w, p, wp, signed, addrs, walletAddressesMap)
-
-		txn.MainExpressions = p.MainExpressions
-		
 		return err
 	}); err != nil {
 		return nil, nil, err

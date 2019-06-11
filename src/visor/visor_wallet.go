@@ -286,8 +286,6 @@ func (vs *Visor) WalletCreateTransaction(wltID string, p transaction.Params, wp 
 	var txn *coin.Transaction
 	var inputs []TransactionInput
 
-	txn.MainExpressions = p.MainExpressions
-
 	if err := vs.wallets.View(wltID, func(w *wallet.Wallet) error {
 		var err error
 		txn, inputs, err = vs.walletCreateTransaction("WalletCreateTransaction", w, p, wp, TxnUnsigned)
@@ -333,8 +331,6 @@ func (vs *Visor) walletCreateTransaction(methodName string, w *wallet.Wallet, p 
 
 	var txn *coin.Transaction
 	var uxb []transaction.UxBalance
-
-	txn.MainExpressions = p.MainExpressions
 
 	if err := vs.db.View(methodName, func(tx *dbutil.Tx) error {
 		var err error

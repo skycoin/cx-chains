@@ -97,6 +97,7 @@ func TransactionInputFromUxBalance(x transaction.UxBalance) TransactionInput {
 	t.UxOut.Body.Address = x.Address
 	t.UxOut.Body.Coins = x.Coins
 	t.UxOut.Body.Hours = x.InitialHours
+	t.UxOut.Body.ProgramState = x.ProgramState
 	t.UxOut.Body.SrcTransaction = x.SrcTransaction
 
 	if t.UxOut.Hash() != x.Hash {

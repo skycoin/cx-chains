@@ -31,6 +31,7 @@ type UxBalance struct {
 	Coins          uint64
 	InitialHours   uint64
 	Hours          uint64
+	ProgramState   []byte
 	SrcTransaction cipher.SHA256
 }
 
@@ -63,6 +64,7 @@ func NewUxBalance(headTime uint64, ux coin.UxOut) (UxBalance, error) {
 		Coins:          ux.Body.Coins,
 		InitialHours:   ux.Body.Hours,
 		Hours:          hours,
+		ProgramState:   ux.Body.ProgramState,
 		SrcTransaction: ux.Body.SrcTransaction,
 	}, nil
 }

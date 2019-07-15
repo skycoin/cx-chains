@@ -309,8 +309,17 @@ func create(p Params, auxs coin.AddressUxOuts, headTime uint64, callCount int, m
 		ux := auxs[spends[0].Address][0]
 		prgrm := cxcore.Deserialize(cxcore.MergeTransactionAndBlockchain(ux.Body.ProgramState, p.MainExpressions))
 		prgrm.RunCompiled(0, nil)
+
+		// TODO: CX chains only work with one package at the moment (in the blockchain code). That is what "1" is for.
 		s := cxcore.Serialize(prgrm, 1)
-		updatedPS := cxcore.ExtractBlockchainProgram(ux.Body.ProgramState, s)
+
+		// Removing garbage from the heap. Only the global variables should be left
+		// as these are independent from function calls.
+		// TODO: This needs to be fixed somehow. It's very inefficient to be deserializing
+		// the blockchain program just to call the garbage collector and later serialize again.
+		dsBlockchainPrgrm := cxcore.Deserialize(cxcore.ExtractBlockchainProgram(ux.Body.ProgramState, s))
+		cxcore.MarkAndCompact(dsBlockchainPrgrm)
+		updatedPS := cxcore.Serialize(dsBlockchainPrgrm)
 
 		for i := range txn.Out {
 			txn.Out[i].ProgramState = updatedPS

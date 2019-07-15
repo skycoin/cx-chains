@@ -319,7 +319,7 @@ func create(p Params, auxs coin.AddressUxOuts, headTime uint64, callCount int, m
 		// the blockchain program just to call the garbage collector and later serialize again.
 		dsBlockchainPrgrm := cxcore.Deserialize(cxcore.ExtractBlockchainProgram(ux.Body.ProgramState, s))
 		cxcore.MarkAndCompact(dsBlockchainPrgrm)
-		updatedPS := cxcore.Serialize(dsBlockchainPrgrm)
+		updatedPS := cxcore.Serialize(dsBlockchainPrgrm, 1)
 
 		for i := range txn.Out {
 			txn.Out[i].ProgramState = updatedPS

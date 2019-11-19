@@ -7,10 +7,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/amherag/skycoin/src/cipher"
-	"github.com/amherag/skycoin/src/coin"
-	"github.com/amherag/skycoin/src/testutil"
-	"github.com/amherag/skycoin/src/visor/dbutil"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/coin"
+	"github.com/SkycoinProject/cx-chains/src/testutil"
+	"github.com/SkycoinProject/cx-chains/src/visor/dbutil"
 )
 
 func prepareDB(t *testing.T) (*dbutil.DB, func()) {

@@ -5,13 +5,13 @@ package visor
 import (
 	"errors"
 
-	"github.com/amherag/skycoin/src/cipher"
-	"github.com/amherag/skycoin/src/coin"
-	"github.com/amherag/skycoin/src/params"
-	"github.com/amherag/skycoin/src/transaction"
-	"github.com/amherag/skycoin/src/util/mathutil"
-	"github.com/amherag/skycoin/src/visor/dbutil"
-	"github.com/amherag/skycoin/src/wallet"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/coin"
+	"github.com/SkycoinProject/cx-chains/src/params"
+	"github.com/SkycoinProject/cx-chains/src/transaction"
+	"github.com/SkycoinProject/cx-chains/src/util/mathutil"
+	"github.com/SkycoinProject/cx-chains/src/visor/dbutil"
+	"github.com/SkycoinProject/cx-chains/src/wallet"
 )
 
 // UserError wraps user input-related errors.

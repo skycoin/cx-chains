@@ -6,12 +6,12 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/amherag/skycoin/src/cipher"
-	"github.com/amherag/skycoin/src/coin"
-	"github.com/amherag/skycoin/src/params"
-	"github.com/amherag/skycoin/src/util/fee"
-	"github.com/amherag/skycoin/src/util/useragent"
-	"github.com/amherag/skycoin/src/visor"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/coin"
+	"github.com/SkycoinProject/cx-chains/src/params"
+	"github.com/SkycoinProject/cx-chains/src/util/fee"
+	"github.com/SkycoinProject/cx-chains/src/util/useragent"
+	"github.com/SkycoinProject/cx-chains/src/visor"
 )
 
 func TestDivideHashes(t *testing.T) {

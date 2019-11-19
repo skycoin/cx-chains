@@ -17,13 +17,13 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
-	"github.com/amherag/skycoin/src/cipher"
-	"github.com/amherag/skycoin/src/coin"
-	"github.com/amherag/skycoin/src/daemon"
-	"github.com/amherag/skycoin/src/daemon/gnet"
-	"github.com/amherag/skycoin/src/readable"
-	"github.com/amherag/skycoin/src/testutil"
-	"github.com/amherag/skycoin/src/visor"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/coin"
+	"github.com/SkycoinProject/cx-chains/src/daemon"
+	"github.com/SkycoinProject/cx-chains/src/daemon/gnet"
+	"github.com/SkycoinProject/cx-chains/src/readable"
+	"github.com/SkycoinProject/cx-chains/src/testutil"
+	"github.com/SkycoinProject/cx-chains/src/visor"
 )
 
 func createUnconfirmedTxn(t *testing.T) visor.UnconfirmedTransaction {

@@ -21,8 +21,8 @@ import (
 	"sort"
 
 	//
-	"github.com/amherag/skycoin/src/cipher"
-	"github.com/amherag/skycoin/src/consensus"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/consensus"
 )
 
 var Cfg_print_config bool = true

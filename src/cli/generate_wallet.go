@@ -10,10 +10,10 @@ import (
 
 	gcli "github.com/spf13/cobra"
 
-	"github.com/amherag/skycoin/src/cipher"
-	"github.com/amherag/skycoin/src/cipher/bip39"
-	secp256k1 "github.com/amherag/skycoin/src/cipher/secp256k1-go"
-	"github.com/amherag/skycoin/src/wallet"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/cipher/bip39"
+	secp256k1 "github.com/SkycoinProject/cx-chains/src/cipher/secp256k1-go"
+	"github.com/SkycoinProject/cx-chains/src/wallet"
 )
 
 const (

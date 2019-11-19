@@ -13,13 +13,13 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
-	"github.com/amherag/skycoin/src/cipher"
-	"github.com/amherag/skycoin/src/coin"
-	"github.com/amherag/skycoin/src/params"
-	"github.com/amherag/skycoin/src/readable"
-	"github.com/amherag/skycoin/src/testutil"
-	"github.com/amherag/skycoin/src/util/droplet"
-	"github.com/amherag/skycoin/src/visor"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/coin"
+	"github.com/SkycoinProject/cx-chains/src/params"
+	"github.com/SkycoinProject/cx-chains/src/readable"
+	"github.com/SkycoinProject/cx-chains/src/testutil"
+	"github.com/SkycoinProject/cx-chains/src/util/droplet"
+	"github.com/SkycoinProject/cx-chains/src/visor"
 )
 
 func makeSuccessCoinSupplyResult(t *testing.T, allUnspents readable.UnspentOutputsSummary) *CoinSupply {

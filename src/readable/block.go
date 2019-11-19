@@ -7,8 +7,8 @@ package readable
 import (
 	"errors"
 
-	"github.com/amherag/skycoin/src/cipher"
-	"github.com/amherag/skycoin/src/coin"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/coin"
 )
 
 // BlockHeader represents the readable block header

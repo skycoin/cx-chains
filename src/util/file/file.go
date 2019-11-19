@@ -12,7 +12,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/amherag/skycoin/src/util/logging"
+	"github.com/SkycoinProject/cx-chains/src/util/logging"
 )
 
 var (

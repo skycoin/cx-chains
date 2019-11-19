@@ -1,8 +1,8 @@
 package wallet
 
 import (
-	"github.com/amherag/skycoin/src/coin"
-	"github.com/amherag/skycoin/src/util/mathutil"
+	"github.com/SkycoinProject/cx-chains/src/coin"
+	"github.com/SkycoinProject/cx-chains/src/util/mathutil"
 )
 
 /*

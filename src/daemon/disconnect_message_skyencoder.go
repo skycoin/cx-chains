@@ -5,7 +5,7 @@ import (
 	"errors"
 	"math"
 
-	"github.com/amherag/skycoin/src/cipher/encoder"
+	"github.com/SkycoinProject/cx-chains/src/cipher/encoder"
 )
 
 // encodeSizeDisconnectMessage computes the size of an encoded object of type DisconnectMessage

@@ -11,10 +11,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/amherag/skycoin/src/api"
-	"github.com/amherag/skycoin/src/cipher"
-	"github.com/amherag/skycoin/src/cipher/bip39"
-	"github.com/amherag/skycoin/src/wallet"
+	"github.com/SkycoinProject/cx-chains/src/api"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/cipher/bip39"
+	"github.com/SkycoinProject/cx-chains/src/wallet"
 )
 
 func TestWalletNewSeed(t *testing.T) {

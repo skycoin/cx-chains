@@ -6,7 +6,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
-	wh "github.com/amherag/skycoin/src/util/http"
+	wh "github.com/SkycoinProject/cx-chains/src/util/http"
 )
 
 var (

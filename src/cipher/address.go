@@ -4,7 +4,7 @@ import (
 	"errors"
 	"log"
 
-	"github.com/amherag/skycoin/src/cipher/base58"
+	"github.com/SkycoinProject/cx-chains/src/cipher/base58"
 )
 
 var (

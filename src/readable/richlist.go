@@ -1,8 +1,8 @@
 package readable
 
 import (
-	"github.com/amherag/skycoin/src/util/droplet"
-	"github.com/amherag/skycoin/src/visor"
+	"github.com/SkycoinProject/cx-chains/src/util/droplet"
+	"github.com/SkycoinProject/cx-chains/src/visor"
 )
 
 // RichlistBalance holds info an address balance holder

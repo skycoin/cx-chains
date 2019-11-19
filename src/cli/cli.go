@@ -22,8 +22,8 @@ import (
 	"github.com/spf13/pflag"
 	"golang.org/x/crypto/ssh/terminal"
 
-	"github.com/amherag/skycoin/src/api"
-	"github.com/amherag/skycoin/src/util/file"
+	"github.com/SkycoinProject/cx-chains/src/api"
+	"github.com/SkycoinProject/cx-chains/src/util/file"
 )
 
 var (

@@ -5,8 +5,8 @@ import (
 	"errors"
 	"math"
 
-	"github.com/amherag/skycoin/src/cipher"
-	"github.com/amherag/skycoin/src/cipher/encoder"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/cipher/encoder"
 )
 
 // encodeSizeHashesWrapper computes the size of an encoded object of type hashesWrapper

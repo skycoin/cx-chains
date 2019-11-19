@@ -7,10 +7,10 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/amherag/skycoin/src/cipher"
-	"github.com/amherag/skycoin/src/coin"
-	"github.com/amherag/skycoin/src/util/logging"
-	"github.com/amherag/skycoin/src/visor/dbutil"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/coin"
+	"github.com/SkycoinProject/cx-chains/src/util/logging"
+	"github.com/SkycoinProject/cx-chains/src/visor/dbutil"
 )
 
 var (
@@ -20,8 +20,8 @@ var (
 	ErrNoHeadBlock = fmt.Errorf("found no head block")
 )
 
-//go:generate skyencoder -unexported -struct Block -output-path . -package blockdb github.com/amherag/skycoin/src/coin
-//go:generate skyencoder -unexported -struct UxOut -output-path . -package blockdb github.com/amherag/skycoin/src/coin
+//go:generate skyencoder -unexported -struct Block -output-path . -package blockdb github.com/SkycoinProject/cx-chains/src/coin
+//go:generate skyencoder -unexported -struct UxOut -output-path . -package blockdb github.com/SkycoinProject/cx-chains/src/coin
 //go:generate skyencoder -unexported -struct hashPairsWrapper
 //go:generate skyencoder -unexported -struct hashesWrapper
 //go:generate skyencoder -unexported -struct sigWrapper

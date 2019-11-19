@@ -5,7 +5,7 @@ import (
 	"os"
 	"sync"
 
-	"github.com/amherag/skycoin/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
 )
 
 // BalanceGetter interface for getting the balance of given addresses

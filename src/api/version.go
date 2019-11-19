@@ -3,8 +3,8 @@ package api
 import (
 	"net/http"
 
-	"github.com/amherag/skycoin/src/readable"
-	wh "github.com/amherag/skycoin/src/util/http"
+	"github.com/SkycoinProject/cx-chains/src/readable"
+	wh "github.com/SkycoinProject/cx-chains/src/util/http"
 )
 
 // versionHandler returns the application version info

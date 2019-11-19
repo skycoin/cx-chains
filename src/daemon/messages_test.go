@@ -9,14 +9,14 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
-	"github.com/amherag/skycoin/src/cipher"
-	"github.com/amherag/skycoin/src/cipher/encoder"
-	"github.com/amherag/skycoin/src/coin"
-	"github.com/amherag/skycoin/src/daemon/gnet"
-	"github.com/amherag/skycoin/src/daemon/pex"
-	"github.com/amherag/skycoin/src/params"
-	"github.com/amherag/skycoin/src/testutil"
-	"github.com/amherag/skycoin/src/util/useragent"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/cipher/encoder"
+	"github.com/SkycoinProject/cx-chains/src/coin"
+	"github.com/SkycoinProject/cx-chains/src/daemon/gnet"
+	"github.com/SkycoinProject/cx-chains/src/daemon/pex"
+	"github.com/SkycoinProject/cx-chains/src/params"
+	"github.com/SkycoinProject/cx-chains/src/testutil"
+	"github.com/SkycoinProject/cx-chains/src/util/useragent"
 )
 
 func TestIntroductionMessage(t *testing.T) {

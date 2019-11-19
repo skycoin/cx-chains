@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/amherag/skycoin/src/wallet"
+	"github.com/SkycoinProject/cx-chains/src/wallet"
 
 	gcli "github.com/spf13/cobra"
 )

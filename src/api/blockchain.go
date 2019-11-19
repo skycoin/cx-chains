@@ -9,11 +9,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/amherag/skycoin/src/cipher"
-	"github.com/amherag/skycoin/src/coin"
-	"github.com/amherag/skycoin/src/readable"
-	wh "github.com/amherag/skycoin/src/util/http"
-	"github.com/amherag/skycoin/src/visor"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/coin"
+	"github.com/SkycoinProject/cx-chains/src/readable"
+	wh "github.com/SkycoinProject/cx-chains/src/util/http"
+	"github.com/SkycoinProject/cx-chains/src/visor"
 )
 
 // blockchainMetadataHandler returns the blockchain metadata

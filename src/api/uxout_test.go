@@ -12,10 +12,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/amherag/skycoin/src/cipher"
-	"github.com/amherag/skycoin/src/readable"
-	"github.com/amherag/skycoin/src/testutil"
-	"github.com/amherag/skycoin/src/visor/historydb"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/readable"
+	"github.com/SkycoinProject/cx-chains/src/testutil"
+	"github.com/SkycoinProject/cx-chains/src/visor/historydb"
 )
 
 func TestGetUxOutByID(t *testing.T) {

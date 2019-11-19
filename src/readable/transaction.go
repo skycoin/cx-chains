@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/amherag/skycoin/src/cipher"
-	"github.com/amherag/skycoin/src/coin"
-	"github.com/amherag/skycoin/src/util/droplet"
-	"github.com/amherag/skycoin/src/util/logging"
-	"github.com/amherag/skycoin/src/util/timeutil"
-	"github.com/amherag/skycoin/src/visor"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/coin"
+	"github.com/SkycoinProject/cx-chains/src/util/droplet"
+	"github.com/SkycoinProject/cx-chains/src/util/logging"
+	"github.com/SkycoinProject/cx-chains/src/util/timeutil"
+	"github.com/SkycoinProject/cx-chains/src/visor"
 )
 
 var logger = logging.MustGetLogger("readable")

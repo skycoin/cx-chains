@@ -7,8 +7,8 @@ import (
 	"log"
 	"sort"
 
-	"github.com/amherag/skycoin/src/cipher"
-	"github.com/amherag/skycoin/src/util/mathutil"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/util/mathutil"
 )
 
 /*

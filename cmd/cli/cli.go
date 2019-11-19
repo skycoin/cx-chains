@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/amherag/skycoin/src/cli"
+	"github.com/SkycoinProject/cx-chains/src/cli"
 )
 
 func main() {

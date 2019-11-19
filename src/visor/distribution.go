@@ -1,8 +1,8 @@
 package visor
 
 import (
-	"github.com/amherag/skycoin/src/coin"
-	"github.com/amherag/skycoin/src/params"
+	"github.com/SkycoinProject/cx-chains/src/coin"
+	"github.com/SkycoinProject/cx-chains/src/params"
 )
 
 // TransactionIsLocked returns true if the transaction spends locked outputs

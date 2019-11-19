@@ -3,13 +3,13 @@ package encoderfuzz
 import (
 	"fmt"
 
-	"github.com/amherag/skycoin/src/cipher/encoder"
+	"github.com/SkycoinProject/cx-chains/src/cipher/encoder"
 )
 
 // To use the fuzzer:
 // Follow the install instructions from https://github.com/dvyukov/go-fuzz
 // Then, from the repo root,
-// $ go-fuzz-build github.com/amherag/skycoin/src/cipher/encoder/internal
+// $ go-fuzz-build github.com/SkycoinProject/cx-chains/src/cipher/encoder/internal
 // This creates a file encoderfuzz-fuzz.zip
 // Then,
 // $ go-fuzz -bin=encoderfuzz-fuzz.zip -workdir=src/cipher/encoder/internal

@@ -3,7 +3,7 @@ package cli
 import (
 	"fmt"
 
-	"github.com/amherag/skycoin/src/wallet"
+	"github.com/SkycoinProject/cx-chains/src/wallet"
 
 	gcli "github.com/spf13/cobra"
 )

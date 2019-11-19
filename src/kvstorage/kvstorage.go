@@ -4,7 +4,7 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/amherag/skycoin/src/util/file"
+	"github.com/SkycoinProject/cx-chains/src/util/file"
 )
 
 var (

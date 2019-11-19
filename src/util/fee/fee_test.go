@@ -8,9 +8,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/amherag/skycoin/src/coin"
-	"github.com/amherag/skycoin/src/params"
-	"github.com/amherag/skycoin/src/testutil"
+	"github.com/SkycoinProject/cx-chains/src/coin"
+	"github.com/SkycoinProject/cx-chains/src/params"
+	"github.com/SkycoinProject/cx-chains/src/testutil"
 )
 
 type verifyTxnFeeTestCase struct {

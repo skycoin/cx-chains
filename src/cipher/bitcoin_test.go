@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/amherag/skycoin/src/cipher/base58"
+	"github.com/SkycoinProject/cx-chains/src/cipher/base58"
 )
 
 func TestBitcoinAddress(t *testing.T) {

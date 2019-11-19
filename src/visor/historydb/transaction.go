@@ -8,9 +8,9 @@ package historydb
 import (
 	"errors"
 
-	"github.com/amherag/skycoin/src/cipher"
-	"github.com/amherag/skycoin/src/coin"
-	"github.com/amherag/skycoin/src/visor/dbutil"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/coin"
+	"github.com/SkycoinProject/cx-chains/src/visor/dbutil"
 )
 
 //go:generate skyencoder -unexported -struct Transaction

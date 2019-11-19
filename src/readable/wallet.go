@@ -1,6 +1,6 @@
 package readable
 
-import "github.com/amherag/skycoin/src/wallet"
+import "github.com/SkycoinProject/cx-chains/src/wallet"
 
 // Balance has coins and hours
 type Balance struct {

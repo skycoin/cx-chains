@@ -10,10 +10,10 @@ import (
 
 	cobra "github.com/spf13/cobra"
 
-	"github.com/amherag/skycoin/src/api"
-	"github.com/amherag/skycoin/src/readable"
-	"github.com/amherag/skycoin/src/util/droplet"
-	"github.com/amherag/skycoin/src/wallet"
+	"github.com/SkycoinProject/cx-chains/src/api"
+	"github.com/SkycoinProject/cx-chains/src/readable"
+	"github.com/SkycoinProject/cx-chains/src/util/droplet"
+	"github.com/SkycoinProject/cx-chains/src/wallet"
 )
 
 // AddrHistory represents a transactional event for an address

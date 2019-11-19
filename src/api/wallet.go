@@ -9,10 +9,10 @@ import (
 	"sort"
 	"strconv"
 
-	"github.com/amherag/skycoin/src/cipher/bip39"
-	"github.com/amherag/skycoin/src/readable"
-	wh "github.com/amherag/skycoin/src/util/http"
-	"github.com/amherag/skycoin/src/wallet"
+	"github.com/SkycoinProject/cx-chains/src/cipher/bip39"
+	"github.com/SkycoinProject/cx-chains/src/readable"
+	wh "github.com/SkycoinProject/cx-chains/src/util/http"
+	"github.com/SkycoinProject/cx-chains/src/wallet"
 )
 
 // UnconfirmedTxnsResponse contains unconfirmed transaction data

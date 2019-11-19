@@ -4,10 +4,10 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/amherag/skycoin/src/api"
-	"github.com/amherag/skycoin/src/cipher"
-	"github.com/amherag/skycoin/src/coin"
-	"github.com/amherag/skycoin/src/readable"
+	"github.com/SkycoinProject/cx-chains/src/api"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/coin"
+	"github.com/SkycoinProject/cx-chains/src/readable"
 
 	"github.com/spf13/cobra"
 )

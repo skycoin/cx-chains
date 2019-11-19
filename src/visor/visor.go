@@ -19,16 +19,16 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/amherag/skycoin/src/cipher"
-	"github.com/amherag/skycoin/src/coin"
-	"github.com/amherag/skycoin/src/params"
-	"github.com/amherag/skycoin/src/util/logging"
-	"github.com/amherag/skycoin/src/util/mathutil"
-	"github.com/amherag/skycoin/src/util/timeutil"
-	"github.com/amherag/skycoin/src/visor/blockdb"
-	"github.com/amherag/skycoin/src/visor/dbutil"
-	"github.com/amherag/skycoin/src/visor/historydb"
-	"github.com/amherag/skycoin/src/wallet"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/coin"
+	"github.com/SkycoinProject/cx-chains/src/params"
+	"github.com/SkycoinProject/cx-chains/src/util/logging"
+	"github.com/SkycoinProject/cx-chains/src/util/mathutil"
+	"github.com/SkycoinProject/cx-chains/src/util/timeutil"
+	"github.com/SkycoinProject/cx-chains/src/visor/blockdb"
+	"github.com/SkycoinProject/cx-chains/src/visor/dbutil"
+	"github.com/SkycoinProject/cx-chains/src/visor/historydb"
+	"github.com/SkycoinProject/cx-chains/src/wallet"
 )
 
 var logger = logging.MustGetLogger("visor")

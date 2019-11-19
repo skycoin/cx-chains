@@ -11,7 +11,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/amherag/skycoin/src/util/file"
+	"github.com/SkycoinProject/cx-chains/src/util/file"
 )
 
 var testPeers = []string{

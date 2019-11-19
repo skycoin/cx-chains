@@ -6,14 +6,14 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/amherag/skycoin/src/cipher"
-	"github.com/amherag/skycoin/src/coin"
-	"github.com/amherag/skycoin/src/transaction"
-	"github.com/amherag/skycoin/src/util/droplet"
-	"github.com/amherag/skycoin/src/util/mathutil"
-	"github.com/amherag/skycoin/src/visor"
-	"github.com/amherag/skycoin/src/visor/historydb"
-	"github.com/amherag/skycoin/src/wallet"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/coin"
+	"github.com/SkycoinProject/cx-chains/src/transaction"
+	"github.com/SkycoinProject/cx-chains/src/util/droplet"
+	"github.com/SkycoinProject/cx-chains/src/util/mathutil"
+	"github.com/SkycoinProject/cx-chains/src/visor"
+	"github.com/SkycoinProject/cx-chains/src/visor/historydb"
+	"github.com/SkycoinProject/cx-chains/src/wallet"
 )
 
 // UnspentOutput represents a readable output

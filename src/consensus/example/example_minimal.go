@@ -10,9 +10,9 @@ import (
 	mathrand "math/rand"
 
 	//
-	"github.com/amherag/skycoin/src/cipher"
-	"github.com/amherag/skycoin/src/cipher/secp256k1-go"
-	"github.com/amherag/skycoin/src/consensus"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/cipher/secp256k1-go"
+	"github.com/SkycoinProject/cx-chains/src/consensus"
 )
 
 var Cfg_simu_num_node int = 5

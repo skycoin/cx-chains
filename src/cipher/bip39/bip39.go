@@ -15,10 +15,10 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/amherag/skycoin/src/cipher"
-	"github.com/amherag/skycoin/src/cipher/bip39/wordlists"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/cipher/bip39/wordlists"
 
-	"github.com/amherag/skycoin/src/cipher/pbkdf2"
+	"github.com/SkycoinProject/cx-chains/src/cipher/pbkdf2"
 )
 
 var (

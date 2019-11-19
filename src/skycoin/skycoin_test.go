@@ -19,7 +19,7 @@ import (
 	"github.com/blang/semver"
 	"github.com/stretchr/testify/require"
 
-	"github.com/amherag/skycoin/src/visor"
+	"github.com/SkycoinProject/cx-chains/src/visor"
 )
 
 const (
@@ -28,10 +28,10 @@ const (
 )
 
 var (
-	// import path for github.com/amherag/skycoin/cmd/skycoin
+	// import path for github.com/SkycoinProject/cx-chains/cmd/skycoin
 	ldflagsNameCmd string
 
-	// import path for github.com/amherag/skycoin/src/skycoin
+	// import path for github.com/SkycoinProject/cx-chains/src/skycoin
 	ldflagsNameSkyLib string
 )
 
@@ -83,7 +83,7 @@ func buildBinary(t *testing.T, version string) (string, func()) {
 	binaryPath, err := filepath.Abs(binaryName)
 	require.NoError(t, err)
 
-	// coverpkgName will be like github.com/amherag/skycoin
+	// coverpkgName will be like github.com/SkycoinProject/cx-chains
 	coverpkgName := filepath.Dir(filepath.Dir(ldflagsNameCmd))
 
 	// Build binary file with specific app version and db checkpoint version

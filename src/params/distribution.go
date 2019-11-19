@@ -3,7 +3,7 @@ package params
 import (
 	"errors"
 
-	"github.com/amherag/skycoin/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
 )
 
 // Distribution parameters define the initial coin distribution and unlocking schedule

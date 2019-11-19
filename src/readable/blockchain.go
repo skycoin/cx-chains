@@ -1,8 +1,8 @@
 package readable
 
 import (
-	"github.com/amherag/skycoin/src/daemon"
-	"github.com/amherag/skycoin/src/visor"
+	"github.com/SkycoinProject/cx-chains/src/daemon"
+	"github.com/SkycoinProject/cx-chains/src/visor"
 )
 
 // BlockchainMetadata encapsulates useful information from the coin.Blockchain

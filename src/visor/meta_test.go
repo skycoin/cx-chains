@@ -6,7 +6,7 @@ import (
 	"github.com/blang/semver"
 	"github.com/stretchr/testify/require"
 
-	"github.com/amherag/skycoin/src/testutil"
+	"github.com/SkycoinProject/cx-chains/src/testutil"
 )
 
 func TestGetSetDBVersion(t *testing.T) {

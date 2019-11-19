@@ -11,20 +11,20 @@ import (
 	"strings"
 	"time"
 
-	"github.com/amherag/skycoin/src/coin"
-	"github.com/amherag/skycoin/src/fiber"
-	"github.com/amherag/skycoin/src/kvstorage"
+	"github.com/SkycoinProject/cx-chains/src/coin"
+	"github.com/SkycoinProject/cx-chains/src/fiber"
+	"github.com/SkycoinProject/cx-chains/src/kvstorage"
 
 	"log"
 
-	"github.com/amherag/skycoin/src/api"
-	"github.com/amherag/skycoin/src/cipher"
-	"github.com/amherag/skycoin/src/params"
-	"github.com/amherag/skycoin/src/readable"
-	"github.com/amherag/skycoin/src/util/droplet"
-	"github.com/amherag/skycoin/src/util/file"
-	"github.com/amherag/skycoin/src/util/useragent"
-	"github.com/amherag/skycoin/src/wallet"
+	"github.com/SkycoinProject/cx-chains/src/api"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/params"
+	"github.com/SkycoinProject/cx-chains/src/readable"
+	"github.com/SkycoinProject/cx-chains/src/util/droplet"
+	"github.com/SkycoinProject/cx-chains/src/util/file"
+	"github.com/SkycoinProject/cx-chains/src/util/useragent"
+	"github.com/SkycoinProject/cx-chains/src/wallet"
 )
 
 var (

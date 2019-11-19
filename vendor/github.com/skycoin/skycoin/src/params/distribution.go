@@ -1,6 +1,6 @@
 package params
 
-import "github.com/skycoin/skycoin/src/cipher"
+import "github.com/SkycoinProject/skycoin/src/cipher"
 
 // distributionAddressesDecoded is initialized in init.go from params.go's distributionAddresses
 var distributionAddressesDecoded []cipher.Address

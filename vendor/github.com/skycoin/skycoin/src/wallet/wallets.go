@@ -7,7 +7,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/skycoin/skycoin/src/cipher"
+	"github.com/SkycoinProject/skycoin/src/cipher"
 )
 
 // Wallets wallets map

@@ -10,6 +10,77 @@
   version = "v1.1.1"
 
 [[projects]]
+  digest = "1:6cae052a56a54451396edd2fede666ff4eaf218f44c2887880def523104c14cb"
+  name = "github.com/SkycoinProject/cx"
+  packages = ["cx"]
+  pruneopts = "UT"
+  revision = "129ca338579cde3c94ea7c742154f85f9cd65ae0"
+  version = "v0.7.1"
+
+[[projects]]
+  branch = "master"
+  digest = "1:8a50c4460a24ce3cff0f50d094fa086db29119b4a0b58e70b87e922274526804"
+  name = "github.com/SkycoinProject/encodertest"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "14c2e31898b98265cc642f54d53f7280998e7208"
+
+[[projects]]
+  digest = "1:5b645409893c8905fa547f4c968b89710fc3bb32b649e470023f3ea712fa8d86"
+  name = "github.com/SkycoinProject/skycoin"
+  packages = [
+    "cmd/monitor-peers/connection",
+    "src/cipher",
+    "src/cipher/base58",
+    "src/cipher/bip32",
+    "src/cipher/bip39",
+    "src/cipher/bip39/wordlists",
+    "src/cipher/bip44",
+    "src/cipher/chacha20poly1305",
+    "src/cipher/chacha20poly1305/internal/chacha20",
+    "src/cipher/encoder",
+    "src/cipher/encrypt",
+    "src/cipher/pbkdf2",
+    "src/cipher/poly1305",
+    "src/cipher/ripemd160",
+    "src/cipher/scrypt",
+    "src/cipher/secp256k1-go",
+    "src/cipher/secp256k1-go/secp256k1-go2",
+    "src/coin",
+    "src/daemon",
+    "src/daemon/gnet",
+    "src/daemon/pex",
+    "src/daemon/strand",
+    "src/params",
+    "src/transaction",
+    "src/util/droplet",
+    "src/util/elapse",
+    "src/util/fee",
+    "src/util/file",
+    "src/util/iputil",
+    "src/util/logging",
+    "src/util/mathutil",
+    "src/util/timeutil",
+    "src/util/useragent",
+    "src/visor",
+    "src/visor/blockdb",
+    "src/visor/dbutil",
+    "src/visor/historydb",
+    "src/wallet",
+  ]
+  pruneopts = "UT"
+  revision = "66f5df5849d339d403a475d523ebe7d1a4c92c31"
+  version = "v0.27.0"
+
+[[projects]]
+  branch = "cxchains"
+  digest = "1:ab7fbf4ca87b2a949b0dc81485d7090b7e05780d2112afafe0f9145370060d0c"
+  name = "github.com/amherag/skycoin"
+  packages = ["src/cipher/encoder"]
+  pruneopts = "UT"
+  revision = "d82f04590a99961f1d3ea97043db73385412f953"
+
+[[projects]]
   branch = "master"
   digest = "1:86d119ee8a0fb122f2d0e0fbbbd5d2f65953029248743462ee3908a21ae04247"
   name = "github.com/andreyvit/diff"
@@ -67,9 +138,12 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:b02d70141c59b87bb1cf1ea8203b0a3ef0faf274154d839ca0e34d057f69b94b"
+  digest = "1:2e87c461d2619c45b1199035da1e183b2fbc873c2f5de2bc4b3d80b17e0453ec"
   name = "github.com/go-gl/gl"
-  packages = ["v2.1/gl"]
+  packages = [
+    "v2.1/gl",
+    "v3.2-compatibility/gl",
+  ]
   pruneopts = "UT"
   revision = "bf2b1f2f34d7f6a60a99a830f65dcd6afb0c6587"
 
@@ -80,14 +154,6 @@
   packages = ["v3.2/glfw"]
   pruneopts = "UT"
   revision = "e6da0acd62b1b57ee2799d4d0a76a7d4514dc5bc"
-
-[[projects]]
-  branch = "master"
-  digest = "1:8a14a98280510fa2f8485b2e8d61ad7d105e8d6582dea287a16c122d33db89c6"
-  name = "github.com/go-gl/gltext"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "01a355945a709027bfe912f07e2c7dd8d1050e89"
 
 [[projects]]
   branch = "master"
@@ -208,6 +274,14 @@
   version = "v1.1.2"
 
 [[projects]]
+  branch = "master"
+  digest = "1:e6ceff2fde44e740f666c25aa5b2a34c206ba092c8b8c0177759f02340f20ede"
+  name = "github.com/mjibson/go-dsp"
+  packages = ["wav"]
+  pruneopts = "UT"
+  revision = "11479a337f1259210b7c8f93f7bf2b0cc87b066e"
+
+[[projects]]
   digest = "1:93131d8002d7025da13582877c32d1fc302486775a1b06f62241741006428c5e"
   name = "github.com/pelletier/go-toml"
   packages = ["."]
@@ -306,63 +380,12 @@
   version = "v1.4.2"
 
 [[projects]]
-  digest = "1:892ec83944c31d788fb625303e71c392a727033fccf65b0bb993b065d301455c"
-  name = "github.com/skycoin/cx"
-  packages = ["cx"]
-  pruneopts = "UT"
-  revision = "94a2a5a76e4c5b77e8861ee2d03ae8a76d74abe6"
-  version = "v0.6.2"
-
-[[projects]]
   branch = "master"
-  digest = "1:8a50c4460a24ce3cff0f50d094fa086db29119b4a0b58e70b87e922274526804"
-  name = "github.com/skycoin/encodertest"
+  digest = "1:067f0ed830568eae456ab9dbadf174c9d77eceb66a9f1a30eb00dd5be4aac115"
+  name = "github.com/skycoin/gltext"
   packages = ["."]
   pruneopts = "UT"
-  revision = "14c2e31898b98265cc642f54d53f7280998e7208"
-
-[[projects]]
-  digest = "1:f65f3f201a9f15972899e0110185c884789272aaf8dded1de21bb26d88799c73"
-  name = "github.com/skycoin/skycoin"
-  packages = [
-    "cmd/monitor-peers/connection",
-    "src/cipher",
-    "src/cipher/base58",
-    "src/cipher/chacha20poly1305",
-    "src/cipher/chacha20poly1305/internal/chacha20",
-    "src/cipher/encoder",
-    "src/cipher/encrypt",
-    "src/cipher/pbkdf2",
-    "src/cipher/poly1305",
-    "src/cipher/ripemd160",
-    "src/cipher/scrypt",
-    "src/cipher/secp256k1-go",
-    "src/cipher/secp256k1-go/secp256k1-go2",
-    "src/coin",
-    "src/daemon",
-    "src/daemon/gnet",
-    "src/daemon/pex",
-    "src/daemon/strand",
-    "src/params",
-    "src/transaction",
-    "src/util/droplet",
-    "src/util/elapse",
-    "src/util/fee",
-    "src/util/file",
-    "src/util/iputil",
-    "src/util/logging",
-    "src/util/mathutil",
-    "src/util/timeutil",
-    "src/util/useragent",
-    "src/visor",
-    "src/visor/blockdb",
-    "src/visor/dbutil",
-    "src/visor/historydb",
-    "src/wallet",
-  ]
-  pruneopts = "UT"
-  revision = "ff754084df0912bc0d151529e2893ca86618fb3f"
-  version = "v0.26.0"
+  revision = "b86a26479c3e25ac0f13e195bd2c0554bcf2f837"
 
 [[projects]]
   digest = "1:bb495ec276ab82d3dd08504bbc0594a65de8c3b22c6f2aaa92d05b73fbf3a82e"
@@ -471,6 +494,17 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:5fcdf76c270c9ca8dd1bd94e2f349e69d3ae9986230bf5bf598b19982ee964b9"
+  name = "golang.org/x/mobile"
+  packages = [
+    "exp/audio/al",
+    "internal/mobileinit",
+  ]
+  pruneopts = "UT"
+  revision = "973feb4309de5c3aad0553fc987d76abf1fa58f7"
+
+[[projects]]
+  branch = "master"
   digest = "1:76ee51c3f468493aff39dbacc401e8831fbb765104cbf613b89bef01cf4bad70"
   name = "golang.org/x/net"
   packages = ["context"]
@@ -516,6 +550,16 @@
   analyzer-version = 1
   input-imports = [
     "github.com/NYTimes/gziphandler",
+    "github.com/SkycoinProject/cx/cx",
+    "github.com/SkycoinProject/encodertest",
+    "github.com/SkycoinProject/skycoin/cmd/monitor-peers/connection",
+    "github.com/SkycoinProject/skycoin/src/cipher",
+    "github.com/SkycoinProject/skycoin/src/cipher/encoder",
+    "github.com/SkycoinProject/skycoin/src/daemon",
+    "github.com/SkycoinProject/skycoin/src/daemon/gnet",
+    "github.com/SkycoinProject/skycoin/src/daemon/pex",
+    "github.com/SkycoinProject/skycoin/src/util/iputil",
+    "github.com/SkycoinProject/skycoin/src/util/logging",
     "github.com/andreyvit/diff",
     "github.com/blang/semver",
     "github.com/boltdb/bolt",
@@ -528,16 +572,6 @@
     "github.com/rs/cors",
     "github.com/shopspring/decimal",
     "github.com/sirupsen/logrus",
-    "github.com/skycoin/cx/cx",
-    "github.com/skycoin/encodertest",
-    "github.com/skycoin/skycoin/cmd/monitor-peers/connection",
-    "github.com/skycoin/skycoin/src/cipher",
-    "github.com/skycoin/skycoin/src/cipher/encoder",
-    "github.com/skycoin/skycoin/src/daemon",
-    "github.com/skycoin/skycoin/src/daemon/gnet",
-    "github.com/skycoin/skycoin/src/daemon/pex",
-    "github.com/skycoin/skycoin/src/util/iputil",
-    "github.com/skycoin/skycoin/src/util/logging",
     "github.com/spf13/cobra",
     "github.com/spf13/pflag",
     "github.com/spf13/viper",

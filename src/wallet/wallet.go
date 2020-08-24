@@ -14,7 +14,7 @@ import (
 	"time"
 
 	"encoding/hex"
-	
+
 	"github.com/SkycoinProject/cx-chains/src/cipher"
 	"github.com/SkycoinProject/cx-chains/src/util/logging"
 )

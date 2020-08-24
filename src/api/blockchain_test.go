@@ -224,7 +224,7 @@ func makeBadBlock(t *testing.T) *coin.Block {
 	var genCoins uint64 = 1000e6
 	var genTime uint64 = 1000
 	now := genTime + 100
-	preBlock, err := coin.NewGenesisBlock(genAddress, genCoins, genTime)
+	preBlock, err := coin.NewGenesisBlock(genAddress, genCoins, genTime, nil)
 	require.NoError(t, err)
 	uxHash := testutil.RandSHA256(t)
 	txn := coin.Transaction{
@@ -232,7 +232,7 @@ func makeBadBlock(t *testing.T) *coin.Block {
 			testutil.RandSHA256(t),
 		},
 	}
-	err = txn.PushOutput(genAddress, math.MaxInt64+1, 255)
+	err = txn.PushOutput(genAddress, math.MaxInt64+1, 255, nil)
 	require.NoError(t, err)
 	b, err := coin.NewBlock(*preBlock, now, uxHash, coin.Transactions{txn}, func(t *coin.Transaction) (uint64, error) {
 		return 0, nil

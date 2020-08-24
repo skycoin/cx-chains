@@ -174,9 +174,9 @@ func makeTransaction(t *testing.T) Transaction {
 
 	err := txn.Txn.PushInput(ux.Hash())
 	require.NoError(t, err)
-	err = txn.Txn.PushOutput(makeAddress(), 1e6, 50)
+	err = txn.Txn.PushOutput(makeAddress(), 1e6, 50, nil)
 	require.NoError(t, err)
-	err = txn.Txn.PushOutput(makeAddress(), 5e6, 50)
+	err = txn.Txn.PushOutput(makeAddress(), 5e6, 50, nil)
 	require.NoError(t, err)
 	txn.Txn.SignInputs([]cipher.SecKey{s})
 	err = txn.Txn.UpdateHeader()

@@ -755,9 +755,9 @@ func makeTransaction(t *testing.T, nInputs int) (coin.Transaction, []coin.UxOut,
 		uxs = append(uxs, ux)
 	}
 
-	err := txn.PushOutput(makeAddress(), 1e6, 50)
+	err := txn.PushOutput(makeAddress(), 1e6, 50, nil)
 	require.NoError(t, err)
-	err = txn.PushOutput(makeAddress(), 5e6, 50)
+	err = txn.PushOutput(makeAddress(), 5e6, 50, nil)
 	require.NoError(t, err)
 	txn.SignInputs(toSign)
 	err = txn.UpdateHeader()

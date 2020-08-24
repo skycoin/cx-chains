@@ -27,7 +27,7 @@ func feeCalc(t *coin.Transaction) (uint64, error) {
 
 func addGenesisBlockToBlockchain(t *testing.T, bc *Blockchain) *coin.SignedBlock {
 	// create genesis block
-	gb, err := coin.NewGenesisBlock(genAddress, genCoins, genTime)
+	gb, err := coin.NewGenesisBlock(genAddress, genCoins, genTime, nil)
 	require.NoError(t, err)
 	gbSig := cipher.MustSignHash(gb.HashHeader(), genSecret)
 
@@ -61,10 +61,10 @@ func makeSpendTxn(t *testing.T, uxs coin.UxArray, keys []cipher.SecKey, toAddr c
 
 	hours := totalHours / 4
 
-	err := spendTxn.PushOutput(toAddr, coins, hours)
+	err := spendTxn.PushOutput(toAddr, coins, hours, nil)
 	require.NoError(t, err)
 	if totalCoins-coins != 0 {
-		err := spendTxn.PushOutput(uxs[0].Body.Address, totalCoins-coins, totalHours/4)
+		err := spendTxn.PushOutput(uxs[0].Body.Address, totalCoins-coins, totalHours/4, nil)
 		require.NoError(t, err)
 	}
 	spendTxn.SignInputs(keys)
@@ -152,7 +152,7 @@ func makeBlock(t *testing.T, preBlock coin.Block, tm uint64) *coin.Block {
 
 func makeBlocks(t *testing.T, n int) []coin.SignedBlock {
 	var bs []coin.SignedBlock
-	preBlock, err := coin.NewGenesisBlock(genAddress, genCoins, genTime)
+	preBlock, err := coin.NewGenesisBlock(genAddress, genCoins, genTime, nil)
 	require.NoError(t, err)
 	bs = append(bs, coin.SignedBlock{Block: *preBlock})
 
@@ -771,7 +771,7 @@ func TestProcessBlock(t *testing.T) {
 		store: store,
 	}
 
-	gb, err := coin.NewGenesisBlock(genAddress, genCoins, genTime)
+	gb, err := coin.NewGenesisBlock(genAddress, genCoins, genTime, nil)
 	require.NoError(t, err)
 
 	sb := coin.SignedBlock{
@@ -829,7 +829,7 @@ func TestExecuteBlock(t *testing.T) {
 		store: store,
 	}
 
-	gb, err := coin.NewGenesisBlock(genAddress, genCoins, genTime)
+	gb, err := coin.NewGenesisBlock(genAddress, genCoins, genTime, nil)
 	require.NoError(t, err)
 
 	sb := coin.SignedBlock{

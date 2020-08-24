@@ -513,7 +513,7 @@ func TestUnspentProcessBlock(t *testing.T) {
 			}
 
 			for _, o := range tc.outputs {
-				err := txn.PushOutput(o.addr, o.coins, o.hours)
+				err := txn.PushOutput(o.addr, o.coins, o.hours, nil)
 				require.NoError(t, err)
 			}
 

@@ -90,7 +90,7 @@ func removeCorruptDBFiles(t *testing.T, badDBFile string) {
 
 func addGenesisBlockToVisor(t *testing.T, vs *Visor) *coin.SignedBlock {
 	// create genesis block
-	gb, err := coin.NewGenesisBlock(genAddress, genCoins, genTime)
+	gb, err := coin.NewGenesisBlock(genAddress, genCoins, genTime, nil)
 	require.NoError(t, err)
 	gbSig := cipher.MustSignHash(gb.HashHeader(), genSecret)
 	vs.Config.GenesisSignature = gbSig
@@ -648,9 +648,9 @@ func makeOverflowCoinsSpendTxn(t *testing.T, uxs coin.UxArray, keys []cipher.Sec
 	hours := totalHours / 12
 
 	// These two outputs' coins added up will overflow
-	err := spendTxn.PushOutput(toAddr, 18446744073709551000, hours)
+	err := spendTxn.PushOutput(toAddr, 18446744073709551000, hours, nil)
 	require.NoError(t, err)
-	err = spendTxn.PushOutput(toAddr, totalCoins, hours)
+	err = spendTxn.PushOutput(toAddr, totalCoins, hours, nil)
 	require.NoError(t, err)
 
 	spendTxn.SignInputs(keys)
@@ -673,9 +673,9 @@ func makeOverflowHoursSpendTxn(t *testing.T, uxs coin.UxArray, keys []cipher.Sec
 	hours := totalHours / 12
 
 	// These two outputs' hours added up will overflow
-	err := spendTxn.PushOutput(toAddr, totalCoins/2, 18446744073709551615)
+	err := spendTxn.PushOutput(toAddr, totalCoins/2, 18446744073709551615, nil)
 	require.NoError(t, err)
-	err = spendTxn.PushOutput(toAddr, totalCoins-totalCoins/2, hours)
+	err = spendTxn.PushOutput(toAddr, totalCoins-totalCoins/2, hours, nil)
 	require.NoError(t, err)
 
 	spendTxn.SignInputs(keys)

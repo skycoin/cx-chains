@@ -669,7 +669,7 @@ func TestCreate(t *testing.T) {
 			}
 
 			t.Log("len of addrUxOuts:", len(addrUxOuts.Flatten()))
-			txn, inputs, err := Create(tc.params, addrUxOuts, tc.headTime)
+			txn, inputs, err := Create(tc.params, addrUxOuts, tc.headTime, nil)
 			require.Equal(t, tc.err, err, "%v != %v", tc.err, err)
 			if tc.err != nil {
 				return

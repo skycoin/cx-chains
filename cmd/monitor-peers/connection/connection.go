@@ -10,10 +10,10 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/SkycoinProject/skycoin/src/cipher/encoder"
-	"github.com/SkycoinProject/skycoin/src/daemon"
-	"github.com/SkycoinProject/skycoin/src/daemon/gnet"
-	"github.com/SkycoinProject/skycoin/src/util/iputil"
+	"github.com/SkycoinProject/cx-chains/src/cipher/encoder"
+	"github.com/SkycoinProject/cx-chains/src/daemon"
+	"github.com/SkycoinProject/cx-chains/src/daemon/gnet"
+	"github.com/SkycoinProject/cx-chains/src/util/iputil"
 )
 
 const (

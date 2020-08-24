@@ -21,11 +21,11 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/SkycoinProject/skycoin/cmd/monitor-peers/connection"
-	"github.com/SkycoinProject/skycoin/src/cipher"
-	"github.com/SkycoinProject/skycoin/src/daemon"
-	"github.com/SkycoinProject/skycoin/src/daemon/pex"
-	"github.com/SkycoinProject/skycoin/src/util/logging"
+	"github.com/SkycoinProject/cx-chains/cmd/monitor-peers/connection"
+	"github.com/SkycoinProject/cx-chains/src/cipher"
+	"github.com/SkycoinProject/cx-chains/src/daemon"
+	"github.com/SkycoinProject/cx-chains/src/daemon/pex"
+	"github.com/SkycoinProject/cx-chains/src/util/logging"
 )
 
 // PeerState is a current state of the peer

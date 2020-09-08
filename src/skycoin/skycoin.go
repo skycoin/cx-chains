@@ -50,7 +50,7 @@ type Coin struct {
 }
 
 // Run starts the node
-func (c *Coin) Run() error {
+func (c *Coin) Run() (*api.Gateway, error) {
 	var db *dbutil.DB
 	var w *wallet.Service
 	var v *visor.Visor
@@ -63,14 +63,14 @@ func (c *Coin) Run() error {
 
 	if c.config.Node.Version {
 		fmt.Println(c.config.Build.Version)
-		return nil
+		return gw, nil
 	}
 
 	logLevel, err := logging.LevelFromString(c.config.Node.LogLevel)
 	if err != nil {
 		err = fmt.Errorf("Invalid -log-level: %v", err)
 		c.logger.Error(err)
-		return err
+		return gw, err
 	}
 
 	logging.SetLevel(logLevel)
@@ -87,7 +87,7 @@ func (c *Coin) Run() error {
 		logFile, err = c.initLogFile()
 		if err != nil {
 			c.logger.Error(err)
-			return err
+			return gw, err
 		}
 	}
 
@@ -102,12 +102,12 @@ func (c *Coin) Run() error {
 		f, err := os.Create(c.config.Node.ProfileCPUFile)
 		if err != nil {
 			c.logger.Error(err)
-			return err
+			return gw, err
 		}
 
 		if err := pprof.StartCPUProfile(f); err != nil {
 			c.logger.Error(err)
-			return err
+			return gw, err
 		}
 		defer pprof.StopCPUProfile()
 	}
@@ -134,7 +134,7 @@ func (c *Coin) Run() error {
 	appVersion, err := c.config.Build.Semver()
 	if err != nil {
 		c.logger.WithError(err).Errorf("Version %s is not a valid semver", c.config.Build.Version)
-		return err
+		return gw, err
 	}
 
 	c.logger.Infof("App version: %s", appVersion)
@@ -151,7 +151,7 @@ func (c *Coin) Run() error {
 	db, err = visor.OpenDB(c.config.Node.DBPath, c.config.Node.DBReadOnly)
 	if err != nil {
 		c.logger.Errorf("Database failed to open: %v. Is another skycoin instance running?", err)
-		return err
+		return gw, err
 	}
 
 	// Look for saved app version
@@ -342,7 +342,7 @@ earlyShutdown:
 		}
 	}
 
-	return retErr
+	return gw, retErr
 }
 
 // NewCoin returns a new fiber coin instance

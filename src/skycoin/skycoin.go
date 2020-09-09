@@ -5,6 +5,7 @@ package skycoin
 
 import (
 	"errors"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -50,7 +51,7 @@ type Coin struct {
 }
 
 // Run starts the node
-func (c *Coin) Run() (*api.Gateway, error) {
+func (c *Coin) Run(gwCh chan *api.Gateway) error {
 	var db *dbutil.DB
 	var w *wallet.Service
 	var v *visor.Visor
@@ -63,14 +64,14 @@ func (c *Coin) Run() (*api.Gateway, error) {
 
 	if c.config.Node.Version {
 		fmt.Println(c.config.Build.Version)
-		return gw, nil
+		return nil
 	}
 
 	logLevel, err := logging.LevelFromString(c.config.Node.LogLevel)
 	if err != nil {
-		err = fmt.Errorf("Invalid -log-level: %v", err)
+		err = fmt.Errorf("invalid -log-level: %v", err)
 		c.logger.Error(err)
-		return gw, err
+		return err
 	}
 
 	logging.SetLevel(logLevel)
@@ -87,7 +88,7 @@ func (c *Coin) Run() (*api.Gateway, error) {
 		logFile, err = c.initLogFile()
 		if err != nil {
 			c.logger.Error(err)
-			return gw, err
+			return err
 		}
 	}
 
@@ -102,12 +103,12 @@ func (c *Coin) Run() (*api.Gateway, error) {
 		f, err := os.Create(c.config.Node.ProfileCPUFile)
 		if err != nil {
 			c.logger.Error(err)
-			return gw, err
+			return err
 		}
 
 		if err := pprof.StartCPUProfile(f); err != nil {
 			c.logger.Error(err)
-			return gw, err
+			return err
 		}
 		defer pprof.StopCPUProfile()
 	}
@@ -134,7 +135,7 @@ func (c *Coin) Run() (*api.Gateway, error) {
 	appVersion, err := c.config.Build.Semver()
 	if err != nil {
 		c.logger.WithError(err).Errorf("Version %s is not a valid semver", c.config.Build.Version)
-		return gw, err
+		return err
 	}
 
 	c.logger.Infof("App version: %s", appVersion)
@@ -151,7 +152,7 @@ func (c *Coin) Run() (*api.Gateway, error) {
 	db, err = visor.OpenDB(c.config.Node.DBPath, c.config.Node.DBReadOnly)
 	if err != nil {
 		c.logger.Errorf("Database failed to open: %v. Is another skycoin instance running?", err)
-		return gw, err
+		return err
 	}
 
 	// Look for saved app version
@@ -247,6 +248,12 @@ func (c *Coin) Run() (*api.Gateway, error) {
 	}
 
 	gw = api.NewGateway(d, v, w, s)
+	if gwCh != nil {
+		select {
+		case gwCh <- gw:
+		default:
+		}
+	}
 
 	if c.config.Node.WebInterface {
 		webInterface, err = c.createGUI(gw, host)
@@ -342,7 +349,7 @@ earlyShutdown:
 		}
 	}
 
-	return gw, retErr
+	return retErr
 }
 
 // NewCoin returns a new fiber coin instance
@@ -596,8 +603,8 @@ func createCertFiles(certFile, keyFile string) error {
 }
 
 // ParseConfig prepare the config
-func (c *Coin) ParseConfig() error {
-	return c.config.postProcess()
+func (c *Coin) ParseConfig(fs *flag.FlagSet) error {
+	return c.config.postProcess(fs)
 }
 
 // InitTransaction creates the genesis transaction

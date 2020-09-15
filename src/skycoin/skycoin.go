@@ -51,7 +51,7 @@ type Coin struct {
 }
 
 // Run starts the node
-func (c *Coin) Run(gwCh chan *api.Gateway) error {
+func (c *Coin) Run(gwCh chan api.Gatewayer) error {
 	var db *dbutil.DB
 	var w *wallet.Service
 	var v *visor.Visor

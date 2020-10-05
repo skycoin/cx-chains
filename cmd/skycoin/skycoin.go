@@ -126,7 +126,7 @@ func main() {
 	}
 
 	// run fiber coin node
-	if err := coin.Run(nil); err != nil {
+	if err := coin.Run(nil, nil); err != nil {
 		os.Exit(1)
 	}
 }

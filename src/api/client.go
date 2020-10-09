@@ -593,11 +593,11 @@ func (c *Client) ProgramState(addrs []string) ([]byte, error) {
 	v.Add("addrs", strings.Join(addrs, ","))
 	endpoint := "/api/v1/programState"
 
-	var progState []byte
-	if err := c.PostForm(endpoint, strings.NewReader(v.Encode()), &progState); err != nil {
+	var b []byte
+	if err := c.PostForm(endpoint, strings.NewReader(v.Encode()), &b); err != nil {
 		return nil, err
 	}
-	return progState, nil
+	return b, nil
 }
 
 // UxOut makes a request to GET /api/v1/uxout?uxid=xxx

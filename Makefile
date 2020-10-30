@@ -27,6 +27,9 @@ ELECTRON_DIR = electron
 # Platform specific checks
 OSNAME = $(TRAVIS_OS_NAME)
 
+# Tooling versions
+GOLANGCI_LINT_VERSION ?= v1.32.0
+
 run-client:  ## Run skycoin with desktop client configuration. To add arguments, do 'make ARGS="--foo" run'.
 	./run-client.sh ${ARGS}
 
@@ -116,9 +119,7 @@ integration-test-live-disable-networking: ## Run live integration tests against 
 	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-live.sh -c -k
 
 install-linters: ## Install linters
-	# For some reason this install method is not recommended, see https://github.com/golangci/golangci-lint#install
-	# However, they suggest `curl ... | bash` which we should not do
-	go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
+	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOBIN) $(GOLANGCI_LINT_VERSION)
 
 format: ## Formats the code. Must have goimports installed (use make install-linters).
 	goimports -w -local github.com/skycoin/skycoin ./cmd

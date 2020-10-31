@@ -122,8 +122,8 @@ install-linters: ## Install linters
 	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOBIN) $(GOLANGCI_LINT_VERSION)
 
 format: ## Formats the code. Must have goimports installed (use make install-linters).
-	goimports -w -local github.com/skycoin/skycoin ./cmd
-	goimports -w -local github.com/skycoin/skycoin ./src
+	goimports -w -local github.com/skycoin/cx-chains ./cmd/
+	goimports -w -local github.com/skycoin/cx-chains ./src/
 
 install-deps-ui:  ## Install the UI dependencies
 	cd $(GUI_STATIC_DIR) && npm install

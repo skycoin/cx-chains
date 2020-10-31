@@ -24,7 +24,11 @@ func requireFileMode(t *testing.T, filename string, mode os.FileMode) {
 func requireFileContentsBinary(t *testing.T, filename string, contents []byte) {
 	f, err := os.Open(filename)
 	require.NoError(t, err)
-	defer f.Close()
+	defer func() {
+		if err := f.Close(); err != nil {
+			logger.WithError(err).Warn()
+		}
+	}()
 	b := make([]byte, len(contents)*16)
 	n, err := f.Read(b)
 	require.NoError(t, err)

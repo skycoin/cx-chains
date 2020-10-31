@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
@@ -504,7 +505,7 @@ func TestIntroductionMessage(t *testing.T) {
 			d.On("recordMessageEvent", tc.intro, mc).Return(tc.mockValue.recordMessageEventErr)
 			d.On("Disconnect", tc.addr, tc.mockValue.disconnectReason).Return(tc.mockValue.disconnectErr)
 			d.On("connectionIntroduced", tc.addr, tc.gnetID, mock.MatchedBy(func(m *IntroductionMessage) bool {
-				t.Logf("connectionIntroduced mock.MatchedBy unconfirmedBurnFactor=%d", m.UnconfirmedVerifyTxn.BurnFactor)
+				t.Logf("connectionIntroduced mock.MatchedBy unconfirmedBurnFactor=%d", m.UnconfirmedVerifyTxn.BurnFactor) //nolint:staticcheck
 				if m == nil {
 					return false
 				}
@@ -538,7 +539,7 @@ func TestIntroductionMessage(t *testing.T) {
 }
 
 func TestMessageEncodeDecode(t *testing.T) {
-	update := false
+	const update = false
 
 	introPubKey := cipher.MustPubKeyFromHex("03cd7dfcd8c3452d1bb5d9d9e34dd95d6848cb9f66c2aad127b60578f4be7498f2")
 	introGenesisHash := cipher.MustSHA256FromHex("9afa0004c0ae04fae7c48e3bc0a324c51100de9508ae6048ebdb6652dc94f0e2")
@@ -848,7 +849,7 @@ func TestMessageEncodeDecode(t *testing.T) {
 
 				f, err := os.Create(fn)
 				require.NoError(t, err)
-				defer f.Close()
+				defer func() { assert.NoError(t, f.Close()) }()
 
 				b := encoder.Serialize(tc.msg)
 				_, err = f.Write(b)
@@ -863,7 +864,7 @@ func TestMessageEncodeDecode(t *testing.T) {
 
 			f, err := os.Open(fn)
 			require.NoError(t, err)
-			defer f.Close()
+			defer func() { assert.NoError(t, f.Close()) }()
 
 			d, err := ioutil.ReadAll(f)
 			require.NoError(t, err)

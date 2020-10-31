@@ -8,6 +8,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	"github.com/SkycoinProject/cx-chains/src/util/file"
@@ -209,11 +210,11 @@ func TestNewPexDisableTrustedPeers(t *testing.T) {
 func TestNewPexLoadCustomPeers(t *testing.T) {
 	dir, err := ioutil.TempDir("", "peerlist")
 	require.NoError(t, err)
-	defer os.Remove(dir)
+	defer func() { assert.NoError(t, os.Remove(dir)) }()
 
 	fn, err := os.Create(filepath.Join(dir, "custom-peers.txt"))
 	require.NoError(t, err)
-	defer fn.Close()
+	defer func() { assert.NoError(t, fn.Close()) }()
 
 	_, err = fn.Write([]byte(`123.45.67.89:2020
 34.34.21.21:12222

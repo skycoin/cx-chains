@@ -17,6 +17,7 @@ import (
 	"time"
 
 	"github.com/blang/semver"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	"github.com/SkycoinProject/cx-chains/src/visor"
@@ -187,11 +188,11 @@ func TestDBVerifyLogic(t *testing.T) {
 		// Copy the database file to a temp file since it will be modified by the application
 		dbf, err := os.Open(filepath.Join(testFixturesDir, dbFile))
 		require.NoError(t, err)
-		defer dbf.Close()
+		defer func() { assert.NoError(t, dbf.Close()) }()
 
 		f, err := ioutil.TempFile("", fmt.Sprintf("%s.*", dbFile))
 		require.NoError(t, err)
-		defer f.Close()
+		defer func() { assert.NoError(t, f.Close()) }()
 
 		_, err = io.Copy(f, dbf)
 		require.NoError(t, err)
@@ -290,7 +291,7 @@ func TestDBVerifyLogic(t *testing.T) {
 				// Re-open the database to check that the version was not modified
 				db, err := visor.OpenDB(tmpFile, false)
 				require.NoError(t, err)
-				defer db.Close()
+				defer func() { assert.NoError(t, db.Close()) }()
 
 				v, err := visor.GetDBVersion(db)
 				require.NoError(t, err)
@@ -310,7 +311,7 @@ func TestDBVerifyLogic(t *testing.T) {
 			// Re-open the database to check that the version was added
 			db, err := visor.OpenDB(tmpFile, false)
 			require.NoError(t, err)
-			defer db.Close()
+			defer func() { assert.NoError(t, db.Close()) }()
 
 			v, err := visor.GetDBVersion(db)
 			require.NoError(t, err)

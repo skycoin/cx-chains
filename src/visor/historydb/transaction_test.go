@@ -64,6 +64,7 @@ func TestTransactionGet(t *testing.T) {
 			// init the bkt
 			err := db.Update("", func(tx *dbutil.Tx) error {
 				for _, txn := range txns[:2] {
+					txn := txn
 					err := txsBkt.put(tx, &txn)
 					require.NoError(t, err)
 				}
@@ -145,6 +146,7 @@ func TestTransactionGetArray(t *testing.T) {
 			// init the bkt
 			err := db.Update("", func(tx *dbutil.Tx) error {
 				for _, txn := range txns[:3] {
+					txn := txn
 					err := txsBkt.put(tx, &txn)
 					require.NoError(t, err)
 				}

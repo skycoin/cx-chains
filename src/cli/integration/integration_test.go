@@ -24,6 +24,7 @@ import (
 	"time"
 
 	"github.com/andreyvit/diff"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	"github.com/SkycoinProject/cx-chains/src/api"
@@ -218,12 +219,12 @@ func createTempWallet(t *testing.T, encrypt bool) (string, func()) {
 	f, err := os.Create(walletPath)
 	require.NoError(t, err)
 
-	defer f.Close()
+	defer func() { assert.NoError(t, f.Close()) }()
 
 	rf, err := os.Open(filepath.Join(testFixturesDir, wltName))
 	require.NoError(t, err)
 
-	defer rf.Close()
+	defer func() { assert.NoError(t, rf.Close()) }()
 
 	_, err = io.Copy(f, rf)
 	require.NoError(t, err)
@@ -274,7 +275,7 @@ func createTempWalletDir(t *testing.T) func() {
 func loadJSON(t *testing.T, filename string, obj interface{}) {
 	f, err := os.Open(filename)
 	require.NoError(t, err)
-	defer f.Close()
+	defer func() { assert.NoError(t, f.Close()) }()
 
 	err = json.NewDecoder(f).Decode(obj)
 	require.NoError(t, err)
@@ -291,7 +292,7 @@ func loadGoldenFile(t *testing.T, filename string, testData TestData) {
 
 	f, err := os.Open(goldenFile)
 	require.NoError(t, err)
-	defer f.Close()
+	defer func() { assert.NoError(t, f.Close()) }()
 
 	err = json.NewDecoder(f).Decode(testData.expected)
 	require.NoError(t, err, filename)
@@ -301,7 +302,7 @@ func updateGoldenFile(t *testing.T, filename string, content interface{}) {
 	contentJSON, err := json.MarshalIndent(content, "", "\t")
 	require.NoError(t, err)
 	contentJSON = append(contentJSON, '\n')
-	err = ioutil.WriteFile(filename, contentJSON, 0644)
+	err = ioutil.WriteFile(filename, contentJSON, 0644) //nolint:gosec
 	require.NoError(t, err)
 }
 
@@ -321,7 +322,7 @@ func checkGoldenFileObjectChanges(t *testing.T, goldenFile string, td TestData) 
 
 	f, err := os.Open(goldenFile)
 	require.NoError(t, err)
-	defer f.Close()
+	defer func() { assert.NoError(t, f.Close()) }()
 
 	c, err := ioutil.ReadAll(f)
 	require.NoError(t, err)
@@ -994,7 +995,7 @@ func TestFiberAddressGen(t *testing.T) {
 	checkSeedsFile := func(t *testing.T, fn string, entropy int, addrs []string) {
 		f, err := os.Open(fn)
 		require.NoError(t, err)
-		defer f.Close()
+		defer func() { assert.NoError(t, f.Close()) }()
 
 		r := csv.NewReader(f)
 		records, err := r.ReadAll()
@@ -1043,9 +1044,8 @@ func TestFiberAddressGen(t *testing.T) {
 	touch := func(t *testing.T, fn string) {
 		f, err := os.Create(fn)
 		require.NoError(t, err)
-		defer f.Close()
-		err = f.Close()
-		require.NoError(t, err)
+		defer func() { assert.NoError(t, f.Close()) }()
+		require.NoError(t, f.Close())
 	}
 
 	addrsFilename := "addresses.txt"
@@ -1723,7 +1723,7 @@ func scanTransactions(t *testing.T, fullTest bool) {
 		var ids []string
 		for len(txidMap) < randomLiveTransactionNum {
 			// get random txid
-			txid := txids[rand.Intn(l)]
+			txid := txids[rand.Intn(l)] //nolint:gosec
 			if _, ok := txidMap[txid]; !ok {
 				ids = append(ids, txid)
 				txidMap[txid] = struct{}{}
@@ -2311,7 +2311,7 @@ func TestLiveCreateAndBroadcastRawTransaction(t *testing.T) {
 
 				f, err := ioutil.TempFile("", "createrawtxn")
 				require.NoError(t, err)
-				defer f.Close()
+				defer func() { assert.NoError(t, f.Close()) }()
 
 				w := csv.NewWriter(f)
 

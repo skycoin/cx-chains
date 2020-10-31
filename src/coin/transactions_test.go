@@ -534,6 +534,7 @@ func TestTransactionsSize(t *testing.T) {
 	txns := makeTransactions(t, 10)
 	var size uint32
 	for _, txn := range txns {
+		txn := txn
 		encodedLen, err := mathutil.IntToUint32(len(encoder.Serialize(&txn)))
 		require.NoError(t, err)
 		size, err = mathutil.AddUint32(size, encodedLen)

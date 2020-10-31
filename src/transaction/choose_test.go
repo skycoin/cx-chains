@@ -63,7 +63,7 @@ func TestSortSpendsCoinsLowToHigh(t *testing.T) {
 		copy(uxb, orderedUxb)
 
 		for i := range uxb {
-			j := rand.Intn(i + 1)
+			j := rand.Intn(i + 1) //nolint:gosec
 			uxb[i], uxb[j] = uxb[j], uxb[i]
 		}
 
@@ -146,6 +146,7 @@ func TestSortSpendsCoinsHighToLow(t *testing.T) {
 		uxb := make([]UxBalance, len(orderedUxb))
 		copy(uxb, orderedUxb)
 
+		//nolint:gosec
 		rand.Shuffle(len(uxb), func(i, j int) {
 			uxb[i], uxb[j] = uxb[j], uxb[i]
 		})
@@ -223,7 +224,7 @@ func TestSortSpendsHoursLowToHigh(t *testing.T) {
 		copy(uxb, orderedUxb)
 
 		for i := range uxb {
-			j := rand.Intn(i + 1)
+			j := rand.Intn(i + 1) //nolint:gosec
 			uxb[i], uxb[j] = uxb[j], uxb[i]
 		}
 
@@ -255,7 +256,7 @@ func TestSortSpendsHoursLowToHigh(t *testing.T) {
 func TestChooseSpendsMaximizeUxOuts(t *testing.T) {
 	nRand := 10000
 	for i := 0; i < nRand; i++ {
-		coins := uint64((rand.Intn(3)+1)*10 + rand.Intn(3)) // 10,20,30 + 0,1,2
+		coins := uint64((rand.Intn(3)+1)*10 + rand.Intn(3)) //nolint:gosec 10,20,30 + 0,1,2
 		uxb := makeRandomUxBalances(t)
 
 		verifyChosenCoins(t, uxb, coins, ChooseSpendsMaximizeUxOuts, func(a, b UxBalance) bool {
@@ -287,7 +288,7 @@ func TestChooseSpendsMaximizeUxOuts(t *testing.T) {
 func TestChooseSpendsMinimizeUxOutsRandom(t *testing.T) {
 	nRand := 10000
 	for i := 0; i < nRand; i++ {
-		coins := uint64((rand.Intn(3)+1)*10 + rand.Intn(3)) // 10,20,30 + 0,1,2
+		coins := uint64((rand.Intn(3)+1)*10 + rand.Intn(3)) //nolint:gosec 10,20,30 + 0,1,2
 		uxb := makeRandomUxBalances(t)
 
 		verifyChosenCoins(t, uxb, coins, ChooseSpendsMinimizeUxOuts, func(a, b UxBalance) bool {
@@ -325,18 +326,18 @@ func makeRandomUxBalances(t *testing.T) []UxBalance {
 	// Small ranges are used for Coins, Hours, BkSeq to increase likelihood
 	// that they collide and test deeper sorting comparisons
 
-	n := rand.Intn(101)
+	n := rand.Intn(101) //nolint:gosec
 	uxb := make([]UxBalance, n)
 
 	// Use a random max range for the hours' rand range to ensure enough
 	// balances have zero hours
-	hasZeroHoursRange := rand.Intn(3) + 1
+	hasZeroHoursRange := rand.Intn(3) + 1 //nolint:gosec
 
 	for i := 0; i < n; i++ {
 		ux := UxBalance{
-			Coins: uint64(rand.Intn(10) + 1), // 1-10
-			Hours: uint64(rand.Intn(hasZeroHoursRange)),
-			BkSeq: uint64(rand.Intn(11)), // 0-10
+			Coins: uint64(rand.Intn(10) + 1),            //nolint:gosec 1-10
+			Hours: uint64(rand.Intn(hasZeroHoursRange)), //nolint:gosec
+			BkSeq: uint64(rand.Intn(11)),                //nolint:gosec 0-10
 			Hash:  testutil.RandSHA256(t),
 		}
 

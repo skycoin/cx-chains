@@ -37,11 +37,11 @@ var (
 	CoinName = "skycoin"
 
 	// GenesisSignatureStr hex string of genesis signature
-	GenesisSignatureStr = "eb10468d10054d15f2b6f8946cd46797779aa20a7617ceb4be884189f219bc9a164e56a5b9f7bec392a804ff3740210348d73db77a37adb542a8e08d429ac92700"
+	GenesisSignatureStr = "a214e0361ff99d80d2f9d646b25f93b8d1d2deb9f7bae0ff908d2302193d8cc31b8388b7bd38c019304b932bfd570444dbe8561aa9d47da021fd31a70146defd01"
 	// GenesisAddressStr genesis address string
-	GenesisAddressStr = "2jBbGxZRGoQG1mqhPBnXnLTxK6oxsTf8os6"
+	GenesisAddressStr = "23v7mT1uLpViNKZHh9aww4VChxizqKsNq4E"
 	// BlockchainPubkeyStr pubic key string
-	BlockchainPubkeyStr = "0328c576d3f420e7682058a981173a4b374c7cc5ff55bf394d3cf57059bbe6456a"
+	BlockchainPubkeyStr = "02583e5ebbf85522474e0f17e681e62ca37910db6b8792763af4e97663c31a7984"
 	// BlockchainSeckeyStr empty private key string
 	BlockchainSeckeyStr = ""
 
@@ -52,15 +52,6 @@ var (
 
 	// DefaultConnections the default trust node addresses
 	DefaultConnections = []string{
-<<<<<<< HEAD
-		// "118.178.135.93:6000",
-		// "47.88.33.156:6000",
-		// "121.41.103.148:6000",
-		// "104.237.142.206:6000",
-		// "176.58.126.224:6000",
-		// "172.104.85.6:6000",
-		// "139.162.7.132:6000",
-=======
 		"118.178.135.93:6000",
 		"47.88.33.156:6000",
 		"104.237.142.206:6000",
@@ -75,7 +66,6 @@ var (
 		"172.104.71.211:6000",
 		"172.105.217.244:6000",
 		"139.162.98.190:6000",
->>>>>>> develop
 	}
 
 	nodeConfig = skycoin.NewNodeConfig(ConfigMode, fiber.NodeConfig{
@@ -93,12 +83,12 @@ var (
 		DataDirectory:       "$HOME/.skycoin",
 
 		UnconfirmedBurnFactor:          10,
-		UnconfirmedMaxTransactionSize:  32768,
+		UnconfirmedMaxTransactionSize:  65535,
 		UnconfirmedMaxDropletPrecision: 3,
 		CreateBlockBurnFactor:          10,
-		CreateBlockMaxTransactionSize:  32768,
+		CreateBlockMaxTransactionSize:  65535,
 		CreateBlockMaxDropletPrecision: 3,
-		MaxBlockTransactionsSize:       32768,
+		MaxBlockTransactionsSize:       5242880,
 
 		DisplayName:     "Skycoin",
 		Ticker:          "SKY",
@@ -111,7 +101,7 @@ var (
 )
 
 func init() {
-	nodeConfig.RegisterFlags()
+	nodeConfig.RegisterFlags(flag.CommandLine)
 }
 
 func main() {
@@ -130,13 +120,13 @@ func main() {
 	}, logger)
 
 	// parse config values
-	if err := coin.ParseConfig(); err != nil {
+	if err := coin.ParseConfig(flag.CommandLine); err != nil {
 		logger.Error(err)
 		os.Exit(1)
 	}
 
 	// run fiber coin node
-	if err := coin.Run(); err != nil {
+	if err := coin.Run(nil, nil); err != nil {
 		os.Exit(1)
 	}
 }

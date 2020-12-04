@@ -5,6 +5,7 @@ package skycoin
 
 import (
 	"errors"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -50,7 +51,7 @@ type Coin struct {
 }
 
 // Run starts the node
-func (c *Coin) Run() error {
+func (c *Coin) Run(genesisProgState []byte, gwCh chan api.Gatewayer) error {
 	var db *dbutil.DB
 	var w *wallet.Service
 	var v *visor.Visor
@@ -68,7 +69,7 @@ func (c *Coin) Run() error {
 
 	logLevel, err := logging.LevelFromString(c.config.Node.LogLevel)
 	if err != nil {
-		err = fmt.Errorf("Invalid -log-level: %v", err)
+		err = fmt.Errorf("invalid -log-level: %v", err)
 		c.logger.Error(err)
 		return err
 	}
@@ -247,6 +248,12 @@ func (c *Coin) Run() error {
 	}
 
 	gw = api.NewGateway(d, v, w, s)
+	if gwCh != nil {
+		select {
+		case gwCh <- gw:
+		default:
+		}
+	}
 
 	if c.config.Node.WebInterface {
 		webInterface, err = c.createGUI(gw, host)
@@ -260,7 +267,7 @@ func (c *Coin) Run() error {
 		c.logger.Critical().Infof("Full address: %s", fullAddress)
 	}
 
-	if err := v.Init(); err != nil {
+	if err := v.Init(genesisProgState); err != nil {
 		c.logger.Error(err)
 		retErr = err
 		goto earlyShutdown
@@ -294,7 +301,7 @@ func (c *Coin) Run() error {
 			go func() {
 				select {
 				case <-cancelLaunchBrowser:
-					c.logger.Warning("Browser launching cancelled")
+					c.logger.Warning("Browser launching canceled")
 
 					// Wait a moment just to make sure the http interface is up
 				case <-time.After(time.Millisecond * 100):
@@ -596,8 +603,8 @@ func createCertFiles(certFile, keyFile string) error {
 }
 
 // ParseConfig prepare the config
-func (c *Coin) ParseConfig() error {
-	return c.config.postProcess()
+func (c *Coin) ParseConfig(fs *flag.FlagSet) error {
+	return c.config.postProcess(fs)
 }
 
 // InitTransaction creates the genesis transaction

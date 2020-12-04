@@ -48,7 +48,7 @@ func prepareDB(t *testing.T) (*dbutil.DB, func()) {
 func readAll(t *testing.T, f string) []byte {
 	fi, err := os.Open(f)
 	require.NoError(t, err)
-	defer fi.Close()
+	defer func() { assert.NoError(t, fi.Close()) }()
 
 	b, err := ioutil.ReadAll(fi)
 	require.NoError(t, err)
@@ -68,7 +68,7 @@ func writeDBFile(t *testing.T, badDBFile string, badDBData []byte) {
 	t.Logf("Writing the original bad db file back to %s", badDBFile)
 	fi, err := os.OpenFile(badDBFile, os.O_WRONLY, 0600)
 	require.NoError(t, err)
-	defer fi.Close()
+	defer func() { assert.NoError(t, fi.Close()) }()
 
 	_, err = io.Copy(fi, bytes.NewBuffer(badDBData))
 	require.NoError(t, err)
@@ -88,9 +88,9 @@ func removeCorruptDBFiles(t *testing.T, badDBFile string) {
 	}
 }
 
-func addGenesisBlockToVisor(t *testing.T, vs *Visor) *coin.SignedBlock {
+func addGenesisBlockToVisor(t *testing.T, vs *Visor) *coin.SignedBlock { //nolint:unparam
 	// create genesis block
-	gb, err := coin.NewGenesisBlock(genAddress, genCoins, genTime)
+	gb, err := coin.NewGenesisBlock(genAddress, genCoins, genTime, nil)
 	require.NoError(t, err)
 	gbSig := cipher.MustSignHash(gb.HashHeader(), genSecret)
 	vs.Config.GenesisSignature = gbSig
@@ -133,10 +133,7 @@ func TestErrMissingSignatureRecreateDB(t *testing.T) {
 	func() {
 		db, err := OpenDB(badDBFile, false)
 		require.NoError(t, err)
-		defer func() {
-			err := db.Close()
-			assert.NoError(t, err)
-		}()
+		defer func() { assert.NoError(t, db.Close()) }()
 
 		bc, err := NewBlockchain(db, BlockchainConfig{
 			Pubkey:      pubkey,
@@ -648,9 +645,9 @@ func makeOverflowCoinsSpendTxn(t *testing.T, uxs coin.UxArray, keys []cipher.Sec
 	hours := totalHours / 12
 
 	// These two outputs' coins added up will overflow
-	err := spendTxn.PushOutput(toAddr, 18446744073709551000, hours)
+	err := spendTxn.PushOutput(toAddr, 18446744073709551000, hours, nil)
 	require.NoError(t, err)
-	err = spendTxn.PushOutput(toAddr, totalCoins, hours)
+	err = spendTxn.PushOutput(toAddr, totalCoins, hours, nil)
 	require.NoError(t, err)
 
 	spendTxn.SignInputs(keys)
@@ -673,9 +670,9 @@ func makeOverflowHoursSpendTxn(t *testing.T, uxs coin.UxArray, keys []cipher.Sec
 	hours := totalHours / 12
 
 	// These two outputs' hours added up will overflow
-	err := spendTxn.PushOutput(toAddr, totalCoins/2, 18446744073709551615)
+	err := spendTxn.PushOutput(toAddr, totalCoins/2, 18446744073709551615, nil)
 	require.NoError(t, err)
-	err = spendTxn.PushOutput(toAddr, totalCoins-totalCoins/2, hours)
+	err = spendTxn.PushOutput(toAddr, totalCoins-totalCoins/2, hours, nil)
 	require.NoError(t, err)
 
 	spendTxn.SignInputs(keys)

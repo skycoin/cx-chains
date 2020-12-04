@@ -49,7 +49,7 @@ func MakeBlockchain(t *testing.T, db *dbutil.DB, seckey cipher.SecKey) *Blockcha
 		Pubkey: pubkey,
 	})
 	require.NoError(t, err)
-	gb, err := coin.NewGenesisBlock(GenesisAddress, GenesisCoins, GenesisTime)
+	gb, err := coin.NewGenesisBlock(GenesisAddress, GenesisCoins, GenesisTime, nil)
 	if err != nil {
 		panic(fmt.Errorf("create genesis block failed: %v", err))
 	}
@@ -140,13 +140,13 @@ func makeTransactionForChain(t *testing.T, tx *dbutil.Tx, bc *Blockchain, ux coi
 	err = txn.PushInput(ux.Hash())
 	require.NoError(t, err)
 
-	err = txn.PushOutput(toAddr, amt, hours)
+	err = txn.PushOutput(toAddr, amt, hours, nil)
 	require.NoError(t, err)
 
 	// Change output
 	coinsOut := ux.Body.Coins - amt
 	if coinsOut > 0 {
-		err := txn.PushOutput(GenesisAddress, coinsOut, chrs-hours-fee)
+		err := txn.PushOutput(GenesisAddress, coinsOut, chrs-hours-fee, nil)
 		require.NoError(t, err)
 	}
 
@@ -182,11 +182,11 @@ func makeLostCoinTxn(t *testing.T, uxs coin.UxArray, keys []cipher.SecKey, toAdd
 		totalHours += ux.Body.Hours
 	}
 
-	err := txn.PushOutput(toAddr, coins, totalHours/4)
+	err := txn.PushOutput(toAddr, coins, totalHours/4, nil)
 	require.NoError(t, err)
 	changeCoins := totalCoins - coins
 	if changeCoins > 0 {
-		err := txn.PushOutput(uxs[0].Body.Address, changeCoins-1, totalHours/4)
+		err := txn.PushOutput(uxs[0].Body.Address, changeCoins-1, totalHours/4, nil)
 		require.NoError(t, err)
 	}
 
@@ -208,13 +208,13 @@ func makeDuplicateUxOutTxn(t *testing.T, uxs coin.UxArray, keys []cipher.SecKey,
 		totalHours += ux.Body.Hours
 	}
 
-	err := txn.PushOutput(toAddr, coins, totalHours/8)
+	err := txn.PushOutput(toAddr, coins, totalHours/8, nil)
 	require.NoError(t, err)
-	err = txn.PushOutput(toAddr, coins, totalHours/8)
+	err = txn.PushOutput(toAddr, coins, totalHours/8, nil)
 	require.NoError(t, err)
 	changeCoins := totalCoins - coins
 	if changeCoins > 0 {
-		err := txn.PushOutput(uxs[0].Body.Address, changeCoins, totalHours/4)
+		err := txn.PushOutput(uxs[0].Body.Address, changeCoins, totalHours/4, nil)
 		require.NoError(t, err)
 	}
 
@@ -263,13 +263,13 @@ func makeUnspentsTxn(t *testing.T, uxs coin.UxArray, keys []cipher.SecKey, toAdd
 		// otherwise the output hashes will be duplicated and the transaction
 		// will be invalid
 		spendHours := hours - uint64(i)
-		err := spendTxn.PushOutput(toAddr, coins, spendHours)
+		err := spendTxn.PushOutput(toAddr, coins, spendHours, nil)
 		require.NoError(t, err)
 	}
 
 	// Add change output, if necessary
 	if changeCoins != 0 {
-		err := spendTxn.PushOutput(uxs[0].Body.Address, changeCoins, changeHours)
+		err := spendTxn.PushOutput(uxs[0].Body.Address, changeCoins, changeHours, nil)
 		require.NoError(t, err)
 	}
 
@@ -298,10 +298,10 @@ func makeSpendTxWithFee(t *testing.T, uxs coin.UxArray, keys []cipher.SecKey, to
 
 	spendHours := totalHours/2 - fee
 
-	err := spendTxn.PushOutput(toAddr, coins, spendHours)
+	err := spendTxn.PushOutput(toAddr, coins, spendHours, nil)
 	require.NoError(t, err)
 	if totalCoins != coins {
-		err := spendTxn.PushOutput(uxs[0].Body.Address, totalCoins-coins, 0)
+		err := spendTxn.PushOutput(uxs[0].Body.Address, totalCoins-coins, 0, nil)
 		require.NoError(t, err)
 	}
 	spendTxn.SignInputs(keys)
@@ -327,10 +327,10 @@ func makeSpendTxWithHoursBurned(t *testing.T, uxs coin.UxArray, keys []cipher.Se
 
 	spendHours := totalHours - hoursBurned
 
-	err := spendTxn.PushOutput(toAddr, coins, spendHours)
+	err := spendTxn.PushOutput(toAddr, coins, spendHours, nil)
 	require.NoError(t, err)
 	if totalCoins != coins {
-		err := spendTxn.PushOutput(uxs[0].Body.Address, totalCoins-coins, 0)
+		err := spendTxn.PushOutput(uxs[0].Body.Address, totalCoins-coins, 0, nil)
 		require.NoError(t, err)
 	}
 	spendTxn.SignInputs(keys)

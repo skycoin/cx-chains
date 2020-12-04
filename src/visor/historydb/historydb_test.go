@@ -130,7 +130,7 @@ func (fbc *fakeBlockchain) ExecuteBlock(b *coin.Block) (coin.UxArray, error) {
 
 func (fbc *fakeBlockchain) CreateGenesisBlock(genesisAddr cipher.Address, genesisCoins, timestamp uint64) coin.Block {
 	txn := coin.Transaction{}
-	err := txn.PushOutput(genesisAddr, genesisCoins, genesisCoins)
+	err := txn.PushOutput(genesisAddr, genesisCoins, genesisCoins, nil)
 	if err != nil {
 		panic(err)
 	}
@@ -419,7 +419,7 @@ func addBlock(bc *fakeBlockchain, td testData, tm uint64) (*coin.Block, *coin.Tr
 		if err != nil {
 			return nil, nil, err
 		}
-		if err := txn.PushOutput(addr, o.Coins, o.Hours); err != nil {
+		if err := txn.PushOutput(addr, o.Coins, o.Hours, nil); err != nil {
 			return nil, nil, err
 		}
 	}

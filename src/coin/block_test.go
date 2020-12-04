@@ -2,7 +2,6 @@ package coin
 
 import (
 	"errors"
-	"fmt"
 	"testing"
 	"time"
 
@@ -65,7 +64,7 @@ func TestNewBlock(t *testing.T) {
 	txns := Transactions{Transaction{}}
 	// invalid txn fees panics
 	_, err := NewBlock(prev, 133, uxHash, txns, badFeeCalc)
-	require.EqualError(t, err, fmt.Sprintf("Invalid transaction fees: Bad"))
+	require.EqualError(t, err, "Invalid transaction fees: Bad")
 
 	// no txns panics
 	_, err = NewBlock(prev, 133, uxHash, nil, feeCalc)
@@ -109,7 +108,7 @@ func TestBlockBodyHash(t *testing.T) {
 }
 
 func TestNewGenesisBlock(t *testing.T) {
-	gb, err := NewGenesisBlock(genAddress, _genCoins, _genTime)
+	gb, err := NewGenesisBlock(genAddress, _genCoins, _genTime, nil)
 	require.NoError(t, err)
 
 	require.Equal(t, cipher.SHA256{}, gb.Head.PrevHash)
@@ -132,7 +131,7 @@ func TestNewGenesisBlock(t *testing.T) {
 
 func TestCreateUnspent(t *testing.T) {
 	txn := Transaction{}
-	err := txn.PushOutput(genAddress, 11e6, 255)
+	err := txn.PushOutput(genAddress, 11e6, 255, nil)
 	require.NoError(t, err)
 	bh := BlockHeader{
 		Time:  tNow(),
@@ -170,7 +169,7 @@ func TestCreateUnspent(t *testing.T) {
 
 func TestCreateUnspents(t *testing.T) {
 	txn := Transaction{}
-	err := txn.PushOutput(genAddress, 11e6, 255)
+	err := txn.PushOutput(genAddress, 11e6, 255, nil)
 	require.NoError(t, err)
 	bh := BlockHeader{
 		Time:  tNow(),

@@ -152,7 +152,11 @@ func createCoinCommand() cli.Command {
 				log.Errorf("failed to create new coin file %s", coinFilePath)
 				return err
 			}
-			defer coinFile.Close()
+			defer func() {
+				if err := coinFile.Close(); err != nil {
+					log.WithError(err).Error("failed to close coin file")
+				}
+			}()
 
 			coinTestFilePath := fmt.Sprintf("./cmd/%[1]s/%[1]s_test.go", coinName)
 			coinTestFile, err := os.Create(coinTestFilePath)
@@ -160,7 +164,11 @@ func createCoinCommand() cli.Command {
 				log.Errorf("failed to create new coin test file %s", coinTestFilePath)
 				return err
 			}
-			defer coinTestFile.Close()
+			defer func() {
+				if err := coinTestFile.Close(); err != nil {
+					log.WithError(err).Error("failed to close coin file")
+				}
+			}()
 
 			paramsFilePath := fmt.Sprintf("%s%s", os.Getenv("GOPATH"), "/src/github.com/SkycoinProject/cx-chains/src/params/params.go")
 			paramsFile, err := os.Create(paramsFilePath)
@@ -168,7 +176,11 @@ func createCoinCommand() cli.Command {
 				log.Errorf("failed to create new file %s", paramsFilePath)
 				return err
 			}
-			defer paramsFile.Close()
+			defer func() {
+				if err := paramsFile.Close(); err != nil {
+					log.WithError(err).Error("failed to close coin file")
+				}
+			}()
 
 			// change dir so that text/template can parse the file
 			err = os.Chdir(templateDir)

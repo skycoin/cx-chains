@@ -64,6 +64,7 @@ func TestTransactionGet(t *testing.T) {
 			// init the bkt
 			err := db.Update("", func(tx *dbutil.Tx) error {
 				for _, txn := range txns[:2] {
+					txn := txn
 					err := txsBkt.put(tx, &txn)
 					require.NoError(t, err)
 				}
@@ -145,6 +146,7 @@ func TestTransactionGetArray(t *testing.T) {
 			// init the bkt
 			err := db.Update("", func(tx *dbutil.Tx) error {
 				for _, txn := range txns[:3] {
+					txn := txn
 					err := txsBkt.put(tx, &txn)
 					require.NoError(t, err)
 				}
@@ -174,9 +176,9 @@ func makeTransaction(t *testing.T) Transaction {
 
 	err := txn.Txn.PushInput(ux.Hash())
 	require.NoError(t, err)
-	err = txn.Txn.PushOutput(makeAddress(), 1e6, 50)
+	err = txn.Txn.PushOutput(makeAddress(), 1e6, 50, nil)
 	require.NoError(t, err)
-	err = txn.Txn.PushOutput(makeAddress(), 5e6, 50)
+	err = txn.Txn.PushOutput(makeAddress(), 5e6, 50, nil)
 	require.NoError(t, err)
 	txn.Txn.SignInputs([]cipher.SecKey{s})
 	err = txn.Txn.UpdateHeader()

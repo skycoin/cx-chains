@@ -1747,20 +1747,20 @@ func testLiveWalletCreateTransactionRandom(t *testing.T, unsigned bool) {
 		spendableHours := fee.RemainingHours(totalHours, params.UserVerifyTxn.BurnFactor)
 		tLog(t, "spendableHours", spendableHours)
 
-		coins := rand.Intn(int(totalCoins)) + 1
+		coins := rand.Intn(int(totalCoins)) + 1 //nolint:gosec
 		coins -= coins % int(params.UserVerifyTxn.MaxDropletDivisor())
 		if coins == 0 {
 			coins = int(params.UserVerifyTxn.MaxDropletDivisor())
 		}
-		hours := rand.Intn(int(spendableHours + 1))
-		nOutputs := rand.Intn(maxOutputs) + 1
+		hours := rand.Intn(int(spendableHours + 1)) //nolint:gosec
+		nOutputs := rand.Intn(maxOutputs) + 1       //nolint:gosec
 
 		tLog(t, "sendCoins", coins)
 		tLog(t, "sendHours", hours)
 
 		changeAddress := w.Entries[0].Address.String()
 
-		shareFactor := strconv.FormatFloat(rand.Float64(), 'f', 8, 64)
+		shareFactor := strconv.FormatFloat(rand.Float64(), 'f', 8, 64) //nolint:gosec
 
 		tLog(t, "shareFactor", shareFactor)
 
@@ -1773,7 +1773,7 @@ func testLiveWalletCreateTransactionRandom(t *testing.T, unsigned bool) {
 			}
 
 			receiver := api.Receiver{}
-			receiver.Address = destAddrs[rand.Intn(len(destAddrs))].String()
+			receiver.Address = destAddrs[rand.Intn(len(destAddrs))].String() //nolint:gosec
 
 			if i == nOutputs-1 {
 				var err error
@@ -1784,7 +1784,7 @@ func testLiveWalletCreateTransactionRandom(t *testing.T, unsigned bool) {
 				remainingCoins = 0
 				remainingHours = 0
 			} else {
-				receiverCoins := rand.Intn(remainingCoins) + 1
+				receiverCoins := rand.Intn(remainingCoins) + 1 //nolint:gosec
 				receiverCoins -= receiverCoins % int(params.UserVerifyTxn.MaxDropletDivisor())
 				if receiverCoins == 0 {
 					receiverCoins = int(params.UserVerifyTxn.MaxDropletDivisor())
@@ -1795,7 +1795,7 @@ func testLiveWalletCreateTransactionRandom(t *testing.T, unsigned bool) {
 				require.NoError(t, err)
 				remainingCoins -= receiverCoins
 
-				receiverHours := rand.Intn(remainingHours + 1)
+				receiverHours := rand.Intn(remainingHours + 1) //nolint:gosec
 				receiver.Hours = fmt.Sprint(receiverHours)
 				remainingHours -= receiverHours
 			}
@@ -1817,6 +1817,7 @@ func testLiveWalletCreateTransactionRandom(t *testing.T, unsigned bool) {
 		nOutputs = len(to)
 		tLog(t, "nOutputs", nOutputs)
 
+		//nolint:gosec
 		rand.Shuffle(len(to), func(i, j int) {
 			to[i], to[j] = to[j], to[i]
 		})

@@ -295,7 +295,7 @@ func DefaultWalker(tx *dbutil.Tx, hps []coin.HashPair) (cipher.SHA256, bool) {
 }
 
 func makeGenesisBlock(t *testing.T) coin.SignedBlock {
-	gb, err := coin.NewGenesisBlock(genAddress, genCoinHours, genTime)
+	gb, err := coin.NewGenesisBlock(genAddress, genCoinHours, genTime, nil)
 	require.NoError(t, err)
 
 	sig := cipher.MustSignHash(gb.HashHeader(), genSecret)

@@ -20,6 +20,7 @@ import (
 	"time"
 
 	"github.com/andreyvit/diff"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	"github.com/SkycoinProject/cx-chains/src/api"
@@ -232,7 +233,7 @@ func loadGoldenFile(t *testing.T, filename string, testData TestData) {
 
 	f, err := os.Open(goldenFile)
 	require.NoError(t, err)
-	defer f.Close()
+	defer func() { assert.NoError(t, f.Close()) }()
 
 	d := json.NewDecoder(f)
 	d.DisallowUnknownFields()
@@ -245,7 +246,7 @@ func updateGoldenFile(t *testing.T, filename string, content interface{}) {
 	contentJSON, err := json.MarshalIndent(content, "", "\t")
 	require.NoError(t, err)
 	contentJSON = append(contentJSON, '\n')
-	err = ioutil.WriteFile(filename, contentJSON, 0644)
+	err = ioutil.WriteFile(filename, contentJSON, 0644) //nolint:gosec
 	require.NoError(t, err)
 }
 
@@ -262,7 +263,7 @@ func checkGoldenFile(t *testing.T, goldenFile string, td TestData) {
 
 	f, err := os.Open(goldenFile)
 	require.NoError(t, err)
-	defer f.Close()
+	defer func() { assert.NoError(t, f.Close()) }()
 
 	c, err := ioutil.ReadAll(f)
 	require.NoError(t, err)
@@ -1538,6 +1539,7 @@ func testBlocksInRangeVerbose(t *testing.T, start, end uint64) *readable.BlocksV
 
 	var prevBlock *readable.BlockVerbose
 	for idx, b := range blocks.Blocks {
+		b := b
 		assertVerboseBlockFee(t, &b)
 
 		if prevBlock != nil {
@@ -1700,6 +1702,7 @@ func testBlocksVerbose(t *testing.T, seqs []uint64) *readable.BlocksVerbose {
 	}
 
 	for _, b := range blocks.Blocks {
+		b := b
 		_, ok := seqsMap[b.Head.BkSeq]
 		require.True(t, ok)
 		delete(seqsMap, b.Head.BkSeq)
@@ -1790,6 +1793,7 @@ func TestStableLastBlocksVerbose(t *testing.T) {
 
 	var prevBlock *readable.BlockVerbose
 	for idx, b := range blocks.Blocks {
+		b := b
 		assertVerboseBlockFee(t, &b)
 
 		if prevBlock != nil {
@@ -1817,6 +1821,7 @@ func TestLiveLastBlocksVerbose(t *testing.T) {
 
 	var prevBlock *readable.BlockVerbose
 	for idx, b := range blocks.Blocks {
+		b := b
 		assertVerboseBlockFee(t, &b)
 
 		if prevBlock != nil {

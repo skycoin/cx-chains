@@ -47,6 +47,7 @@ func TestCreate(t *testing.T) {
 	}
 
 	// shuffle the uxouts to test that the uxout sorting during spend selection is working
+	//nolint:gosec
 	rand.Shuffle(len(uxouts), func(i, j int) {
 		uxouts[i], uxouts[j] = uxouts[j], uxouts[i]
 	})
@@ -76,6 +77,7 @@ func TestCreate(t *testing.T) {
 	}
 
 	// shuffle the uxouts to test that the uxout sorting during spend selection is working
+	//nolint:gosec
 	rand.Shuffle(len(uxoutsNoHours), func(i, j int) {
 		uxoutsNoHours[i], uxoutsNoHours[j] = uxoutsNoHours[j], uxoutsNoHours[i]
 	})
@@ -669,7 +671,7 @@ func TestCreate(t *testing.T) {
 			}
 
 			t.Log("len of addrUxOuts:", len(addrUxOuts.Flatten()))
-			txn, inputs, err := Create(tc.params, addrUxOuts, tc.headTime)
+			txn, inputs, err := Create(tc.params, addrUxOuts, tc.headTime, nil)
 			require.Equal(t, tc.err, err, "%v != %v", tc.err, err)
 			if tc.err != nil {
 				return
@@ -765,8 +767,8 @@ func TestCreate(t *testing.T) {
 
 func makeUxOut(t *testing.T, s cipher.SecKey, coins, hours uint64) coin.UxOut { // nolint: unparam
 	body := makeUxBody(t, s, coins, hours)
-	tm := rand.Int31n(1000)
-	seq := rand.Int31n(100)
+	tm := rand.Int31n(1000) //nolint:gosec
+	seq := rand.Int31n(100) //nolint:gosec
 	return coin.UxOut{
 		Head: coin.UxHead{
 			Time:  uint64(tm),

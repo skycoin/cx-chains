@@ -12,9 +12,9 @@ import (
 
 	"github.com/SkycoinProject/cx-chains/src/cipher/encoder"
 	"github.com/SkycoinProject/cx-chains/src/coin"
+	"github.com/SkycoinProject/encodertest"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
-	"github.com/SkycoinProject/encodertest"
 )
 
 func newEmptyBlockForEncodeTest() *coin.Block {

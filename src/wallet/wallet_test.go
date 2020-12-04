@@ -741,7 +741,7 @@ func TestWalletGetEntry(t *testing.T) {
 			false,
 		},
 		{
-			"scrypt-chacha20poly1305 encrytped wallet",
+			"scrypt-chacha20poly1305 encrypted wallet",
 			"./testdata/scrypt-chacha20poly1305-encrypted.wlt",
 			"LxcitUpWQZbPjgEPs6R1i3G4Xa31nPMoSG",
 			true,

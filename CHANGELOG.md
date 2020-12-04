@@ -9,15 +9,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - Document the daemon's CLI options
+- Add ability for wallet to support cx coin types. CX coin types are prefixed with 'cx_'.
 
 ### Fixed
 
 - #2287 A `Content-Type` with a `charset` specified, for example `application/json; charset=utf-8`, will not return an HTTP 415 error anymore
 - Fix `fiber.toml` transaction verification parameters ignored by newcoin
+- Fix `.travis.yml` and `.golangci.yml` and ensure codebase passes `golangci-lint` checks.
+- Fix `maybeCreateGenesisBlock()` so that it creates genesis block containing program state.
 
 ### Changed
 
 - Add `display_name`, `ticker`, `coin_hours_display_name`, `coin_hours_ticker`, `explorer_url` to the `/health` endpoint response
+- Switched to use go modules for dependency management.
+- Expose API gateway directly from `skycoin.Coin`.
 
 ### Removed
 

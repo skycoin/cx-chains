@@ -148,20 +148,20 @@ func TestDistributeCoinHoursProportional(t *testing.T) {
 	maxHours := 15000000
 	coins := make([]uint64, maxCoinsLen)
 	for i := 0; i < iterations; i++ {
-		coinsLen := rand.Intn(maxCoinsLen) + 1
+		coinsLen := rand.Intn(maxCoinsLen) + 1 //nolint:gosec
 
-		maxCoins := rand.Intn(maxMaxCoins) + 1
+		maxCoins := rand.Intn(maxMaxCoins) + 1 //nolint:gosec
 
 		var totalCoins uint64
 		for i := 0; i < coinsLen; i++ {
-			coins[i] = uint64(rand.Intn(maxCoins) + 1)
+			coins[i] = uint64(rand.Intn(maxCoins) + 1) //nolint:gosec
 
 			var err error
 			totalCoins, err = mathutil.AddUint64(totalCoins, coins[i])
 			require.NoError(t, err)
 		}
 
-		hours := uint64(rand.Intn(maxHours))
+		hours := uint64(rand.Intn(maxHours)) //nolint:gosec
 
 		output, err := DistributeCoinHoursProportional(coins[:coinsLen], hours)
 		require.NoError(t, err)

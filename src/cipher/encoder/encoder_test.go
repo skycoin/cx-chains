@@ -12,6 +12,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	"github.com/SkycoinProject/cx-chains/src/cipher"
@@ -973,13 +974,13 @@ func TestPrimitiveInts(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			bytes := Serialize(tc.c)
-			require.NotEmpty(t, bytes)
+			b := Serialize(tc.c)
+			require.NotEmpty(t, b)
 
 			var obj primitiveInts
-			n, err := DeserializeRaw(bytes, &obj)
+			n, err := DeserializeRaw(b, &obj)
 			require.NoError(t, err)
-			require.Equal(t, uint64(len(bytes)), n)
+			require.Equal(t, uint64(len(b)), n)
 			require.Equal(t, tc.c, obj)
 		})
 	}
@@ -1013,7 +1014,7 @@ type hasEveryType struct {
 func TestEncodeStable(t *testing.T) {
 	// Tests encoding against previously encoded data on disk to verify
 	// that encoding results have not changed
-	update := false
+	const update = false
 
 	x := hasEveryType{
 		A: -127,
@@ -1048,7 +1049,7 @@ func TestEncodeStable(t *testing.T) {
 	if update {
 		f, err := os.Create(goldenFile)
 		require.NoError(t, err)
-		defer f.Close()
+		defer func() { assert.NoError(t, f.Close()) }()
 
 		b := Serialize(x)
 		_, err = f.Write(b)
@@ -1058,7 +1059,7 @@ func TestEncodeStable(t *testing.T) {
 
 	f, err := os.Open(goldenFile)
 	require.NoError(t, err)
-	defer f.Close()
+	defer func() { assert.NoError(t, f.Close()) }()
 
 	d, err := ioutil.ReadAll(f)
 	require.NoError(t, err)

@@ -3,7 +3,7 @@ package cli
 import (
 	cobra "github.com/spf13/cobra"
 
-	"github.com/SkycoinProject/cx-chains/src/api"
+	"github.com/Skycoin/cx-chains/src/api"
 )
 
 // StatusResult is printed by cli status command

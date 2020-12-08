@@ -7,9 +7,9 @@ import (
 	"github.com/shopspring/decimal"
 	"github.com/stretchr/testify/require"
 
-	"github.com/SkycoinProject/cx-chains/src/cipher"
-	"github.com/SkycoinProject/cx-chains/src/coin"
-	"github.com/SkycoinProject/cx-chains/src/testutil"
+	"github.com/Skycoin/cx-chains/src/cipher"
+	"github.com/Skycoin/cx-chains/src/coin"
+	"github.com/Skycoin/cx-chains/src/testutil"
 )
 
 func TestCreateWalletParamsVerify(t *testing.T) {

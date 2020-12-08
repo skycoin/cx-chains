@@ -9,9 +9,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/SkycoinProject/cx-chains/src/cipher"
-	"github.com/SkycoinProject/cx-chains/src/cipher/bip39"
-	"github.com/SkycoinProject/cx-chains/src/wallet"
+	"github.com/Skycoin/cx-chains/src/cipher"
+	"github.com/Skycoin/cx-chains/src/cipher/bip39"
+	"github.com/Skycoin/cx-chains/src/wallet"
 )
 
 func addressGenCmd() *cobra.Command {

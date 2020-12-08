@@ -15,18 +15,18 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/SkycoinProject/cx-chains/src/cipher"
-	"github.com/SkycoinProject/cx-chains/src/coin"
-	"github.com/SkycoinProject/cx-chains/src/daemon/gnet"
-	"github.com/SkycoinProject/cx-chains/src/daemon/pex"
-	"github.com/SkycoinProject/cx-chains/src/params"
-	"github.com/SkycoinProject/cx-chains/src/util/elapse"
-	"github.com/SkycoinProject/cx-chains/src/util/fee"
-	"github.com/SkycoinProject/cx-chains/src/util/iputil"
-	"github.com/SkycoinProject/cx-chains/src/util/logging"
-	"github.com/SkycoinProject/cx-chains/src/util/useragent"
-	"github.com/SkycoinProject/cx-chains/src/visor"
-	"github.com/SkycoinProject/cx-chains/src/visor/dbutil"
+	"github.com/Skycoin/cx-chains/src/cipher"
+	"github.com/Skycoin/cx-chains/src/coin"
+	"github.com/Skycoin/cx-chains/src/daemon/gnet"
+	"github.com/Skycoin/cx-chains/src/daemon/pex"
+	"github.com/Skycoin/cx-chains/src/params"
+	"github.com/Skycoin/cx-chains/src/util/elapse"
+	"github.com/Skycoin/cx-chains/src/util/fee"
+	"github.com/Skycoin/cx-chains/src/util/iputil"
+	"github.com/Skycoin/cx-chains/src/util/logging"
+	"github.com/Skycoin/cx-chains/src/util/useragent"
+	"github.com/Skycoin/cx-chains/src/visor"
+	"github.com/Skycoin/cx-chains/src/visor/dbutil"
 )
 
 var (

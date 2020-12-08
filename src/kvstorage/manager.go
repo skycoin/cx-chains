@@ -8,8 +8,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/SkycoinProject/cx-chains/src/util/file"
-	"github.com/SkycoinProject/cx-chains/src/util/logging"
+	"github.com/Skycoin/cx-chains/src/util/file"
+	"github.com/Skycoin/cx-chains/src/util/logging"
 )
 
 // Type is a type of a key-value storage

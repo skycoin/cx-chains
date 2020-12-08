@@ -3,7 +3,7 @@ package cli
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/SkycoinProject/cx-chains/src/cipher"
+	"github.com/Skycoin/cx-chains/src/cipher"
 )
 
 func verifyAddressCmd() *cobra.Command {

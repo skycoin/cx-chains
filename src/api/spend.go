@@ -9,17 +9,17 @@ import (
 
 	"github.com/shopspring/decimal"
 
-	"github.com/SkycoinProject/cx-chains/src/cipher"
-	"github.com/SkycoinProject/cx-chains/src/coin"
-	"github.com/SkycoinProject/cx-chains/src/params"
-	"github.com/SkycoinProject/cx-chains/src/transaction"
-	"github.com/SkycoinProject/cx-chains/src/util/droplet"
-	"github.com/SkycoinProject/cx-chains/src/util/fee"
-	wh "github.com/SkycoinProject/cx-chains/src/util/http"
-	"github.com/SkycoinProject/cx-chains/src/util/mathutil"
-	"github.com/SkycoinProject/cx-chains/src/visor"
-	"github.com/SkycoinProject/cx-chains/src/visor/blockdb"
-	"github.com/SkycoinProject/cx-chains/src/wallet"
+	"github.com/Skycoin/cx-chains/src/cipher"
+	"github.com/Skycoin/cx-chains/src/coin"
+	"github.com/Skycoin/cx-chains/src/params"
+	"github.com/Skycoin/cx-chains/src/transaction"
+	"github.com/Skycoin/cx-chains/src/util/droplet"
+	"github.com/Skycoin/cx-chains/src/util/fee"
+	wh "github.com/Skycoin/cx-chains/src/util/http"
+	"github.com/Skycoin/cx-chains/src/util/mathutil"
+	"github.com/Skycoin/cx-chains/src/visor"
+	"github.com/Skycoin/cx-chains/src/visor/blockdb"
+	"github.com/Skycoin/cx-chains/src/wallet"
 )
 
 // CreateTransactionResponse is returned by /wallet/transaction

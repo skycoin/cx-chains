@@ -20,8 +20,8 @@ import (
 	"github.com/cenkalti/backoff"
 	"github.com/sirupsen/logrus"
 
-	"github.com/SkycoinProject/cx-chains/src/util/logging"
-	"github.com/SkycoinProject/cx-chains/src/util/useragent"
+	"github.com/Skycoin/cx-chains/src/util/logging"
+	"github.com/Skycoin/cx-chains/src/util/useragent"
 )
 
 //TODO:

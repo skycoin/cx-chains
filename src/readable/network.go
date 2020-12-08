@@ -1,9 +1,9 @@
 package readable
 
 import (
-	"github.com/SkycoinProject/cx-chains/src/daemon"
-	"github.com/SkycoinProject/cx-chains/src/params"
-	"github.com/SkycoinProject/cx-chains/src/util/useragent"
+	"github.com/Skycoin/cx-chains/src/daemon"
+	"github.com/Skycoin/cx-chains/src/params"
+	"github.com/Skycoin/cx-chains/src/util/useragent"
 )
 
 // Connection a connection's state within the daemon

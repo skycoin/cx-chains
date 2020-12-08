@@ -13,14 +13,14 @@ import (
 
 	"github.com/shopspring/decimal"
 
-	cxcore "github.com/SkycoinProject/cx/cx"
+	cxcore "github.com/Skycoin/cx/cx"
 
-	"github.com/SkycoinProject/cx-chains/src/cipher"
-	"github.com/SkycoinProject/cx-chains/src/coin"
-	"github.com/SkycoinProject/cx-chains/src/params"
-	"github.com/SkycoinProject/cx-chains/src/util/fee"
-	"github.com/SkycoinProject/cx-chains/src/util/logging"
-	"github.com/SkycoinProject/cx-chains/src/util/mathutil"
+	"github.com/Skycoin/cx-chains/src/cipher"
+	"github.com/Skycoin/cx-chains/src/coin"
+	"github.com/Skycoin/cx-chains/src/params"
+	"github.com/Skycoin/cx-chains/src/util/fee"
+	"github.com/Skycoin/cx-chains/src/util/logging"
+	"github.com/Skycoin/cx-chains/src/util/mathutil"
 )
 
 var (

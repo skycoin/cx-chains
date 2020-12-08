@@ -6,7 +6,7 @@ package elapse
 import (
 	"time"
 
-	"github.com/SkycoinProject/cx-chains/src/util/logging"
+	"github.com/Skycoin/cx-chains/src/util/logging"
 )
 
 // Elapser measures time elapsed for an operation. It is not thread-safe, use a different elapser per thread.

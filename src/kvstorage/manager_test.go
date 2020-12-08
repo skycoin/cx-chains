@@ -7,8 +7,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/SkycoinProject/cx-chains/src/testutil"
-	"github.com/SkycoinProject/cx-chains/src/util/file"
+	"github.com/Skycoin/cx-chains/src/testutil"
+	"github.com/Skycoin/cx-chains/src/util/file"
 )
 
 func TestLoadStorage(t *testing.T) {

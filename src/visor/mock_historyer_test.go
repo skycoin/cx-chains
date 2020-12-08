@@ -3,12 +3,12 @@
 package visor
 
 import (
-	cipher "github.com/SkycoinProject/cx-chains/src/cipher"
-	coin "github.com/SkycoinProject/cx-chains/src/coin"
+	cipher "github.com/Skycoin/cx-chains/src/cipher"
+	coin "github.com/Skycoin/cx-chains/src/coin"
 
-	dbutil "github.com/SkycoinProject/cx-chains/src/visor/dbutil"
+	dbutil "github.com/Skycoin/cx-chains/src/visor/dbutil"
 
-	historydb "github.com/SkycoinProject/cx-chains/src/visor/historydb"
+	historydb "github.com/Skycoin/cx-chains/src/visor/historydb"
 
 	mock "github.com/stretchr/testify/mock"
 )

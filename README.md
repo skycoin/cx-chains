@@ -1,731 +1,358 @@
-![skycoin logo](https://user-images.githubusercontent.com/26845312/32426705-d95cb988-c281-11e7-9463-a3fce8076a72.png)
+# CX Chains Overview
 
-# Skycoin
+This document has the purpose of dissecting CX chains into its different parts and to describe the processes that involve these parts. As the CX chains feature is still in a prototype/alpha stage, the descriptions contained in this file are subject to change. Changes can be expected after a new release of CX is created and after Github pull requests are merged into the `develop` branch.
 
-[![Build Status](https://travis-ci.org/skycoin/skycoin.svg)](https://travis-ci.org/skycoin/skycoin)
-[![GoDoc](https://godoc.org/github.com/skycoin/skycoin?status.svg)](https://godoc.org/github.com/skycoin/skycoin)
-[![Go Report Card](https://goreportcard.com/badge/github.com/skycoin/skycoin)](https://goreportcard.com/report/github.com/skycoin/skycoin)
+Each of the following sections describe either a process or a module that is part of the composition of a CX chain. The document starts explaining what a [Blockchain Code](#blockchain-code) and a [Transaction Code](#transaction-code) are, and how and why [Merging the Blockchain and Transaction Codes](#merging-the-blockchain-and-transaction-codes) is necessary for the functionality of a CX chain. After reviewing these concepts, it is then explained how these programs are necessary to create, modify and query a CX chain's [Program State](#program-state). The [Program State Structure](#program-state-structure) is then described, which helps the reader understand how a CX chain stores its state and what are the capabilities of a CX chain.
 
-Skycoin is a next-generation cryptocurrency.
+In order to create a CX chain, a number of parameters need to be set first in different files by using different methods. First, it is described how a [Coin Template](#coin-template) file is used to generate a program that can be used to run something similar to a cryptocurrency. Then, a process to generate a [Genesis Address and Genesis Private and Public Keys](#genesis-address-and-genesis-private-and-public-keys) is described, which outputs data that will be used to populate a [fiber.toml Configuration File](#fibertoml-configuration-file) that is used for [Initializing a CX Chain](#initializing-a-cx-chain). After this initialization process completes, it is explained how a [Wallet](#wallet) is created using a [Seed](#seed) and how we can start [Testing and Injecting Transactions](#testing-and-injecting-transactions).
 
-Skycoin was written from scratch and designed over four years to realize the
-ideal of Bitcoin and represents the apex of cryptocurrency design.
-Skycoin is not designed to add features to Bitcoin,
-but rather improves Bitcoin by increasing simplicity,
-security and stripping out everything non-essential.
+For any encountered bug or feature request, we encourage the reader to [create a Github issue](https://github.com/SkycoinProject/cx/issues/new/choose) with the inquiry.
 
-Some people have hyped the Skycoin Project as leading into "Bitcoin 3.0".
-The coin itself is not "Bitcoin 3.0",
-but is rather "Bitcoin 1.0". Bitcoin is a prototype crypto-coin.
-Skycoin was designed to be what Bitcoin would look like if it were built from
-scratch, to remedy the rough edges in the Bitcoin design.
+Table of Contents
+=================
 
-- no duplicate coin-base outputs
-- enforced checks for hash collisions
-- simple deterministic wallets
-- no transaction malleability
-- no signature malleability
-- removal of the scripting language
-- CoinJoin and normal transactions are indistinguishable
-- elimination of edge-cases that prevent independent node implementations
-- <=10 second transaction times
-- elimination of the need for mining to achieve blockchain consensus
+   * [CX Chains Overview](#cx-chains-overview)
+   * [Table of Contents](#table-of-contents)
+   * [Blockchain Code](#blockchain-code)
+      * [Program State](#program-state)
+      * [Program State Structure](#program-state-structure)
+         * [Code Segment](#code-segment)
+         * [Stack Segment](#stack-segment)
+         * [Data Segment](#data-segment)
+         * [Heap Segment](#heap-segment)
+   * [Transaction Code](#transaction-code)
+   * [Merging the Blockchain and Transaction Codes](#merging-the-blockchain-and-transaction-codes)
+   * [Coin Templates](#coin-templates)
+   * [Genesis Address and Genesis Private and Public Keys](#genesis-address-and-genesis-private-and-public-keys)
+   * [fiber.toml Configuration File](#fibertoml-configuration-file)
+   * [Initializing a CX Chain](#initializing-a-cx-chain)
+   * [Publisher and Peer Nodes](#publisher-and-peer-nodes)
+   * [Wallet](#wallet)
+      * [Seed](#seed)
+   * [Testing and Injecting Transactions](#testing-and-injecting-transactions)
+   * [Limitations, bugs and non-desirable behaviors](#limitations-bugs-and-non-desirable-behaviors)
+   * [More examples](#more-examples)
+      * [Hello, world!](#hello-world)
+      * [Blockchain counter](#blockchain-counter)
 
-## Links
+# Blockchain Code
 
-* [skycoin.net](https://www.skycoin.net)
-* [Skycoin Blog](https://www.skycoin.net/blog)
-* [Skycoin Docs](https://www.skycoin.net/docs)
-* [Skycoin Blockchain Explorer](https://explorer.skycoin.net)
-* [Skycoin Development Telegram Channel](https://t.me/skycoindev)
-* [Skycoin Github Wiki](https://github.com/skycoin/skycoin/wiki)
+"Blockchain code" plays a similar role to that of a programming language library: it defines a series of subroutines (functions), types (structs) and variables, and it can be imported into a program. The differences between blockchain code and a library are the following:
 
-## Table of Contents
+1. It is used to initialize a CX chain.
+2. The global variables defined in the packages that compose the blockchain code act as the program state of a CX chain.
+3. It includes a `main` function. This function is used to initialize the program state of a CX chain.
+4. After initializing the program state, the `main` function is removed from the blockchain code.
 
-<!-- MarkdownTOC levels="1,2,3,4,5" autolink="true" bracket="round" -->
+## Program State
 
-- [Changelog](#changelog)
-- [Installation](#installation)
-	- [Go 1.10+ Installation and Setup](#go-110-installation-and-setup)
-	- [Go get skycoin](#go-get-skycoin)
-	- [Run Skycoin from the command line](#run-skycoin-from-the-command-line)
-	- [Show Skycoin node options](#show-skycoin-node-options)
-	- [Run Skycoin with options](#run-skycoin-with-options)
-	- [Docker image](#docker-image)
-	- [Building your own images](#building-your-own-images)
-	- [Development image](#development-image)
-- [API Documentation](#api-documentation)
-	- [REST API](#rest-api)
-	- [Skycoin command line interface](#skycoin-command-line-interface)
-- [Integrating Skycoin with your application](#integrating-skycoin-with-your-application)
-- [Contributing a node to the network](#contributing-a-node-to-the-network)
-- [Creating a new coin](#creating-a-new-coin)
-- [Daemon CLI Options](#daemon-cli-options)
-- [URI Specification](#uri-specification)
-- [Wire protocol user agent](#wire-protocol-user-agent)
-- [Development](#development)
-	- [Modules](#modules)
-	- [Client libraries](#client-libraries)
-	- [Running Tests](#running-tests)
-	- [Running Integration Tests](#running-integration-tests)
-		- [Stable Integration Tests](#stable-integration-tests)
-		- [Live Integration Tests](#live-integration-tests)
-		- [Debugging Integration Tests](#debugging-integration-tests)
-		- [Update golden files in integration testdata](#update-golden-files-in-integration-testdata)
-	- [Test coverage](#test-coverage)
-		- [Test coverage for the live node](#test-coverage-for-the-live-node)
-	- [Formatting](#formatting)
-	- [Code Linting](#code-linting)
-	- [Profiling](#profiling)
-	- [Fuzzing](#fuzzing)
-		- [base58](#base58)
-		- [encoder](#encoder)
-	- [Dependencies](#dependencies)
-		- [Rules](#rules)
-		- [Management](#management)
-	- [Configuration Modes](#configuration-modes)
-		- [Development Desktop Client Mode](#development-desktop-client-mode)
-		- [Server Daemon Mode](#server-daemon-mode)
-		- [Electron Desktop Client Mode](#electron-desktop-client-mode)
-		- [Standalone Desktop Client Mode](#standalone-desktop-client-mode)
-	- [Wallet GUI Development](#wallet-gui-development)
-		- [Translations](#translations)
-	- [Releases](#releases)
-		- [Update the version](#update-the-version)
-		- [Pre-release testing](#pre-release-testing)
-		- [Creating release builds](#creating-release-builds)
-		- [Release signing](#release-signing)
-- [Responsible Disclosure](#responsible-disclosure)
+The program state of a CX chain is generated by serializing the CX program represented by a blockchain code. This serialization includes all the blockchain code with the exception of the `main` function which serves solely for the initialization of the program state of a CX chain. This program state is stored on the blockchain as part of an unspent output of a transaction.
 
-<!-- /MarkdownTOC -->
+The entirety of the program state can be queried or mutated. As is described in the following subsections, it can be seen that the code segment – which represents the blockchain code – is also part of the program state. As a consequent of this design, the code of a CX chain can be modified. Although this feature is not implemented yet, the modification of a CX chain blockchain code is intended to be modified by the use of affordances.
 
-## Changelog
+## Program State Structure
 
-[CHANGELOG.md](CHANGELOG.md)
+The program state of a CX chain is equivalent to the serialization of the initialized blockchain code, minus its `main` function. The structure of this serialization is composed of four memory segments: code, stack, data and heap. The code segment represents the source code in the blockchain code; the stack segment represents the CX program's stack, which stores the local variables of the different function calls that are performed when running a CX program; the data segment stores any global variable and primitive literals found in the source code (for example, in the function call `foo(5)`, the value 5 is stored in the data segment); lastly, the heap segment stores objects that can shrink or expand in size (strings and slices) and objects that are being pointed to by pointers and that escape their function call scope (see [Escape Analysis](https://en.wikipedia.org/wiki/Escape_analysis)). A diagram of this structure is shown below:
 
-## Installation
 
-Skycoin supports go1.10+.
+[![memory-segments.png](https://raw.githubusercontent.com/skycoin/cx/develop/documentation/images/memory-segments.png)](https://raw.githubusercontent.com/skycoin/cx/develop/documentation/images/memory-segments.png)
 
-### Go 1.10+ Installation and Setup
+It must be noted that the stack and heap segments are not being included at the moment, but this can/should change in the future versions of CX chains. Despite this limitation, the role of these segments in a CX chain are also described in this document.
 
-[Golang 1.10+ Installation/Setup](./INSTALLATION.md)
+### Code Segment
 
-### Go get skycoin
+The code segment in the program state of a CX chain represents the blockchain code, without its `main` function. This code can be imported into the transaction code, in order to have its different packages, functions and types be used by the transaction code to modify the program state.
 
-```sh
-$ go get github.com/skycoin/skycoin/cmd/...
+```go
+package viewsChain
+
+var views i32
+
+func GetViews() (currentViews i32) {
+	return views
+}
+
+func IncrementViews() {
+	views++
+}
+
+func main() {
+	// Initialize views.
+	views = 78
+}
 ```
 
-This will download `github.com/skycoin/skycoin` to `$GOPATH/src/github.com/skycoin/skycoin`.
+The code above shows a minimal library to manage video views in an application. After initializing a CX chain with the code above, we will have a code segment with two functions (`GetViews` and `IncrementViews`), a global variable (`views`) and a package containing these elements (`viewsChain`). Additionally, `views` will be pointing to a `78`, but this number is stored in a different memory segment.
 
-You can also clone the repo directly with `git clone https://github.com/skycoin/skycoin`,
-but it must be cloned to this path: `$GOPATH/src/github.com/skycoin/skycoin`.
+The code segment has an additional property: it can be modified by using affordances. For example, a user with the required permissions to a CX chain could call a function that adds more functions to the code segment. It is noteworthy that this feature has not been implemented nor fully designed yet.
 
-### Run Skycoin from the command line
+### Stack Segment
 
-```sh
-$ cd $GOPATH/src/github.com/skycoin/skycoin
-$ make run-client
+The stack segment stores all the values of the local variables of a function call. This memory segment is volatile, as the values stored in it can suddenly be considered garbage after a function call is finished. Storing this memory segment in the program state enables a CX chain to be paused and resumed in a subsequent transaction.
+
+It must be noted that the stack segment will always be wiped out after initializing the program state. In other words, after running the blockchain code, the values left in the stack by calling its `main` function will not be preserved.
+
+### Data Segment
+
+Although the other segments can also be used to preserve the state of a CX chain, the data segment results in the most reliable  of the segments due to its nature. The code segment only stores data that represents source code; the stack segment is volatile, which means that the data contained in there can suddenly become garbage, depending on the behavior of the function calls in a program; and the heap segment stores data objects that could be removed by the garbage collector at any moment. In contrast, the data segment has a fixed size, where every chunk of bytes represents the value of each of the global variables declared in the blockchain code, and these global variables will always point to the same addresses in the data segment.
+
+### Heap Segment
+
+The heap segment should be seen as an auxiliary mechanism for storing data in a CX chain. Although variables in function calls can point to objects in the heap, these objects will sooner or later be destroyed by the garbage collector if the function call containing that local variable has finished its execution. However, the heap segment works well together with the data segment, as the heap segment allows a CX chain to have pointer global variables, slices and strings, as these are objects that are always allocated in the heap segment in CX.
+
+# Transaction Code
+
+The program state that is stored on the blockchain can either be mutated or queried by running a program that "imports" the program state. Actually, in order to have any sort of access to the program state, a program needs to import packages that are stored in the program state. As a minimalist example, consider the following code:
+
+```go
+package number
+
+var Num i32
+
+func main() {
+	Num = 10
+}
 ```
 
-### Show Skycoin node options
+In order to modify the value of `Num`, the following transaction code can be used:
 
-```sh
-$ cd $GOPATH/src/github.com/skycoin/skycoin
-$ make run-help
+```
+package main
+import "number"
+
+func main() {
+	number.Num = 11
+}
 ```
 
-### Run Skycoin with options
+As can be seen, this resembles exactly what would happen in a CX program that is importing a package, either located in the same file or in an external file. The difference between a CX chain and the aforementioned situation is that in a CX chain, the program state will be preserved. For example, consider the following transaction code:
 
-Example:
+```
+package main
+import "number"
 
-```sh
-$ cd $GOPATH/src/github.com/skycoin/skycoin
-$ make ARGS="--launch-browser=false -data-dir=/custom/path" run
+func main() {
+	i32.print(number.Num)
+}
 ```
 
-### Docker image
+In the case above, `i32.print(number.Num)` will print `11`, because the previous transaction code modified the value of `number.Num`.
 
-This is the quickest way to start using Skycoin using Docker.
+# Merging the Blockchain and Transaction Codes
 
-```sh
-$ docker volume create skycoin-data
-$ docker volume create skycoin-wallet
-$ docker run -ti --rm \
-    -v skycoin-data:/data/.skycoin \
-    -v skycoin-wallet:/wallet \
-    -p 6000:6000 \
-    -p 6420:6420 \
-    skycoin/skycoin
+Both the program state and the transactions that are run against this program state are stored as serializations of CX programs. In order to run a transaction against the program state, a merging of both serializations needs to be performed. This merging – although not so trivial – results in a structure similar to the one depicted in the diagram below:
+
+[![merging.png](https://raw.githubusercontent.com/skycoin/cx/develop/documentation/images/merging.png)](https://raw.githubusercontent.com/skycoin/cx/develop/documentation/images/merging.png)
+
+As can be seen, each of the memory segments of the serialization of the transaction code is appended at the end of each of the memory segments of the serialization of the blockchain code. The merging of both serializations results in a serialization representing a CX program that both includes the blockchain and the transaction code.
+
+After running the merged program, the program needs to be separated into two parts again: the program state and the serialized transaction code, where the new program state is stored as part of an unspent output, and the serialized transaction code is stored as part of the transaction. 
+
+# Coin Templates
+
+A coin template is used by the `newcoin` command to generate a Go source file that is used to run a CX chain. These templates are located in the `template/` directory.
+
+The `coin.template` file is used to generate the `cmd/cxcoin/cxcoin.go` source file, while the file `params.template` is used to generate the file `src/params/params.go` source file. The former is used to run the peer and publisher nodes for the CX chain, while the latter is used to hold multiple configuration parameters for the CX chain nodes.
+
+# Genesis Address and Genesis Private and Public Keys
+
+In order to initialize a new CX chain, secret and public keys need to be generated to create the genesis transaction. Generating these keys is achieved by running the following command:
+
+```
+cx --generate-address
 ```
 
-This image has a `skycoin` user for the skycoin daemon to run, with UID and GID 10000.
-When you mount the volumes, the container will change their owner, so you
-must be aware that if you are mounting an existing host folder any content you
-have there will be own by 10000.
+The output of this command will be similar to the one below:
 
-The container will run with some default options, but you can change them
-by just appending flags at the end of the `docker run` command. The following
-example will show you the available options.
-
-```sh
-$ docker run --rm skycoin/skycoin -help
+```json
+{
+    "meta": {
+        "coin": "skycoin",
+        "cryptoType": "",
+        "encrypted": "false",
+        "filename": "2019_05_23_a737.wlt",
+        "label": "cxcoin",
+        "lastSeed": "64ceea88ba937fecab483ab6d2d9f51d4a02548cba71dbc494bab9550c0e6346",
+        "secrets": "",
+        "seed": "2a998dcce5470b87207a790db446219c046972b1f5bb618b0a5e851c972cc3e8",
+        "tm": "1558675717",
+        "type": "deterministic",
+        "version": "0.2"
+    },
+    "entries": [
+        {
+            "address": "U84KDcpRbEK8ReHs7Z85MZd3KiFCCjUYPY",
+            "public_key": "027ab554fef1fb125c5ec5317b830126cba5ba554f56ce08afb44eef8ead9cdfc1",
+            "secret_key": "e2529cf862bd5a01c044966897e3ab4173e3df39cf2034f4c1c749e1ef0c3672"
+        }
+    ]
+}
 ```
 
-Access the dashboard: [http://localhost:6420](http://localhost:6420).
+The bits of interest from this output are the values of the JSON keys `address`, `public_key` and `secret_key`.
 
-Access the API: [http://localhost:6420/version](http://localhost:6420/version).
+These values are used for editing the file `fiber.toml`, with the exception of `secret_key`. At the moment, the modification of this file needs to be done manually, but this process should be performed automatically in later versions of CX. The value of the secret key must be kept secret, as the name implies, as this key could be used to sign transactions by anyone who posseses it.
 
-### Building your own images
+# `fiber.toml` Configuration File
 
-[Building your own images](docker/images/mainnet/README.md).
+`fiber.toml` is used to set parameters that are used during the initialization and operation of a CX chain. The file already contains some values that can be considered as default, such as the `genesis_timestamp` or `max_block_size`, but other fields need to be set up with different values for every CX chain. Particularly, the fields:
 
-### Development image
+- `blockchain_pubkey_str`
+- `genesis_address_str`
+- `genesis_signature_str`
 
-The [skycoin/skycoindev-cli docker image](docker/images/dev-cli/README.md) is provided in order to make
-easy to start developing Skycoin. It comes with the compiler, linters, debugger
-and the vim editor among other tools.
+need to be updated. The values of the first two fields are updated with the values obtained by following the instructions in the section [Genesis Transaction](#genesis-transaction), while the last one is automatically generated and added to `fiber.toml` by initializing a blockchain by running a command of the form `cx --blockchain --public-key $PUBLIC_KEY --private-key $PRIVATE_KEY blockchain-code.cx`.
 
-The [skycoin/skycoindev-dind docker image](docker/images/dev-docker/README.md) comes with docker installed
-and all tools available on `skycoin/skycoindev-cli:develop` docker image.
+Other fields that can be of interest in this file are:
 
-Also, the [skycoin/skycoindev-vscode docker image](docker/images/dev-vscode/README.md) is provided
-to facilitate the setup of the development process with [Visual Studio Code](https://code.visualstudio.com)
-and useful tools included in `skycoin/skycoindev-cli`.
+- `create_block_max_transaction_size`
+- `max_block_size`
+- `unconfirmed_max_transaction_size`.
 
-## API Documentation
+These fields control how large a CX chain's transactions can be. The default is set to be 5 Mb for all of these parameters.
 
-### REST API
+Lastly, any field related to the configuration of a cryptocurrency should be ignored and left untouched for the functionality of a CX chain, specifically: 
 
-[REST API](src/api/README.md).
+- `genesis_coin_volume`
+- `create_block_burn_factor`
+- `unconfirmed_burn_factor`
+- `max_coin_supply`
+- `user_burn_factor`
 
-### Skycoin command line interface
+# Initializing a CX Chain
 
-[CLI command API](cmd/cli/README.md).
+Currently, CX has the `newcoin` command as a dependency (located in `cmd/newcoin`). In order to initialize a new CX chain, `newcoin` needs to create the `cxcoin` command (located in `cmd/cxcoin`) using the parameters defined in `./fiber.toml`. This process should be simplified by mimicking the process defined by `cmd/cxcoin/cxcoin.go` in `cxgo/main.go`. In other words, instead of having to call the process defined by `cxcoin`, we can embed the process in CX to eliminate the `newcoin` and `cxcoin` dependencies.
 
-## Integrating Skycoin with your application
+The workflow – which occurs when running, for example, `cx --blockchain --secret-key $SECRET_KEY --public-key $PUBLIC_KEY examples/blockchain/counter-bc.cx` – is as follows:
 
-[Skycoin Integration Documentation](INTEGRATION.md)
+1. `newcoin` is installed by running `go install ./cmd/newcoin/...`
+2. `newcoin` is run in order to create `cxcoin`
 
-## Contributing a node to the network
+> It is worthy to note that the name `cxcoin` could be changed to something else by using the `--program-name` flag, but this behavior has not been tested yet.
 
-Add your node's `ip:port` to the [peers.txt](peers.txt) file.
-This file will be periodically uploaded to https://downloads.skycoin.net/blockchain/peers.txt
-and used to seed client with peers.
+3. `cxcoin` is installed by running `go install ./cmd/cxcoin/...`
 
-*Note*: Do not add Skywire nodes to `peers.txt`.
-Only add Skycoin nodes with high uptime and a static IP address (such as a Skycoin node hosted on a VPS).
+4. `cxcoin` is run to initialize the CX chain. This process involves:
 
-## Creating a new coin
+   1. Running `go run ./cmd/cxcoin/cxcoin.go --block-publisher=true --blockchain-secret-key=$SECRET_KEY`.
 
-See the [newcoin tool README](./cmd/newcoin/README.md)
+   > The data directory for the publisher node is stored in `$HOME/.cxcoin/`. Every time a new CX chain is initialized, its data directory is deleted first. The name of this directory can change, depending on the value of `--program-name`.
 
-## Daemon CLI Options
+   2. As this is a new blockchain, the genesis block will be created and a genesis signature is generated. This genesis signature will be different for every blockchain, even if the blockchain private and public keys are the same.
+   3. Using the genesis signature and the secret key, a CX chain creates the first transaction in the genesis block, which is a transaction without a transaction code and with an unspent output storing the initial program state, defined by running the blockchain code.
+   4. `fiber.toml`'s field `genesis_signature_str` is updated automatically with the new genesis signature.
+   5. The genesis signature is printed to standard output, so the user can take note of it.
 
-See the [Skycoin Daemon CLI options](./cmd/skycoin/README.md)
+The diagram below illustrates how the different parts and processes that have been reviewed until now interact among them in order to generate the initial program state.
 
-## URI Specification
+[![init-stage.png](https://raw.githubusercontent.com/skycoin/cx/develop/documentation/images/init-stage.png)](https://raw.githubusercontent.com/skycoin/cx/develop/documentation/images/init-stage.png)
 
-Skycoin URIs obey the same rules as specified in Bitcoin's [BIP21](https://github.com/bitcoin/bips/blob/master/bip-0021.mediawiki).
-They use the same fields, except with the addition of an optional `hours` parameter, specifying the coin hours.
+# Publisher and Peer Nodes
 
-Example Skycoin URIs:
+A CX chain works by using the Skycoin platform. In order to start broadcasting transactions and storing them on a blockchain, you need to have a publisher and a peer node. The publisher node is in charge of signing the blocks that are being created on the blockchain, while the peer node has the purpose of receiving the transactions and running them against the current program state of a CX chain.
 
-* `skycoin:2hYbwYudg34AjkJJCRVRcMeqSWHUixjkfwY`
-* `skycoin:2hYbwYudg34AjkJJCRVRcMeqSWHUixjkfwY?amount=123.456&hours=70`
-* `skycoin:2hYbwYudg34AjkJJCRVRcMeqSWHUixjkfwY?amount=123.456&hours=70&label=friend&message=Birthday%20Gift`
+In order to start a publisher node, the `--publisher` flag needs to be given to the `cx` command. For example:
 
-Additonally, if no `skycoin:` prefix is present when parsing, the string may be treated as an address:
-
-* `2hYbwYudg34AjkJJCRVRcMeqSWHUixjkfwY`
-
-However, do not use this URI in QR codes displayed to the user, because the address can't be disambiguated from other Skyfiber coins.
-
-## Wire protocol user agent
-
-[Wire protocol user agent description](https://github.com/skycoin/skycoin/wiki/Wire-protocol-user-agent)
-
-## Development
-
-We have two branches: `master` and `develop`.
-
-`develop` is the default branch and will have the latest code.
-
-`master` will always be equal to the current stable release on the website, and should correspond with the latest release tag.
-
-### Modules
-
-* `api` - REST API interface
-* `cipher` - cryptographic library (key generation, addresses, hashes)
-* `cipher/base58` - Base58 encoding
-* `cipher/encoder` - reflect-based deterministic runtime binary encoder
-* `cipher/encrypt` - at-rest data encryption (chacha20poly1305+scrypt)
-* `cipher/go-bip39` - BIP-39 seed generation
-* `cli` - CLI library
-* `coin` - blockchain data structures (blocks, transactions, unspent outputs)
-* `daemon` - top-level application manager, combining all components (networking, database, wallets)
-* `daemon/gnet` - networking library
-* `daemon/pex` - peer management
-* `params` - configurable transaction verification parameters
-* `readable` - JSON-encodable representations of internal structures
-* `skycoin` - core application initialization and configuration
-* `testutil` - testing utility methods
-* `transaction` - methods for creating transactions
-* `util` - miscellaneous utilities
-* `visor` - top-level blockchain database layer
-* `visor/blockdb` - low-level blockchain database layer
-* `visor/historydb` - low-level blockchain database layer for historical blockchain metadata
-* `wallet` - wallet file management
-
-### Client libraries
-
-Skycoin implements client libraries which export core functionality for usage from
-other programming languages.
-
-* [libskycoin C client library and SWIG interface](https://github.com/skycoin/libskycoin)
-* [skycoin-lite: Javascript and mobile bindings](https://github.com/skycoin/skycoin-lite)
-
-### Running Tests
-
-```sh
-$ make test
+```
+cx --publisher --genesis-address $GENESIS_ADDRESS \
+   --genesis-signature $GENESIS_SIGNATURE \
+   --secret-key $SECRET_KEY \
+   --public-key $PUBLIC_KEY
 ```
 
-### Running Integration Tests
+In the case of a peer node, the `--peer` flag is given to the `cx` command. For example:
 
-There are integration tests for the CLI and HTTP API interfaces. They have two
-run modes, "stable" and "live".
-
-The stable integration tests will use a skycoin daemon
-whose blockchain is synced to a specific point and has networking disabled so that the internal
-state does not change.
-
-The live integration tests should be run against a synced or syncing node with networking enabled.
-
-#### Stable Integration Tests
-
-```sh
-$ make integration-test-stable
+```
+cx --peer --genesis-address $GENESIS_ADDRESS \
+   --port 6001 \
+   --genesis-signature $GENESIS_SIGNATURE \
+   --public-key $PUBLIC_KEY
 ```
 
-or
+The data directory for the publisher node is stored at `$HOME/.cxcoin`, while the data directory for the peer node is stored at `tmp/6001`. This will be changed in the future, as the peer node's data will be deleted every time the server storing the data directory is rebooted.
 
-```sh
-$ ./ci-scripts/integration-test-stable.sh -v -w
+Note that if a new CX chain (a different blockchain code) needs to be created, the data directory of the peer node is required to be manually deleted (for example, by running the command `rm -r /tmp/6001`).
+
+# Wallet
+
+The transactions that are going to be run against the program state that is being stored on the blockchain need to be signed in order to meet the constraints imposed by the Skycoin blockchain platform.
+
+Although, in theory, a secret key should be enough to sign a transaction, CX chains require at the moment to generate a wallet to be used to sign transactions. This wallet can be generated using the `cx` command, for example:
+
+```
+$ cx --create-wallet --wallet-seed "museum nothing practice weird wheel dignity economy attend mask recipe minor dress"
 ```
 
-The `-w` option, run wallet integrations tests.
+## Seed
 
-The `-v` option, show verbose logs.
+Any transaction that occurs in a CX chain can be seen as a transaction between two accounts, which are represented by two addresses.  At the moment, these addresses involved in the transactions are hardcoded in CX. As a consequent, in order to run any transaction in a CX chain, a wallet created from the seed `"museum nothing practice weird wheel dignity economy attend mask recipe minor dress"` needs to be created.
 
-#### Live Integration Tests
+The two addresses involved in any CX chain transaction are `TkyD4wD64UE6M5BkNQA17zaf7Xcg4AufwX` and `2PBcLADETphmqWV7sujRZdh3UcabssgKAEB`. If this was a transaction involving the transfer of SKY from one address to another, the former would be the address that is sending SKY to the latter.
 
-The live integration tests run against a live runnning skycoin node, so before running the test, we
-need to start a skycoin node:
+# Testing and Injecting Transactions
 
-```sh
-$ ./run-daemon.sh
+Once a CX chain has been initialized, transactions can be run against the program state stored on the blockchain. There are two flags that can be used for this purpose: `--transaction` and `--broadcast`, where the first flag is used to only retrieve the current program state of a CX chain and run the transaction code against it locally, and the latter is used to additionally broadcast the transaction. For example, consider the following blockchain and transaction codes:
+
+```go
+package number
+
+var Num i32
+
+func main() {
+	Num = 10
+}
 ```
 
-After the skycoin node is up, run the following command to start the live tests:
+```go
+package main
+import "number"
 
-```sh
-$ make integration-test-live
+func main() {
+	number.Num = 11
+}
 ```
 
-The above command will run all tests except the wallet-related tests. To run wallet tests, we
-need to manually specify a wallet file, and it must have at least `2 coins` and `256 coinhours`,
-it also must have been loaded by the node.
+If the transaction code in the second snippet is run using the `--transaction` flag, the program state of the CX chain represented by the first code snippet will still be holding `10` as the value of the global variable `Num`. In contrast, if the second code snippet is run using the `--broadcast` flag, the program state of the CX chain will be mutated, and the value of the global variable `Num` will now be changed to `11`.
 
-We can specify the wallet by setting two environment variables: `WALLET_DIR` and `WALLET_NAME`. The `WALLET_DIR`
-represents the absolute path of the wallet directory, and `WALLET_NAME` represents the wallet file name.
+The diagram below depicts the workflow of a CX chain after its initialization. It can be seen how blockchain codes are used to form a transaction that will be changing the current program state in order to generate a new program state to be used by future transactions.
 
-Note: `WALLET_DIR` is only used by the CLI integration tests. The GUI integration tests use the node's
-configured wallet directory, which can be controlled with `-wallet-dir` when running the node.
+[![mutating-querying-stage.png](https://raw.githubusercontent.com/skycoin/cx/develop/documentation/images/mutating-querying-stage.png)](https://raw.githubusercontent.com/skycoin/cx/develop/documentation/images/mutating-querying-stage.png)
 
-If the wallet is encrypted, also set `WALLET_PASSWORD`.
+# Limitations, bugs and non-desirable behaviors
 
-```sh
-$ export WALLET_DIR="$HOME/.skycoin/wallets"
-$ export WALLET_NAME="$valid_wallet_filename"
-$ export WALLET_PASSWORD="$wallet_password"
-$ ./run-client.sh -launch-browser=false -enable-all-api-sets
-```
+At the time of writing, the CXChain implementation suffers from a number of limitations and bugs. But remember that this is only a beta version and we will work to improve the state of CX and Skycoin Fiber.
 
-Then run the tests with the following command:
+* CXChain has only been tested on Linux, and the Debian distribution at that.
+* You cannot send and receive SKY or any other cryptocurrency on Fiber (which is a good thing, as this CX chains are still in their experimental stage).
+* You need to wait a few seconds before creating and broadcasting a new transaction.
+* We don't have any security mechanism to prevent someone from calling or accessing certain parts of a CX chain's program state.  If you need security at this point, you should set up a firewall to your development workstation or work offline.
+* The wallet's address that is sending transactions is hard coded at the moment.
+* We need a way to set a seed for random numbers for the initial program state. This way we ensure determinism in subsequent transactions. Also, this seed should not be able to be changed by any transaction.
 
-```sh
-$ make integration-test-live-wallet
-```
+# More examples
 
-There are two other live integration test modes for CSRF disabled and networking disabled.
+In the CX source code you can find a number of increasingly complex examples that we have put together to increase your understanding:
 
-To run the CSRF disabled tests:
-
-```sh
-$ ./run-daemon.sh -disable-csrf
-```
-
-```sh
-$ make integration-test-live-disable-csrf
-```
-
-To run the networking disabled tests, which requires a live wallet:
-
-```sh
-$ ./run-client.sh -disable-networking -launch-browser=false
-```
-
-```sh
-$ export WALLET_DIR="$HOME/.skycoin/wallets"
-$ export WALLET_NAME="$valid_wallet_filename"
-$ export WALLET_PASSWORD="$wallet_password"
-$ make integration-test-live-disable-networking
-```
-
-#### Debugging Integration Tests
-
-Run specific test case:
-
-It's annoying and a waste of time to run all tests to see if the test we real care
-is working correctly. There's an option: `-r`, which can be used to run specific test case.
-For example: if we only want to test `TestStableAddressBalance` and see the result, we can run:
-
-```sh
-$ ./ci-scripts/integration-test-stable.sh -v -r TestStableAddressBalance
-```
-
-#### Update golden files in integration testdata
-
-Golden files are expected data responses from the CLI or HTTP API saved to disk.
-When the tests are run, their output is compared to the golden files.
-
-To update golden files, use the provided `make` command:
-
-```sh
-$ make update-golden-files
-```
-
-We can also update a specific test case's golden file with the `-r` option.
-For example:
-```sh
-$ ./ci-scripts/integration-test-stable.sh -v -u -r TestStableAddressBalance
-```
-
-### Test coverage
-
-Coverage is automatically generated for `make test` and integration tests run against a stable node.
-This includes integration test coverage. The coverage output files are placed in `coverage/`.
-
-To merge coverage from all tests into a single HTML file for viewing:
-
-```sh
-$ make check
-$ make merge-coverage
-```
-
-Then open `coverage/all-coverage.html` in the browser.
-
-#### Test coverage for the live node
-
-Some tests can only be run with a live node, for example wallet spending tests.
-To generate coverage for this, build and run the skycoin node in test mode before running the live integration tests.
-
-In one shell:
-
-```sh
-$ make run-integration-test-live-cover
-```
-
-In another shell:
-
-```sh
-$ make integration-test-live
-```
-
-After the tests have run, CTRL-C to exit the process from the first shell.
-A coverage file will be generated at `coverage/skycoin-live.coverage.out`.
-
-Merge the coverage with `make merge-coverage` then open the `coverage/all-coverage.html` file to view it,
-or generate the HTML coverage in isolation with `go tool cover -html`
-
-### Formatting
-
-All `.go` source files should be formatted `goimports`.  You can do this with:
-
-```sh
-$ make format
-```
-
-### Code Linting
-
-Install prerequisites:
-
-```sh
-$ make install-linters
-```
-
-Run linters:
-
-```sh
-$ make lint
-```
-
-### Profiling
-
-A full CPU profile of the program from start to finish can be obtained by running the node with the `-profile-cpu` flag.
-Once the node terminates, a profile file is written to `-profile-cpu-file` (defaults to `cpu.prof`).
-This profile can be analyzed with
-
-```sh
-$ go tool pprof cpu.prof
-```
-
-The HTTP interface for obtaining more profiling data or obtaining data while running can be enabled with `-http-prof`.
-The HTTP profiling interface can be controlled with `-http-prof-host` and listens on `localhost:6060` by default.
-
-See https://golang.org/pkg/net/http/pprof/ for guidance on using the HTTP profiler.
-
-Some useful examples include:
-
-```sh
-$ go tool pprof http://localhost:6060/debug/pprof/profile?seconds=10
-$ go tool pprof http://localhost:6060/debug/pprof/heap
-```
-
-A web page interface is provided by http/pprof at http://localhost:6060/debug/pprof/.
-
-### Fuzzing
-
-Fuzz tests are run with [go-fuzz](https://github.com/dvyukov/go-fuzz).
-[Follow the instructions on the go-fuzz page](https://github.com/dvyukov/go-fuzz) to install it.
-
-Fuzz tests are written for the following packages:
-
-#### base58
-
-To fuzz the `cipher/base58` package,
-
-```sh
-$ make fuzz-base58
-```
-
-#### encoder
-
-To fuzz the `cipher/encoder` package,
-
-```sh
-$ make fuzz-encoder
-```
-
-### Dependencies
-
-#### Rules
-
-Dependencies must not require `cgo`.  This means dependencies cannot be wrappers around C libraries.
-Requiring `cgo` breaks cross compilation and interferes with repeatable (deterministic) builds.
-
-Critical cryptographic dependencies used by code in package `cipher` are archived inside the `cipher` folder,
-rather than in the `vendor` folder.  This prevents a user of the `cipher` package from accidentally using a
-different version of the `cipher` dependencies than were developed, which could have catastrophic but hidden problems.
-
-#### Management
-
-Dependencies are managed with [dep](https://github.com/golang/dep).
-
-To [install `dep` for development](https://github.com/golang/dep/blob/master/docs/installation.md#development):
-
-```sh
-$ go get -u github.com/golang/dep/cmd/dep
-```
-
-`dep` vendors all dependencies into the repo.
-
-If you change the dependencies, you should update them as needed with `dep ensure`.
-
-Use `dep help` for instructions on vendoring a specific version of a dependency, or updating them.
-
-When updating or initializing, `dep` will find the latest version of a dependency that will compile.
-
-Examples:
-
-Initialize all dependencies:
-
-```sh
-$ dep init
-```
-
-Update all dependencies:
-
-```sh
-$ dep ensure -update -v
-```
-
-Add a single dependency (latest version):
-
-```sh
-$ dep ensure github.com/foo/bar
-```
-
-Add a single dependency (more specific version), or downgrade an existing dependency:
-
-```sh
-$ dep ensure github.com/foo/bar@tag
-```
-
-### Configuration Modes
-There are 4 configuration modes in which you can run a skycoin node:
-- Development Desktop Daemon
-- Server Daemon
-- Electron Desktop Client
-- Standalone Desktop Client
-
-#### Development Desktop Client Mode
-This mode is configured via `run-client.sh`
-```bash
-$ ./run-client.sh
-```
-
-#### Server Daemon Mode
-The default settings for a skycoin node are chosen for `Server Daemon`, which is typically run from source.
-This mode is usually preferred to be run with security options, though `-disable-csrf` is normal for server daemon mode, it is left enabled by default.
+## Hello, world!
 
 ```bash
-$ ./run-daemon.sh
+cx --heap-initial 100 --stack-size 100 --blockchain examples/blockchain/hello-world-bc.cx
 ```
-
-To disable CSRF:
 
 ```bash
-$ ./run-daemon.sh -disable-csrf
+cx --heap-initial 100 --stack-size 100 --transaction examples/blockchain/hello-world-txn.cx
 ```
 
-#### Electron Desktop Client Mode
-This mode configures itself via electron-main.js
+## Blockchain counter
 
-#### Standalone Desktop Client Mode
-This mode is configured by compiling with `STANDALONE_CLIENT` build tag.
-The configuration is handled in `cmd/skycoin/skycoin.go`
-
-### Wallet GUI Development
-
-The compiled wallet source should be checked in to the repo, so that others do not need to install node to run the software.
-
-Instructions for doing this:
-
-[Wallet GUI Development README](src/gui/static/README.md)
-
-#### Translations
-
-You can find information about how to work with translation files in the [Translations README](./src/gui/static/src/assets/i18n/README.md).
-
-### Releases
-
-#### Update the version
-
-0. If the `master` branch has commits that are not in `develop` (e.g. due to a hotfix applied to `master`), merge `master` into `develop`
-0. Make sure the translations are up to date. See the [i18n README](./src/gui/static/src/assets/i18n/README.md) for instructions on how to update translations and how to check if they are up to date.
-0. Compile the `src/gui/static/dist/` to make sure that it is up to date (see [Wallet GUI Development README](src/gui/static/README.md))
-0. Update version strings to the new version in the following files: `electron/package-lock.json`, `electron/package.json`, `electron/skycoin/current-skycoin.json`, `src/cli/cli.go`, `src/gui/static/src/current-skycoin.json`, `src/cli/integration/testdata/status*.golden`, `template/coin.template`, `README.md` files .
-0. If changes require a new database verification on the next upgrade, update `src/skycoin/skycoin.go`'s `DBVerifyCheckpointVersion` value
-0. Update `CHANGELOG.md`: move the "unreleased" changes to the version and add the date
-0. Update the files in https://github.com/skycoin/repo-info by following the [metadata update procedure](https://github.com/skycoin/repo-info/#updating-skycoin-repository-metadate),
-0. Merge these changes to `develop`
-0. Follow the steps in [pre-release testing](#pre-release-testing)
-0. Make a PR merging `develop` into `master`
-0. Review the PR and merge it
-0. Tag the `master` branch with the version number. Version tags start with `v`, e.g. `v0.20.0`.
-    Sign the tag. If you have your GPG key in github, creating a release on the Github website will automatically tag the release.
-    It can be tagged from the command line with `git tag -as v0.20.0 $COMMIT_ID`, but Github will not recognize it as a "release".
-0. Make sure that the client runs properly from the `master` branch
-0. Release builds are created and uploaded by travis. To do it manually, checkout the `master` branch and follow the [create release builds](electron/README.md) instructions.
-
-If there are problems discovered after merging to `master`, start over, and increment the 3rd version number.
-For example, `v0.20.0` becomes `v0.20.1`, for minor fixes.
-
-#### Pre-release testing
-
-Performs these actions before releasing:
-
-* `make check`
-* `make integration-test-live`
-* `make integration-test-live-disable-networking` (requires node run with `-disable-networking`)
-* `make integration-test-live-disable-csrf` (requires node run with `-disable-csrf`)
-* `make intergration-test-live-wallet` (see [live integration tests](#live-integration-tests)) both with an unencrypted and encrypted wallet
-* `go run cmd/cli/cli.go checkdb` against a fully synced database
-* `go run cmd/cli/cli.go checkDBDecoding` against a fully synced database
-* On all OSes, make sure that the client runs properly from the command line (`./run-client.sh` and `./run-daemon.sh`)
-* Build the releases and make sure that the Electron client runs properly on Windows, Linux and macOS.
-    * Use a clean data directory with no wallets or database to sync from scratch and verify the wallet setup wizard.
-    * Load a test wallet with nonzero balance from seed to confirm wallet loading works
-    * Send coins to another wallet to confirm spending works
-    * Restart the client, confirm that it reloads properly
-* For both the Android and iOS mobile wallets, configure the node url to be https://staging.node.skycoin.net
-  and test all operations to ensure it will work with the new node version.
-
-#### Creating release builds
-
-[Create Release builds](electron/README.md).
-
-#### Release signing
-
-Releases are signed with this PGP key:
-
-`0x5801631BD27C7874`
-
-The fingerprint for this key is:
-
-```
-pub   ed25519 2017-09-01 [SC] [expires: 2023-03-18]
-      10A7 22B7 6F2F FE7B D238  0222 5801 631B D27C 7874
-uid                      GZ-C SKYCOIN <token@protonmail.com>
-sub   cv25519 2017-09-01 [E] [expires: 2023-03-18]
+```bash
+cx --heap-initial 100 --stack-size 100 --blockchain examples/blockchain/counter-bc.cx
 ```
 
-Keybase.io account: https://keybase.io/gzc
-
-Follow the [Tor Project's instructions for verifying signatures](https://www.torproject.org/docs/verifying-signatures.html.en).
-
-If you can't or don't want to import the keys from a keyserver, the signing key is available in the repo: [gz-c.asc](gz-c.asc).
-
-Releases and their signatures can be found on the [releases page](https://github.com/skycoin/skycoin/releases).
-
-Instructions for generating a PGP key, publishing it, signing the tags and binaries:
-https://gist.github.com/gz-c/de3f9c43343b2f1a27c640fe529b067c
-
-## Responsible Disclosure
-
-Security flaws in skycoin source or infrastructure can be sent to security@skycoin.net.
-Bounties are available for accepted critical bug reports.
-
-PGP Key for signing:
-
-```
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-mDMEWaj46RYJKwYBBAHaRw8BAQdApB44Kgde4Kiax3M9Ta+QbzKQQPoUHYP51fhN
-1XTSbRi0I0daLUMgU0tZQ09JTiA8dG9rZW5AcHJvdG9ubWFpbC5jb20+iJYEExYK
-AD4CGwMFCwkIBwIGFQgJCgsCBBYCAwECHgECF4AWIQQQpyK3by/+e9I4AiJYAWMb
-0nx4dAUCWq/TNwUJCmzbzgAKCRBYAWMb0nx4dKzqAP4tKJIk1vV2bO60nYdEuFB8
-FAgb5ITlkj9PyoXcunETVAEAhigo4miyE/nmE9JT3Q/ZAB40YXS6w3hWSl3YOF1P
-VQq4OARZqPjpEgorBgEEAZdVAQUBAQdAa8NkEMxo0dr2x9PlNjTZ6/gGwhaf5OEG
-t2sLnPtYxlcDAQgHiH4EGBYKACYCGwwWIQQQpyK3by/+e9I4AiJYAWMb0nx4dAUC
-Wq/TTQUJCmzb5AAKCRBYAWMb0nx4dFPAAQD7otGsKbV70UopH+Xdq0CDTzWRbaGw
-FAoZLIZRcFv8zwD/Z3i9NjKJ8+LS5oc8rn8yNx8xRS+8iXKQq55bDmz7Igw=
-=5fwW
------END PGP PUBLIC KEY BLOCK-----
+```bash
+cx --heap-initial 100 --stack-size 100 --transaction examples/blockchain/counter-txn.cx
 ```
 
-Key ID: [0x5801631BD27C7874](https://pgp.mit.edu/pks/lookup?search=0x5801631BD27C7874&op=index)
-
-The fingerprint for this key is:
-
+```bash
+cx --heap-initial 100 --stack-size 100 --broadcast examples/blockchain/counter-txn.cx
 ```
-pub   ed25519 2017-09-01 [SC] [expires: 2023-03-18]
-      10A7 22B7 6F2F FE7B D238  0222 5801 631B D27C 7874
-uid                      GZ-C SKYCOIN <token@protonmail.com>
-sub   cv25519 2017-09-01 [E] [expires: 2023-03-18]
-```
-
-Keybase.io account: https://keybase.io/gzc

@@ -6,13 +6,13 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/SkycoinProject/cx-chains/src/cipher"
-	"github.com/SkycoinProject/cx-chains/src/coin"
-	"github.com/SkycoinProject/cx-chains/src/params"
-	"github.com/SkycoinProject/cx-chains/src/util/fee"
-	"github.com/SkycoinProject/cx-chains/src/visor/blockdb"
-	"github.com/SkycoinProject/cx-chains/src/visor/dbutil"
-	"github.com/SkycoinProject/cx-chains/src/visor/historydb"
+	"github.com/Skycoin/cx-chains/src/cipher"
+	"github.com/Skycoin/cx-chains/src/coin"
+	"github.com/Skycoin/cx-chains/src/params"
+	"github.com/Skycoin/cx-chains/src/util/fee"
+	"github.com/Skycoin/cx-chains/src/visor/blockdb"
+	"github.com/Skycoin/cx-chains/src/visor/dbutil"
+	"github.com/Skycoin/cx-chains/src/visor/historydb"
 )
 
 const (

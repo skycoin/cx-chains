@@ -15,8 +15,8 @@ import (
 
 	"encoding/hex"
 
-	"github.com/SkycoinProject/cx-chains/src/cipher"
-	"github.com/SkycoinProject/cx-chains/src/util/logging"
+	"github.com/Skycoin/cx-chains/src/cipher"
+	"github.com/Skycoin/cx-chains/src/util/logging"
 )
 
 // Error wraps wallet-related errors.

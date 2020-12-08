@@ -19,8 +19,6 @@ before_install:
 
 env:
   global:
-    - ELECTRON_CACHE: $HOME/.cache/electron
-    - ELECTRON_BUILDER_CACHE: $HOME/.cache/electron-builder
     - BUILD_DIR: build
     - BUILDLIB_DIR: $BUILD_DIR/libskycoin
     - LIB_DIR: lib
@@ -28,10 +26,6 @@ env:
 
 cache:
   directories:
-  - electron/node_modules
-  - electron/src/node_modules
-  - $HOME/.cache/electron
-  - $HOME/.cache/electron-builder
   - $HOME/.npm/_prebuilds
   - src/gui/static/node_modules
 
@@ -40,7 +34,7 @@ addons:
 
 install:
   # Install gox
-  - go get github.com/gz-c/gox
+  - go get github.com/skycoin/gox
   # Install dependences for building wallet
   - if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_PULL_REQUEST" == false ]]; then sudo apt-get install --no-install-recommends -y icnsutils graphicsmagick xz-utils libudev-dev libusb-1.0-0-dev && nvm install 8; fi
   - if [[ ! -d $GOPATH/src/github.com/SkycoinProject/cx-chains ]]; then mkdir -p $GOPATH/src/github.com/skycoin; ln -s $TRAVIS_BUILD_DIR $GOPATH/src/github.com/SkycoinProject/cx-chains; fi
@@ -85,7 +79,6 @@ deploy:
   secret_access_key: $AWS_SECRET_ACCESS_KEY
   bucket: $AWS_BUCKET
   skip_cleanup: true
-  local_dir: electron/release
   upload-dir: wallet
   acl: public_read
   region: $AWS_REGION

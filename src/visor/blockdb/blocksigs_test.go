@@ -5,10 +5,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/SkycoinProject/cx-chains/src/cipher"
-	"github.com/SkycoinProject/cx-chains/src/cipher/encoder"
-	"github.com/SkycoinProject/cx-chains/src/testutil"
-	"github.com/SkycoinProject/cx-chains/src/visor/dbutil"
+	"github.com/Skycoin/cx-chains/src/cipher"
+	"github.com/Skycoin/cx-chains/src/cipher/encoder"
+	"github.com/Skycoin/cx-chains/src/testutil"
+	"github.com/Skycoin/cx-chains/src/visor/dbutil"
 )
 
 func TestBlockSigsGet(t *testing.T) {

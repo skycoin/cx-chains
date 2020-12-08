@@ -3,7 +3,7 @@ package params
 import (
 	"errors"
 
-	"github.com/SkycoinProject/cx-chains/src/util/droplet"
+	"github.com/Skycoin/cx-chains/src/util/droplet"
 )
 
 var (

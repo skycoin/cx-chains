@@ -8,10 +8,10 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/SkycoinProject/cx-chains/src/cipher"
-	"github.com/SkycoinProject/cx-chains/src/coin"
-	"github.com/SkycoinProject/cx-chains/src/util/logging"
-	"github.com/SkycoinProject/cx-chains/src/visor/dbutil"
+	"github.com/Skycoin/cx-chains/src/cipher"
+	"github.com/Skycoin/cx-chains/src/coin"
+	"github.com/Skycoin/cx-chains/src/util/logging"
+	"github.com/Skycoin/cx-chains/src/visor/dbutil"
 )
 
 var logger = logging.MustGetLogger("historydb")

@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/SkycoinProject/cx-chains/src/visor/dbutil"
+	"github.com/Skycoin/cx-chains/src/visor/dbutil"
 )
 
 func TestHistoryMetaGetSetParsedHeight(t *testing.T) {

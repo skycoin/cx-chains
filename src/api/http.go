@@ -18,12 +18,12 @@ import (
 	"github.com/NYTimes/gziphandler"
 	"github.com/rs/cors"
 
-	"github.com/SkycoinProject/cx-chains/src/cipher"
-	"github.com/SkycoinProject/cx-chains/src/readable"
-	"github.com/SkycoinProject/cx-chains/src/util/file"
-	wh "github.com/SkycoinProject/cx-chains/src/util/http"
-	"github.com/SkycoinProject/cx-chains/src/util/logging"
-	"github.com/SkycoinProject/cx-chains/src/util/useragent"
+	"github.com/Skycoin/cx-chains/src/cipher"
+	"github.com/Skycoin/cx-chains/src/readable"
+	"github.com/Skycoin/cx-chains/src/util/file"
+	wh "github.com/Skycoin/cx-chains/src/util/http"
+	"github.com/Skycoin/cx-chains/src/util/logging"
+	"github.com/Skycoin/cx-chains/src/util/useragent"
 )
 
 var (

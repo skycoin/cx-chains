@@ -5,11 +5,11 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/SkycoinProject/cx-chains/src/cipher"
-	"github.com/SkycoinProject/cx-chains/src/readable"
-	"github.com/SkycoinProject/cx-chains/src/util/droplet"
-	wh "github.com/SkycoinProject/cx-chains/src/util/http"
-	"github.com/SkycoinProject/cx-chains/src/util/mathutil"
+	"github.com/Skycoin/cx-chains/src/cipher"
+	"github.com/Skycoin/cx-chains/src/readable"
+	"github.com/Skycoin/cx-chains/src/util/droplet"
+	wh "github.com/Skycoin/cx-chains/src/util/http"
+	"github.com/Skycoin/cx-chains/src/util/mathutil"
 )
 
 // CoinSupply records the coin supply info

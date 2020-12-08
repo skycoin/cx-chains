@@ -21,7 +21,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/SkycoinProject/cx-chains/src/util/logging"
+	"github.com/Skycoin/cx-chains/src/util/logging"
 )
 
 var logger = logging.MustGetLogger("certutil")

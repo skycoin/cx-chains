@@ -18,16 +18,16 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/SkycoinProject/cx-chains/src/cipher"
-	"github.com/SkycoinProject/cx-chains/src/coin"
-	"github.com/SkycoinProject/cx-chains/src/params"
-	"github.com/SkycoinProject/cx-chains/src/util/logging"
-	"github.com/SkycoinProject/cx-chains/src/util/mathutil"
-	"github.com/SkycoinProject/cx-chains/src/util/timeutil"
-	"github.com/SkycoinProject/cx-chains/src/visor/blockdb"
-	"github.com/SkycoinProject/cx-chains/src/visor/dbutil"
-	"github.com/SkycoinProject/cx-chains/src/visor/historydb"
-	"github.com/SkycoinProject/cx-chains/src/wallet"
+	"github.com/Skycoin/cx-chains/src/cipher"
+	"github.com/Skycoin/cx-chains/src/coin"
+	"github.com/Skycoin/cx-chains/src/params"
+	"github.com/Skycoin/cx-chains/src/util/logging"
+	"github.com/Skycoin/cx-chains/src/util/mathutil"
+	"github.com/Skycoin/cx-chains/src/util/timeutil"
+	"github.com/Skycoin/cx-chains/src/visor/blockdb"
+	"github.com/Skycoin/cx-chains/src/visor/dbutil"
+	"github.com/Skycoin/cx-chains/src/visor/historydb"
+	"github.com/Skycoin/cx-chains/src/wallet"
 )
 
 var logger = logging.MustGetLogger("visor")

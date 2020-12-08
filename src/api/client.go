@@ -13,10 +13,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/SkycoinProject/cx-chains/src/coin"
-	"github.com/SkycoinProject/cx-chains/src/daemon"
-	"github.com/SkycoinProject/cx-chains/src/kvstorage"
-	"github.com/SkycoinProject/cx-chains/src/readable"
+	"github.com/Skycoin/cx-chains/src/coin"
+	"github.com/Skycoin/cx-chains/src/daemon"
+	"github.com/Skycoin/cx-chains/src/kvstorage"
+	"github.com/Skycoin/cx-chains/src/readable"
 )
 
 const (

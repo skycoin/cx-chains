@@ -7,9 +7,9 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/SkycoinProject/cx-chains/src/cipher"
-	wh "github.com/SkycoinProject/cx-chains/src/util/http"
-	"github.com/SkycoinProject/cx-chains/src/util/iputil"
+	"github.com/Skycoin/cx-chains/src/cipher"
+	wh "github.com/Skycoin/cx-chains/src/util/http"
+	"github.com/Skycoin/cx-chains/src/util/iputil"
 )
 
 // ContentSecurityPolicy represents the value of content-security-policy

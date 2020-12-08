@@ -12,8 +12,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/SkycoinProject/cx-chains/src/cipher"
-	wh "github.com/SkycoinProject/cx-chains/src/util/http"
+	"github.com/Skycoin/cx-chains/src/cipher"
+	wh "github.com/Skycoin/cx-chains/src/util/http"
 )
 
 const (

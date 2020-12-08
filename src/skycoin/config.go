@@ -11,20 +11,20 @@ import (
 	"strings"
 	"time"
 
-	"github.com/SkycoinProject/cx-chains/src/coin"
-	"github.com/SkycoinProject/cx-chains/src/fiber"
-	"github.com/SkycoinProject/cx-chains/src/kvstorage"
+	"github.com/Skycoin/cx-chains/src/coin"
+	"github.com/Skycoin/cx-chains/src/fiber"
+	"github.com/Skycoin/cx-chains/src/kvstorage"
 
 	"log"
 
-	"github.com/SkycoinProject/cx-chains/src/api"
-	"github.com/SkycoinProject/cx-chains/src/cipher"
-	"github.com/SkycoinProject/cx-chains/src/params"
-	"github.com/SkycoinProject/cx-chains/src/readable"
-	"github.com/SkycoinProject/cx-chains/src/util/droplet"
-	"github.com/SkycoinProject/cx-chains/src/util/file"
-	"github.com/SkycoinProject/cx-chains/src/util/useragent"
-	"github.com/SkycoinProject/cx-chains/src/wallet"
+	"github.com/Skycoin/cx-chains/src/api"
+	"github.com/Skycoin/cx-chains/src/cipher"
+	"github.com/Skycoin/cx-chains/src/params"
+	"github.com/Skycoin/cx-chains/src/readable"
+	"github.com/Skycoin/cx-chains/src/util/droplet"
+	"github.com/Skycoin/cx-chains/src/util/file"
+	"github.com/Skycoin/cx-chains/src/util/useragent"
+	"github.com/Skycoin/cx-chains/src/wallet"
 )
 
 var (

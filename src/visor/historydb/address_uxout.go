@@ -1,8 +1,8 @@
 package historydb
 
 import (
-	"github.com/SkycoinProject/cx-chains/src/cipher"
-	"github.com/SkycoinProject/cx-chains/src/visor/dbutil"
+	"github.com/Skycoin/cx-chains/src/cipher"
+	"github.com/Skycoin/cx-chains/src/visor/dbutil"
 )
 
 // AddressUxBkt maps addresses to unspent outputs

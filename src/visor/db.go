@@ -14,13 +14,13 @@ import (
 
 	"github.com/boltdb/bolt"
 
-	"github.com/SkycoinProject/cx-chains/src/cipher"
-	"github.com/SkycoinProject/cx-chains/src/cipher/encoder"
-	"github.com/SkycoinProject/cx-chains/src/coin"
-	"github.com/SkycoinProject/cx-chains/src/util/elapse"
-	"github.com/SkycoinProject/cx-chains/src/visor/blockdb"
-	"github.com/SkycoinProject/cx-chains/src/visor/dbutil"
-	"github.com/SkycoinProject/cx-chains/src/visor/historydb"
+	"github.com/Skycoin/cx-chains/src/cipher"
+	"github.com/Skycoin/cx-chains/src/cipher/encoder"
+	"github.com/Skycoin/cx-chains/src/coin"
+	"github.com/Skycoin/cx-chains/src/util/elapse"
+	"github.com/Skycoin/cx-chains/src/visor/blockdb"
+	"github.com/Skycoin/cx-chains/src/visor/dbutil"
+	"github.com/Skycoin/cx-chains/src/visor/historydb"
 )
 
 var (

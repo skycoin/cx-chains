@@ -10,7 +10,7 @@ package api
 //
 // 	"github.com/stretchr/testify/require"
 //
-// 	"github.com/SkycoinProject/cx-chains/src/api/webrpc"
+// 	"github.com/Skycoin/cx-chains/src/api/webrpc"
 // )
 //
 // func TestWebRPC(t *testing.T) {

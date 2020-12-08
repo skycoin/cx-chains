@@ -3,9 +3,9 @@ package api
 import (
 	"net/http"
 
-	"github.com/SkycoinProject/cx-chains/src/cipher"
-	"github.com/SkycoinProject/cx-chains/src/readable"
-	wh "github.com/SkycoinProject/cx-chains/src/util/http"
+	"github.com/Skycoin/cx-chains/src/cipher"
+	"github.com/Skycoin/cx-chains/src/readable"
+	wh "github.com/Skycoin/cx-chains/src/util/http"
 )
 
 // URI: /api/v1/uxout

@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	_require "github.com/SkycoinProject/cx-chains/src/testutil/require"
+	_require "github.com/Skycoin/cx-chains/src/testutil/require"
 )
 
 func TestDropletPrecisionToDivisor(t *testing.T) {

@@ -6,8 +6,8 @@ package fee
 import (
 	"errors"
 
-	"github.com/SkycoinProject/cx-chains/src/coin"
-	"github.com/SkycoinProject/cx-chains/src/util/mathutil"
+	"github.com/Skycoin/cx-chains/src/coin"
+	"github.com/Skycoin/cx-chains/src/util/mathutil"
 )
 
 var (

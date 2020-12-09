@@ -3,14 +3,15 @@ package api
 import (
 	"time"
 
-	"github.com/Skycoin/cx-chains/src/cipher"
-	"github.com/Skycoin/cx-chains/src/coin"
-	"github.com/Skycoin/cx-chains/src/daemon"
-	"github.com/Skycoin/cx-chains/src/kvstorage"
-	"github.com/Skycoin/cx-chains/src/transaction"
-	"github.com/Skycoin/cx-chains/src/visor"
-	"github.com/Skycoin/cx-chains/src/visor/historydb"
-	"github.com/Skycoin/cx-chains/src/wallet"
+	"github.com/skycoin/skycoin/src/cipher"
+
+	"github.com/skycoin/cx-chains/src/coin"
+	"github.com/skycoin/cx-chains/src/daemon"
+	"github.com/skycoin/cx-chains/src/kvstorage"
+	"github.com/skycoin/cx-chains/src/transaction"
+	"github.com/skycoin/cx-chains/src/visor"
+	"github.com/skycoin/cx-chains/src/visor/historydb"
+	"github.com/skycoin/cx-chains/src/wallet"
 )
 
 //go:generate mockery -name Gatewayer -case underscore -inpkg -testonly

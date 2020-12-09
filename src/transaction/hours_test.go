@@ -9,9 +9,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/Skycoin/cx-chains/src/params"
-	"github.com/Skycoin/cx-chains/src/util/fee"
-	"github.com/Skycoin/cx-chains/src/util/mathutil"
+	"github.com/skycoin/skycoin/src/util/fee"
+	"github.com/skycoin/skycoin/src/util/mathutil"
+
+	"github.com/skycoin/cx-chains/src/params"
 )
 
 func TestDistributeCoinHoursProportional(t *testing.T) {

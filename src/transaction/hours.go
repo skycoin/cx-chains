@@ -4,9 +4,10 @@ import (
 	"errors"
 	"math/big"
 
-	"github.com/Skycoin/cx-chains/src/params"
-	"github.com/Skycoin/cx-chains/src/util/fee"
-	"github.com/Skycoin/cx-chains/src/util/mathutil"
+	"github.com/skycoin/skycoin/src/util/fee"
+	"github.com/skycoin/skycoin/src/util/mathutil"
+
+	"github.com/skycoin/cx-chains/src/params"
 )
 
 // DistributeSpendHours calculates how many coin hours to transfer to the change address and how

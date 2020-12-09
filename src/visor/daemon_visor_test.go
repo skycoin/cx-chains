@@ -18,10 +18,12 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/Skycoin/cx-chains/src/cipher"
-	"github.com/Skycoin/cx-chains/src/testutil"
-	"github.com/Skycoin/cx-chains/src/util/fee"
-	"github.com/Skycoin/cx-chains/src/visor/dbutil"
+	"github.com/skycoin/skycoin/src/cipher"
+
+	"github.com/skycoin/skycoin/src/testutil"
+	"github.com/skycoin/skycoin/src/util/fee"
+
+	"github.com/skycoin/cx-chains/src/visor/dbutil"
 )
 
 func setupSimpleVisor(t *testing.T, db *dbutil.DB, bc *Blockchain) *Visor {

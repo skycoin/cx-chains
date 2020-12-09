@@ -13,11 +13,13 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/Skycoin/cx-chains/src/cipher"
-	"github.com/Skycoin/cx-chains/src/coin"
-	"github.com/Skycoin/cx-chains/src/testutil"
-	"github.com/Skycoin/cx-chains/src/transaction"
-	"github.com/Skycoin/cx-chains/src/util/fee"
+	"github.com/skycoin/skycoin/src/cipher"
+
+	"github.com/skycoin/skycoin/src/testutil"
+	"github.com/skycoin/skycoin/src/util/fee"
+
+	"github.com/skycoin/cx-chains/src/coin"
+	"github.com/skycoin/cx-chains/src/transaction"
 )
 
 func TestWalletSignTransaction(t *testing.T) {

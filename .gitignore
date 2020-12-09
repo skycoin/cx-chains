@@ -34,11 +34,18 @@ client
 *.tar
 *.zip
 
-# Logs and databases #
-######################
+# Logs, databases and config files #
+####################################
 *.log
 *.sql
 *.sqlite
+*.pprof
+
+# CX Chains
+*.chain_keys.json
+*.chain_spec.json
+*.genesis_keys.json
+*.db
 
 # OS generated files #
 ######################
@@ -52,7 +59,9 @@ ehthumbs.db
 Thumbs.db
 
 *.pyx
-#build
+
+# Build #
+#########
 *~
 
 *.orig
@@ -66,7 +75,8 @@ release
 *.prof
 *.out
 
-# Binaries
+# Binaries #
+############
 /skycoind
 /skycoin
 /skycoindev
@@ -77,7 +87,8 @@ release
 
 *.pem
 
-# Deprecated
+# Deprecated #
+##############
 _deprecated/
 
 blockchain.bin
@@ -128,7 +139,6 @@ coverage.html
 coverage/
 *.coverage.out
 
-src/api/integration/wallets/
 src/api/integration/wallets/
 
 skycoin-cli

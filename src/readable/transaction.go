@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Skycoin/cx-chains/src/cipher"
-	"github.com/Skycoin/cx-chains/src/coin"
-	"github.com/Skycoin/cx-chains/src/util/droplet"
-	"github.com/Skycoin/cx-chains/src/util/logging"
-	"github.com/Skycoin/cx-chains/src/util/timeutil"
-	"github.com/Skycoin/cx-chains/src/visor"
+	"github.com/skycoin/skycoin/src/cipher"
+
+	"github.com/skycoin/skycoin/src/util/droplet"
+	"github.com/skycoin/skycoin/src/util/logging"
+	"github.com/skycoin/skycoin/src/util/timeutil"
+
+	"github.com/skycoin/cx-chains/src/coin"
+	"github.com/skycoin/cx-chains/src/visor"
 )
 
 var logger = logging.MustGetLogger("readable")

@@ -23,17 +23,19 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/Skycoin/cx-chains/src/api"
-	"github.com/Skycoin/cx-chains/src/cipher"
-	"github.com/Skycoin/cx-chains/src/coin"
-	"github.com/Skycoin/cx-chains/src/daemon"
-	"github.com/Skycoin/cx-chains/src/readable"
-	"github.com/Skycoin/cx-chains/src/testutil"
-	"github.com/Skycoin/cx-chains/src/transaction"
-	"github.com/Skycoin/cx-chains/src/util/droplet"
-	"github.com/Skycoin/cx-chains/src/util/mathutil"
-	"github.com/Skycoin/cx-chains/src/util/useragent"
-	"github.com/Skycoin/cx-chains/src/visor"
+	"github.com/skycoin/skycoin/src/cipher"
+
+	"github.com/skycoin/skycoin/src/testutil"
+	"github.com/skycoin/skycoin/src/util/droplet"
+	"github.com/skycoin/skycoin/src/util/mathutil"
+	"github.com/skycoin/skycoin/src/util/useragent"
+
+	"github.com/skycoin/cx-chains/src/api"
+	"github.com/skycoin/cx-chains/src/coin"
+	"github.com/skycoin/cx-chains/src/daemon"
+	"github.com/skycoin/cx-chains/src/readable"
+	"github.com/skycoin/cx-chains/src/transaction"
+	"github.com/skycoin/cx-chains/src/visor"
 )
 
 /* Runs HTTP API tests against a running skycoin node

@@ -13,10 +13,11 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
-	"github.com/Skycoin/cx-chains/src/daemon"
-	"github.com/Skycoin/cx-chains/src/daemon/pex"
-	"github.com/Skycoin/cx-chains/src/readable"
-	"github.com/Skycoin/cx-chains/src/util/useragent"
+	"github.com/skycoin/skycoin/src/util/useragent"
+
+	"github.com/skycoin/cx-chains/src/daemon"
+	"github.com/skycoin/cx-chains/src/daemon/pex"
+	"github.com/skycoin/cx-chains/src/readable"
 )
 
 func TestConnection(t *testing.T) {

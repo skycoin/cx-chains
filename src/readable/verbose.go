@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Skycoin/cx-chains/src/cipher"
-	"github.com/Skycoin/cx-chains/src/coin"
-	"github.com/Skycoin/cx-chains/src/util/mathutil"
-	"github.com/Skycoin/cx-chains/src/util/timeutil"
-	"github.com/Skycoin/cx-chains/src/visor"
+	"github.com/skycoin/skycoin/src/cipher"
+
+	"github.com/skycoin/skycoin/src/util/mathutil"
+	"github.com/skycoin/skycoin/src/util/timeutil"
+
+	"github.com/skycoin/cx-chains/src/coin"
+	"github.com/skycoin/cx-chains/src/visor"
 )
 
 // BlockBodyVerbose represents a verbose readable block body

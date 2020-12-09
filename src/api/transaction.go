@@ -10,13 +10,15 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Skycoin/cx-chains/src/cipher"
-	"github.com/Skycoin/cx-chains/src/coin"
-	"github.com/Skycoin/cx-chains/src/daemon"
-	"github.com/Skycoin/cx-chains/src/readable"
-	wh "github.com/Skycoin/cx-chains/src/util/http"
-	"github.com/Skycoin/cx-chains/src/util/mathutil"
-	"github.com/Skycoin/cx-chains/src/visor"
+	"github.com/skycoin/skycoin/src/cipher"
+
+	wh "github.com/skycoin/skycoin/src/util/http"
+	"github.com/skycoin/skycoin/src/util/mathutil"
+
+	"github.com/skycoin/cx-chains/src/coin"
+	"github.com/skycoin/cx-chains/src/daemon"
+	"github.com/skycoin/cx-chains/src/readable"
+	"github.com/skycoin/cx-chains/src/visor"
 )
 
 // pendingTxnsHandler returns pending (unconfirmed) transactions

@@ -598,10 +598,13 @@ func newServerMux(c muxConfig, gateway Gatewayer) *http.ServeMux {
 		http.MethodGet: []string{EndpointsRead},
 	})
 
+	//Stubbed out, removla of Prometheus end points
+	//replace with victoria metrics later
+
 	// golang process internal metrics for Prometheus
-	webHandlerV2("/metrics", metricsHandler(c, gateway), map[string][]string{
-		http.MethodGet: []string{EndpointsPrometheus},
-	})
+	//webHandlerV2("/metrics", metricsHandler(c, gateway), map[string][]string{
+	//	http.MethodGet: []string{EndpointsPrometheus},
+	//})
 
 	// Address related endpoints
 	webHandlerV2("/address/verify", http.HandlerFunc(addressVerifyHandler), map[string][]string{

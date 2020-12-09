@@ -3,12 +3,17 @@ package api
 import (
 	"net/http"
 
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
+	//"github.com/prometheus/client_golang/prometheus"
+	//"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	wh "github.com/Skycoin/cx-chains/src/util/http"
 )
 
+//File is stubbed out
+//Strip all prometheus dependencies
+//Replace with victoria metrics
+
+/*
 var (
 	promUnspents = prometheus.NewGauge(
 		prometheus.GaugeOpts{
@@ -62,7 +67,9 @@ func init() {
 	prometheus.MustRegister(promStartedAt)
 	prometheus.MustRegister(promLastBlockSeq)
 }
+*/
 
+/*
 func metricsHandler(c muxConfig, gateway Gatewayer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		health, err := getHealthData(c, gateway)
@@ -83,3 +90,4 @@ func metricsHandler(c muxConfig, gateway Gatewayer) http.HandlerFunc {
 		promhttp.Handler().ServeHTTP(w, r)
 	}
 }
+*/

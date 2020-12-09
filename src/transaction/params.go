@@ -5,8 +5,9 @@ import (
 
 	"github.com/shopspring/decimal"
 
-	"github.com/Skycoin/cx-chains/src/cipher"
-	"github.com/Skycoin/cx-chains/src/coin"
+	"github.com/skycoin/skycoin/src/cipher"
+
+	"github.com/skycoin/cx-chains/src/coin"
 )
 
 // Error wraps transaction creation-related errors.

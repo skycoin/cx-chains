@@ -1,5 +1,7 @@
 # CX Chains Overview
 
+> For first run instructions, refer to the [FIRST_RUN.md](FIRST_RUN.md) document.
+
 This document has the purpose of dissecting CX chains into its different parts and to describe the processes that involve these parts. As the CX chains feature is still in a prototype/alpha stage, the descriptions contained in this file are subject to change. Changes can be expected after a new release of CX is created and after Github pull requests are merged into the `develop` branch.
 
 Each of the following sections describe either a process or a module that is part of the composition of a CX chain. The document starts explaining what a [Blockchain Code](#blockchain-code) and a [Transaction Code](#transaction-code) are, and how and why [Merging the Blockchain and Transaction Codes](#merging-the-blockchain-and-transaction-codes) is necessary for the functionality of a CX chain. After reviewing these concepts, it is then explained how these programs are necessary to create, modify and query a CX chain's [Program State](#program-state). The [Program State Structure](#program-state-structure) is then described, which helps the reader understand how a CX chain stores its state and what are the capabilities of a CX chain.

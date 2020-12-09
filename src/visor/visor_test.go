@@ -17,16 +17,18 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
-	"github.com/Skycoin/cx-chains/src/cipher"
-	"github.com/Skycoin/cx-chains/src/coin"
-	"github.com/Skycoin/cx-chains/src/params"
-	"github.com/Skycoin/cx-chains/src/testutil"
-	_require "github.com/Skycoin/cx-chains/src/testutil/require"
-	"github.com/Skycoin/cx-chains/src/util/fee"
-	"github.com/Skycoin/cx-chains/src/util/timeutil"
-	"github.com/Skycoin/cx-chains/src/visor/blockdb"
-	"github.com/Skycoin/cx-chains/src/visor/dbutil"
-	"github.com/Skycoin/cx-chains/src/visor/historydb"
+	"github.com/skycoin/skycoin/src/cipher"
+
+	"github.com/skycoin/skycoin/src/testutil"
+	_require "github.com/skycoin/skycoin/src/testutil/require"
+	"github.com/skycoin/skycoin/src/util/fee"
+	"github.com/skycoin/skycoin/src/util/timeutil"
+
+	"github.com/skycoin/cx-chains/src/coin"
+	"github.com/skycoin/cx-chains/src/params"
+	"github.com/skycoin/cx-chains/src/visor/blockdb"
+	"github.com/skycoin/cx-chains/src/visor/dbutil"
+	"github.com/skycoin/cx-chains/src/visor/historydb"
 )
 
 const (

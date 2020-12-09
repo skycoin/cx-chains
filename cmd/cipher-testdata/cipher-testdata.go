@@ -15,11 +15,12 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/SkycoinProject/cx-chains/src/cipher"
-	"github.com/SkycoinProject/cx-chains/src/cipher/bip32"
-	"github.com/SkycoinProject/cx-chains/src/cipher/bip39"
-	"github.com/SkycoinProject/cx-chains/src/cipher/testsuite"
-	"github.com/SkycoinProject/cx-chains/src/util/file"
+	"github.com/skycoin/skycoin/src/cipher"
+	"github.com/skycoin/skycoin/src/cipher/bip32"
+	"github.com/skycoin/skycoin/src/cipher/bip39"
+	"github.com/skycoin/skycoin/src/cipher/testsuite"
+
+	"github.com/skycoin/skycoin/src/util/file"
 )
 
 const (

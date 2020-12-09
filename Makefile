@@ -18,17 +18,14 @@
 
 COIN ?= skycoin
 
-# Static files directory
-GUI_STATIC_DIR = src/gui/static
-
-# Electron files directory
-ELECTRON_DIR = electron
-
 # Platform specific checks
 OSNAME = $(TRAVIS_OS_NAME)
 
 # Tooling versions
 GOLANGCI_LINT_VERSION ?= v1.32.0
+
+install: ## Installs cxchain and cxchain-cli
+	go install ./cmd/...
 
 run-client:  ## Run skycoin with desktop client configuration. To add arguments, do 'make ARGS="--foo" run'.
 	./run-client.sh ${ARGS}
@@ -62,11 +59,6 @@ lint: ## Run linters. Use make install-linters first.
 	golangci-lint run -c .golangci.yml ./...
 	@# The govet version in golangci-lint is out of date and has spurious warnings, run it separately
 	go vet -all ./...
-
-check-newcoin: newcoin clean-vendor ## Check that make newcoin succeeds and no templated files are changed.
-	@if [ "$(shell git diff ./cmd/skycoin/skycoin.go | wc -l | tr -d ' ')" != "0" ] ; then echo 'Changes detected after make newcoin' ; exit 2 ; fi
-	@if [ "$(shell git diff ./cmd/skycoin/skycoin_test.go | wc -l | tr -d ' ')" != "0" ] ; then echo 'Changes detected after make newcoin' ; exit 2 ; fi
-	@if [ "$(shell git diff ./src/params/params.go | wc -l | tr -d ' ')" != "0" ] ; then echo 'Changes detected after make newcoin' ; exit 2 ; fi
 
 check: lint clean-coverage test test-386 integration-tests-stable check-newcoin ## Run tests and linters
 
@@ -124,52 +116,6 @@ install-linters: ## Install linters
 format: ## Formats the code. Must have goimports installed (use make install-linters).
 	goimports -w -local github.com/skycoin/cx-chains ./cmd/
 	goimports -w -local github.com/skycoin/cx-chains ./src/
-
-install-deps-ui:  ## Install the UI dependencies
-	cd $(GUI_STATIC_DIR) && npm install
-
-lint-ui:  ## Lint the UI code
-	cd $(GUI_STATIC_DIR) && npm run lint
-
-test-ui:  ## Run UI tests
-	cd $(GUI_STATIC_DIR) && npm run test
-
-test-ui-e2e:  ## Run UI e2e tests
-	./ci-scripts/ui-e2e.sh
-
-build-ui:  ## Builds the UI
-	cd $(GUI_STATIC_DIR) && npm run build
-
-build-ui-travis:  ## Builds the UI for travis
-	cd $(GUI_STATIC_DIR) && npm run build-travis
-
-release: ## Build electron, standalone and daemon apps. Use osarch=${osarch} to specify the platform. Example: 'make release osarch=darwin/amd64', multiple platform can be supported in this way: 'make release osarch="darwin/amd64 windows/amd64"'. Supported architectures are: darwin/amd64 windows/amd64 windows/386 linux/amd64 linux/arm, the builds are located in electron/release folder.
-	cd $(ELECTRON_DIR) && ./build.sh ${osarch}
-	@echo release files are in the folder of electron/release
-
-release-standalone: ## Build standalone apps. Use osarch=${osarch} to specify the platform. Example: 'make release-standalone osarch=darwin/amd64' Supported architectures are the same as 'release' command.
-	cd $(ELECTRON_DIR) && ./build-standalone-release.sh ${osarch}
-	@echo release files are in the folder of electron/release
-
-release-electron: ## Build electron apps. Use osarch=${osarch} to specify the platform. Example: 'make release-electron osarch=darwin/amd64' Supported architectures are the same as 'release' command.
-	cd $(ELECTRON_DIR) && ./build-electron-release.sh ${osarch}
-	@echo release files are in the folder of electron/release
-
-release-daemon: ## Build daemon apps. Use osarch=${osarch} to specify the platform. Example: 'make release-daemon osarch=darwin/amd64' Supported architectures are the same as 'release' command.
-	cd $(ELECTRON_DIR) && ./build-daemon-release.sh ${osarch}
-	@echo release files are in the folder of electron/release
-
-release-cli: ## Build CLI apps. Use osarch=${osarch} to specify the platform. Example: 'make release-cli osarch=darwin/amd64' Supported architectures are the same as 'release' command.
-	cd $(ELECTRON_DIR) && ./build-cli-release.sh ${osarch}
-	@echo release files are in the folder of electron/release
-
-clean-release: ## Remove all electron build artifacts
-	rm -rf $(ELECTRON_DIR)/release
-	rm -rf $(ELECTRON_DIR)/.gox_output
-	rm -rf $(ELECTRON_DIR)/.daemon_output
-	rm -rf $(ELECTRON_DIR)/.cli_output
-	rm -rf $(ELECTRON_DIR)/.standalone_output
-	rm -rf $(ELECTRON_DIR)/.electron_output
 
 clean-coverage: ## Remove coverage output files
 	rm -rf ./coverage/

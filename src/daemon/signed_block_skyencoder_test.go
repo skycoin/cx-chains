@@ -10,11 +10,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Skycoin/cx-chains/src/cipher/encoder"
-	"github.com/Skycoin/cx-chains/src/coin"
-	"github.com/Skycoin/encodertest"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
+	"github.com/skycoin/encodertest"
+	"github.com/skycoin/skycoin/src/cipher/encoder"
+
+	"github.com/skycoin/cx-chains/src/coin"
 )
 
 func newEmptySignedBlockForEncodeTest() *coin.SignedBlock {

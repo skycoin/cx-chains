@@ -9,8 +9,9 @@ import (
 	"math"
 	"sort"
 
-	"github.com/Skycoin/cx-chains/src/cipher"
-	"github.com/Skycoin/cx-chains/src/util/mathutil"
+	"github.com/skycoin/skycoin/src/cipher"
+
+	"github.com/skycoin/skycoin/src/util/mathutil"
 )
 
 var (

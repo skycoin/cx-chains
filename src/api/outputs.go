@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/Skycoin/cx-chains/src/readable"
-	wh "github.com/Skycoin/cx-chains/src/util/http"
-	"github.com/Skycoin/cx-chains/src/visor"
+	wh "github.com/skycoin/skycoin/src/util/http"
+
+	"github.com/skycoin/cx-chains/src/readable"
+	"github.com/skycoin/cx-chains/src/visor"
 )
 
 // outputsHandler returns UxOuts filtered by a set of addresses or a set of hashes

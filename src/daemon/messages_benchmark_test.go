@@ -3,9 +3,10 @@ package daemon
 import (
 	"testing"
 
-	"github.com/Skycoin/cx-chains/src/cipher"
-	"github.com/Skycoin/cx-chains/src/cipher/encoder"
-	"github.com/Skycoin/cx-chains/src/coin"
+	"github.com/skycoin/skycoin/src/cipher"
+	"github.com/skycoin/skycoin/src/cipher/encoder"
+
+	"github.com/skycoin/cx-chains/src/coin"
 )
 
 var getPeersMessageObj = GetPeersMessage{}

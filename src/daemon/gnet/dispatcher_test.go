@@ -10,7 +10,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/Skycoin/cx-chains/src/testutil"
+	"github.com/skycoin/skycoin/src/testutil"
 )
 
 var (

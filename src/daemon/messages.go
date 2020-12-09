@@ -9,14 +9,16 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/Skycoin/cx-chains/src/cipher"
-	"github.com/Skycoin/cx-chains/src/cipher/encoder"
-	"github.com/Skycoin/cx-chains/src/coin"
-	"github.com/Skycoin/cx-chains/src/daemon/gnet"
-	"github.com/Skycoin/cx-chains/src/daemon/pex"
-	"github.com/Skycoin/cx-chains/src/params"
-	"github.com/Skycoin/cx-chains/src/util/iputil"
-	"github.com/Skycoin/cx-chains/src/util/useragent"
+	"github.com/skycoin/skycoin/src/cipher"
+	"github.com/skycoin/skycoin/src/cipher/encoder"
+
+	"github.com/skycoin/skycoin/src/util/iputil"
+	"github.com/skycoin/skycoin/src/util/useragent"
+
+	"github.com/skycoin/cx-chains/src/coin"
+	"github.com/skycoin/cx-chains/src/daemon/gnet"
+	"github.com/skycoin/cx-chains/src/daemon/pex"
+	"github.com/skycoin/cx-chains/src/params"
 )
 
 // Message represent a packet to be serialized over the network by
@@ -54,8 +56,8 @@ func NewMessageConfig(prefix string, m interface{}) MessageConfig {
 //go:generate skyencoder -unexported -struct AnnounceTxnsMessage
 //go:generate skyencoder -unexported -struct DisconnectMessage
 //go:generate skyencoder -unexported -struct IPAddr
-//go:generate skyencoder -unexported -output-path . -package daemon -struct SignedBlock github.com/Skycoin/cx-chains/src/coin
-//go:generate skyencoder -unexported -output-path . -package daemon -struct Transaction github.com/Skycoin/cx-chains/src/coin
+//go:generate skyencoder -unexported -output-path . -package daemon -struct SignedBlock github.com/skycoin/cx-chains/src/coin
+//go:generate skyencoder -unexported -output-path . -package daemon -struct Transaction github.com/skycoin/cx-chains/src/coin
 
 // Creates and populates the message configs
 func getMessageConfigs() []MessageConfig {

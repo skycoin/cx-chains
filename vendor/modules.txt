@@ -103,7 +103,7 @@ github.com/shopspring/decimal
 # github.com/sirupsen/logrus v1.7.0
 ## explicit
 github.com/sirupsen/logrus
-# github.com/skycoin/cx v0.7.2-0.20201209000610-0a635c7aec52
+# github.com/skycoin/cx v0.7.2-0.20201209010831-a44240bebbaf
 ## explicit
 github.com/skycoin/cx/cx
 github.com/skycoin/cx/cxgo/actions

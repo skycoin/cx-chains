@@ -21,7 +21,7 @@ require (
 	github.com/rs/cors v1.7.0
 	github.com/shopspring/decimal v1.2.0
 	github.com/sirupsen/logrus v1.7.0
-	github.com/skycoin/cx v0.7.2-0.20201209000610-0a635c7aec52
+	github.com/skycoin/cx v0.7.2-0.20201209010831-a44240bebbaf
 	github.com/skycoin/dmsg v0.0.0-20201130133816-e601063284fa
 	github.com/skycoin/encodertest v0.0.0-20190217072920-14c2e31898b9
 	github.com/skycoin/skycoin v0.27.1

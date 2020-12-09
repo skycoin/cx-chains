@@ -13,17 +13,19 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/Skycoin/cx-chains/src/api"
-	"github.com/Skycoin/cx-chains/src/cipher"
-	"github.com/Skycoin/cx-chains/src/coin"
-	"github.com/Skycoin/cx-chains/src/params"
-	"github.com/Skycoin/cx-chains/src/readable"
-	"github.com/Skycoin/cx-chains/src/testutil"
-	"github.com/Skycoin/cx-chains/src/transaction"
-	"github.com/Skycoin/cx-chains/src/util/droplet"
-	"github.com/Skycoin/cx-chains/src/util/fee"
-	"github.com/Skycoin/cx-chains/src/util/mathutil"
-	"github.com/Skycoin/cx-chains/src/wallet"
+	"github.com/skycoin/skycoin/src/cipher"
+
+	"github.com/skycoin/skycoin/src/testutil"
+	"github.com/skycoin/skycoin/src/util/droplet"
+	"github.com/skycoin/skycoin/src/util/fee"
+	"github.com/skycoin/skycoin/src/util/mathutil"
+
+	"github.com/skycoin/cx-chains/src/api"
+	"github.com/skycoin/cx-chains/src/coin"
+	"github.com/skycoin/cx-chains/src/params"
+	"github.com/skycoin/cx-chains/src/readable"
+	"github.com/skycoin/cx-chains/src/transaction"
+	"github.com/skycoin/cx-chains/src/wallet"
 )
 
 func TestStableInjectTransaction(t *testing.T) {

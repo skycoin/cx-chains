@@ -4,8 +4,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/Skycoin/cx-chains/src/cipher"
-	"github.com/Skycoin/cx-chains/src/params"
+	"github.com/skycoin/skycoin/src/cipher"
+
+	"github.com/skycoin/cx-chains/src/params"
 )
 
 // Config configuration parameters for the Visor

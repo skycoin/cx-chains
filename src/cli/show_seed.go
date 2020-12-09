@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/Skycoin/cx-chains/src/wallet"
+	"github.com/skycoin/cx-chains/src/wallet"
 )
 
 func showSeedCmd() *cobra.Command {

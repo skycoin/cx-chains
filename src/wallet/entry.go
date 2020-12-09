@@ -3,7 +3,7 @@ package wallet
 import (
 	"errors"
 
-	"github.com/Skycoin/cx-chains/src/cipher"
+	"github.com/skycoin/skycoin/src/cipher"
 )
 
 // Entry represents the wallet entry

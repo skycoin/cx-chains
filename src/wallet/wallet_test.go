@@ -12,9 +12,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/Skycoin/cx-chains/src/cipher"
-	"github.com/Skycoin/cx-chains/src/cipher/encrypt"
-	"github.com/Skycoin/cx-chains/src/util/logging"
+	"github.com/skycoin/skycoin/src/cipher"
+	"github.com/skycoin/skycoin/src/cipher/encrypt"
+
+	"github.com/skycoin/skycoin/src/util/logging"
 )
 
 var (

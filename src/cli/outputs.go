@@ -5,9 +5,10 @@ import (
 
 	gcli "github.com/spf13/cobra"
 
-	"github.com/Skycoin/cx-chains/src/cipher"
-	"github.com/Skycoin/cx-chains/src/readable"
-	"github.com/Skycoin/cx-chains/src/wallet"
+	"github.com/skycoin/skycoin/src/cipher"
+
+	"github.com/skycoin/cx-chains/src/readable"
+	"github.com/skycoin/cx-chains/src/wallet"
 )
 
 func walletOutputsCmd() *gcli.Command {

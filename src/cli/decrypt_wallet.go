@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/Skycoin/cx-chains/src/wallet"
+	"github.com/skycoin/cx-chains/src/wallet"
 
 	gcli "github.com/spf13/cobra"
 )

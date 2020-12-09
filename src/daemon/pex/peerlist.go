@@ -10,8 +10,8 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/Skycoin/cx-chains/src/util/file"
-	"github.com/Skycoin/cx-chains/src/util/useragent"
+	"github.com/skycoin/skycoin/src/util/file"
+	"github.com/skycoin/skycoin/src/util/useragent"
 )
 
 // Peers peer list

@@ -1,12 +1,13 @@
 package visor
 
 import (
-	"github.com/Skycoin/cx-chains/src/cipher"
-	"github.com/Skycoin/cx-chains/src/coin"
-	"github.com/Skycoin/cx-chains/src/params"
-	"github.com/Skycoin/cx-chains/src/visor/blockdb"
-	"github.com/Skycoin/cx-chains/src/visor/dbutil"
-	"github.com/Skycoin/cx-chains/src/visor/historydb"
+	"github.com/skycoin/skycoin/src/cipher"
+
+	"github.com/skycoin/cx-chains/src/coin"
+	"github.com/skycoin/cx-chains/src/params"
+	"github.com/skycoin/cx-chains/src/visor/blockdb"
+	"github.com/skycoin/cx-chains/src/visor/dbutil"
+	"github.com/skycoin/cx-chains/src/visor/historydb"
 )
 
 //go:generate mockery -name Historyer -case underscore -inpkg -testonly

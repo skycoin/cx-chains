@@ -5,10 +5,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Skycoin/cx-chains/src/daemon"
-	"github.com/Skycoin/cx-chains/src/params"
-	"github.com/Skycoin/cx-chains/src/readable"
-	wh "github.com/Skycoin/cx-chains/src/util/http"
+	wh "github.com/skycoin/skycoin/src/util/http"
+
+	"github.com/skycoin/cx-chains/src/daemon"
+	"github.com/skycoin/cx-chains/src/params"
+	"github.com/skycoin/cx-chains/src/readable"
 )
 
 // BlockchainMetadata extends visor.BlockchainMetadata to include the time since the last block

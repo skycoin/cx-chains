@@ -10,8 +10,9 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/Skycoin/cx-chains/src/cipher/encoder"
-	"github.com/Skycoin/cx-chains/src/util/mathutil"
+	"github.com/skycoin/skycoin/src/cipher/encoder"
+
+	"github.com/skycoin/skycoin/src/util/mathutil"
 )
 
 var (

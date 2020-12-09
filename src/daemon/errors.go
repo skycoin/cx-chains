@@ -3,7 +3,7 @@ package daemon
 import (
 	"errors"
 
-	"github.com/Skycoin/cx-chains/src/daemon/gnet"
+	"github.com/skycoin/cx-chains/src/daemon/gnet"
 )
 
 var (

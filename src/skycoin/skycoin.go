@@ -20,20 +20,22 @@ import (
 	"github.com/blang/semver"
 	"github.com/toqueteos/webbrowser"
 
-	"github.com/Skycoin/cx-chains/src/api"
-	"github.com/Skycoin/cx-chains/src/cipher"
-	"github.com/Skycoin/cx-chains/src/coin"
-	"github.com/Skycoin/cx-chains/src/daemon"
-	"github.com/Skycoin/cx-chains/src/kvstorage"
-	"github.com/Skycoin/cx-chains/src/params"
-	"github.com/Skycoin/cx-chains/src/readable"
-	"github.com/Skycoin/cx-chains/src/util/apputil"
-	"github.com/Skycoin/cx-chains/src/util/certutil"
-	"github.com/Skycoin/cx-chains/src/util/droplet"
-	"github.com/Skycoin/cx-chains/src/util/logging"
-	"github.com/Skycoin/cx-chains/src/visor"
-	"github.com/Skycoin/cx-chains/src/visor/dbutil"
-	"github.com/Skycoin/cx-chains/src/wallet"
+	"github.com/skycoin/skycoin/src/cipher"
+
+	"github.com/skycoin/skycoin/src/util/apputil"
+	"github.com/skycoin/skycoin/src/util/certutil"
+	"github.com/skycoin/skycoin/src/util/droplet"
+	"github.com/skycoin/skycoin/src/util/logging"
+
+	"github.com/skycoin/cx-chains/src/api"
+	"github.com/skycoin/cx-chains/src/coin"
+	"github.com/skycoin/cx-chains/src/daemon"
+	"github.com/skycoin/cx-chains/src/kvstorage"
+	"github.com/skycoin/cx-chains/src/params"
+	"github.com/skycoin/cx-chains/src/readable"
+	"github.com/skycoin/cx-chains/src/visor"
+	"github.com/skycoin/cx-chains/src/visor/dbutil"
+	"github.com/skycoin/cx-chains/src/wallet"
 )
 
 var (

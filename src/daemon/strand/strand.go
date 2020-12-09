@@ -11,7 +11,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/Skycoin/cx-chains/src/util/logging"
+	"github.com/skycoin/skycoin/src/util/logging"
 )
 
 const (

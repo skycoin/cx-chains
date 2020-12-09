@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	wh "github.com/Skycoin/cx-chains/src/util/http"
-	"github.com/Skycoin/cx-chains/src/visor"
+	wh "github.com/skycoin/skycoin/src/util/http"
+
+	"github.com/skycoin/cx-chains/src/visor"
 )
 
 // Returns the program state of a CX chain.

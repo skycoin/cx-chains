@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/Skycoin/cx-chains/src/cipher/encrypt"
+	"github.com/skycoin/skycoin/src/cipher/encrypt"
 )
 
 type cryptor interface {

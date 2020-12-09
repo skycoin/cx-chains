@@ -5,9 +5,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/Skycoin/cx-chains/src/cipher"
-	"github.com/Skycoin/cx-chains/src/coin"
-	"github.com/Skycoin/cx-chains/src/params"
+	"github.com/skycoin/skycoin/src/cipher"
+
+	"github.com/skycoin/cx-chains/src/coin"
+	"github.com/skycoin/cx-chains/src/params"
 )
 
 func TestTransactionIsLocked(t *testing.T) {

@@ -8,10 +8,12 @@ import (
 	"github.com/boltdb/bolt"
 	"github.com/spf13/cobra"
 
-	"github.com/Skycoin/cx-chains/src/cipher"
-	"github.com/Skycoin/cx-chains/src/util/apputil"
-	"github.com/Skycoin/cx-chains/src/visor"
-	"github.com/Skycoin/cx-chains/src/visor/dbutil"
+	"github.com/skycoin/skycoin/src/cipher"
+
+	"github.com/skycoin/skycoin/src/util/apputil"
+
+	"github.com/skycoin/cx-chains/src/visor"
+	"github.com/skycoin/cx-chains/src/visor/dbutil"
 )
 
 const (

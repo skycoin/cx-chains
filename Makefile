@@ -24,6 +24,9 @@ OSNAME = $(TRAVIS_OS_NAME)
 # Tooling versions
 GOLANGCI_LINT_VERSION ?= v1.32.0
 
+install: ## Installs cxchain and cxchain-cli
+	go install ./cmd/...
+
 run-client:  ## Run skycoin with desktop client configuration. To add arguments, do 'make ARGS="--foo" run'.
 	./run-client.sh ${ARGS}
 

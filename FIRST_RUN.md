@@ -2,8 +2,12 @@
 
 > This document should be integrated within `README.md` in the near future.
 
+Install `cxchain` and `cxchain-cli`.
+```bash
+$ make install
+```
+
 Start `cx-tracker` with default setting.
-* Compile from [github.com/skycoin/cx-tracker](https://github.com/skycoin/cx-tracker).
 ```bash
 $ cx-tracker
 ```

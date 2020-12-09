@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/skycoin/skycoin/src/util/fee"
+	"github.com/skycoin/cx-chains/src/util/fee"
 
 	"github.com/skycoin/cx-chains/src/coin"
 	"github.com/skycoin/cx-chains/src/params"

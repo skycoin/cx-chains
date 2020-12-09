@@ -8,10 +8,9 @@ import (
 
 	"github.com/skycoin/skycoin/src/cipher"
 
-	"github.com/skycoin/skycoin/src/util/fee"
-
 	"github.com/skycoin/cx-chains/src/coin"
 	"github.com/skycoin/cx-chains/src/params"
+	"github.com/skycoin/cx-chains/src/util/fee"
 	"github.com/skycoin/cx-chains/src/visor/blockdb"
 	"github.com/skycoin/cx-chains/src/visor/dbutil"
 	"github.com/skycoin/cx-chains/src/visor/historydb"

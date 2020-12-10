@@ -15,7 +15,6 @@ import (
 	"time"
 	"unicode"
 
-	"github.com/NYTimes/gziphandler"
 	"github.com/rs/cors"
 
 	"github.com/skycoin/skycoin/src/cipher"
@@ -26,6 +25,7 @@ import (
 	"github.com/skycoin/skycoin/src/util/useragent"
 
 	"github.com/skycoin/cx-chains/src/readable"
+	"github.com/skycoin/cx-chains/src/util/httpgzip"
 )
 
 var (
@@ -398,7 +398,7 @@ func newServerMux(c muxConfig, gateway Gatewayer) *http.ServeMux {
 		}
 
 		handler = basicAuth(apiVersion, c.username, c.password, "skycoin daemon", handler)
-		handler = gziphandler.GzipHandler(handler)
+		handler = httpgzip.HTTPGzip(handler)
 		mux.Handle(endpoint, handler)
 	}
 

@@ -68,7 +68,7 @@ func (cm *CommandMap) ParseAndRun(args []string) int {
 */
 
 func CmdPrintf(cmd *flag.FlagSet, format string, a ...interface{}) {
-	if lastI := len(format)-1; lastI >= 0 && format[lastI] != '\n' {
+	if lastI := len(format) - 1; lastI >= 0 && format[lastI] != '\n' {
 		format += "\n"
 	}
 	_, _ = fmt.Fprintf(cmd.Output(), format, a...)

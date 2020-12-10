@@ -1,17 +1,14 @@
 package api
 
-import (
-	"net/http"
+// "net/http"
+// "github.com/prometheus/client_golang/prometheus"
+// "github.com/prometheus/client_golang/prometheus/promhttp"
+// wh "github.com/skycoin/skycoin/src/util/http"
 
-	//"github.com/prometheus/client_golang/prometheus"
-	//"github.com/prometheus/client_golang/prometheus/promhttp"
-
-	wh "github.com/skycoin/skycoin/src/util/http"
-)
-
-//File is stubbed out
-//Strip all prometheus dependencies
-//Replace with victoria metrics
+// TODO @SkycoinSynth
+//  File is stubbed out
+//  Strip all prometheus dependencies
+//  Replace with victoria metrics
 
 /*
 var (

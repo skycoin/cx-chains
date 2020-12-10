@@ -15,7 +15,7 @@ const (
 // ExtractedResults contains the extracted results from parsing args for
 // cx-related parts.
 type ExtractedResults struct {
-	CXFlags   []string // CX flags. key: flag key, value: flag value.
+	CXFlags   []string   // CX flags. key: flag key, value: flag value.
 	CXSources []*os.File // CX source files.
 }
 

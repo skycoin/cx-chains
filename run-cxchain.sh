@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Runs skycoin in daemon mode configuration
+# Runs skycoin in desktop client configuration
 
 set -x
 
@@ -10,13 +10,12 @@ pushd "$DIR" >/dev/null
 
 COMMIT=$(git rev-parse HEAD)
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
-GOLDFLAGS="-X main.Commit=${COMMIT} -X main.Branch=${BRANCH}"
+GOLDFLAGS="${GOLDFLAGS} -X main.commit=${COMMIT} -X main.branch=${BRANCH}"
 
 GORUNFLAGS=${GORUNFLAGS:-}
 
-go run -ldflags "${GOLDFLAGS}" $GORUNFLAGS cmd/skycoin/skycoin.go \
-    -enable-gui=false \
-    -launch-browser=false \
+go run -ldflags "${GOLDFLAGS}" $GORUNFLAGS cmd/cxchain/cxchain.go \
+    -enable-all-api-sets=true \
     -log-level=debug \
     $@
 

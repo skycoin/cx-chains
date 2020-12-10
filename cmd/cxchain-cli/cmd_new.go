@@ -11,6 +11,7 @@ import (
 
 	"github.com/skycoin/cx/cxgo/cxlexer"
 	"github.com/skycoin/cx/cxgo/parser"
+
 	"github.com/skycoin/cx-chains/src/cx/cxutil"
 
 	"github.com/skycoin/cx-chains/src/cx/cxflags"

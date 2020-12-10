@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/skycoin/cx/cxgo/parser"
+
 	"github.com/skycoin/cx-chains/src/cx/cxutil"
 )
 

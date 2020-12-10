@@ -18,14 +18,12 @@ import (
 	"time"
 
 	"github.com/blang/semver"
-	"github.com/toqueteos/webbrowser"
-
 	"github.com/skycoin/skycoin/src/cipher"
-
 	"github.com/skycoin/skycoin/src/util/apputil"
 	"github.com/skycoin/skycoin/src/util/certutil"
 	"github.com/skycoin/skycoin/src/util/droplet"
 	"github.com/skycoin/skycoin/src/util/logging"
+	"github.com/toqueteos/webbrowser"
 
 	"github.com/skycoin/cx-chains/src/api"
 	"github.com/skycoin/cx-chains/src/coin"

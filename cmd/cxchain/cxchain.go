@@ -11,17 +11,14 @@ import (
 
 	"github.com/skycoin/dmsg"
 	cipher2 "github.com/skycoin/dmsg/cipher"
-
 	"github.com/skycoin/skycoin/src/cipher"
-
 	"github.com/skycoin/skycoin/src/util/logging"
 
 	"github.com/skycoin/cx-chains/src/api"
-	"github.com/skycoin/cx-chains/src/readable"
-	"github.com/skycoin/cx-chains/src/skycoin"
-
 	"github.com/skycoin/cx-chains/src/cx/cxdmsg"
 	"github.com/skycoin/cx-chains/src/cx/cxspec"
+	"github.com/skycoin/cx-chains/src/readable"
+	"github.com/skycoin/cx-chains/src/skycoin"
 )
 
 const (

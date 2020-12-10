@@ -4,6 +4,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"log"
 	"math"
 	"os"
 	"path/filepath"
@@ -11,22 +12,16 @@ import (
 	"strings"
 	"time"
 
+	"github.com/skycoin/cx-chains/src/api"
 	"github.com/skycoin/cx-chains/src/coin"
-	"github.com/skycoin/cx-chains/src/fiber"
 	"github.com/skycoin/cx-chains/src/kvstorage"
-
-	"log"
+	"github.com/skycoin/cx-chains/src/params"
+	"github.com/skycoin/cx-chains/src/readable"
 
 	"github.com/skycoin/skycoin/src/cipher"
-
 	"github.com/skycoin/skycoin/src/util/droplet"
 	"github.com/skycoin/skycoin/src/util/file"
 	"github.com/skycoin/skycoin/src/util/useragent"
-
-	"github.com/skycoin/cx-chains/src/api"
-	"github.com/skycoin/cx-chains/src/params"
-	"github.com/skycoin/cx-chains/src/readable"
-	"github.com/skycoin/cx-chains/src/wallet"
 )
 
 var (
@@ -211,138 +206,6 @@ type NodeConfig struct {
 	blockchainSeckey cipher.SecKey
 
 	Fiber readable.FiberConfig
-}
-
-// NewNodeConfig returns a new node config instance
-func NewNodeConfig(mode string, node fiber.NodeConfig) NodeConfig {
-	nodeConfig := NodeConfig{
-		CoinName:            node.CoinName,
-		GenesisSignatureStr: node.GenesisSignatureStr,
-		GenesisAddressStr:   node.GenesisAddressStr,
-		GenesisCoinVolume:   node.GenesisCoinVolume,
-		GenesisTimestamp:    node.GenesisTimestamp,
-		BlockchainPubkeyStr: node.BlockchainPubkeyStr,
-		BlockchainSeckeyStr: node.BlockchainSeckeyStr,
-		DefaultConnections:  node.DefaultConnections,
-		// Disable peer exchange
-		DisablePEX: false,
-		// Don't make any outgoing connections
-		DisableOutgoingConnections: false,
-		// Don't allowing incoming connections
-		DisableIncomingConnections: false,
-		// Disables networking altogether
-		DisableNetworking: false,
-		// Enable GUI
-		EnableGUI: false,
-		// Disable CSRF check in the wallet API
-		DisableCSRF: false,
-		// Disable Host, Origin and Referer header check in the wallet API
-		DisableHeaderCheck: false,
-		// DisableCSP disable content-security-policy in http response
-		DisableCSP: false,
-		// Only run on localhost and only connect to others on localhost
-		LocalhostOnly: false,
-		// Which address to serve on. Leave blank to automatically assign to a
-		// public interface
-		Address: "",
-		// gnet uses this for TCP incoming and outgoing
-		Port: node.Port,
-		// MaxConnections is the maximum number of total connections allowed
-		MaxConnections: 128,
-		// MaxOutgoingConnections is the maximum outgoing connections allowed
-		MaxOutgoingConnections: 8,
-		// MaxDefaultOutgoingConnections is the maximum default outgoing connections allowed
-		MaxDefaultPeerOutgoingConnections: 1,
-		DownloadPeerList:                  true,
-		PeerListURL:                       node.PeerListURL,
-		// How often to make outgoing connections, in seconds
-		OutgoingConnectionsRate:  time.Second * 5,
-		MaxOutgoingMessageLength: 256 * 1024,
-		MaxIncomingMessageLength: 1024 * 1024,
-		PeerlistSize:             65535,
-		// Wallet Address Version
-		// AddressVersion: "test",
-		// Remote web interface
-		WebInterface:      true,
-		WebInterfacePort:  node.WebInterfacePort,
-		WebInterfaceAddr:  "127.0.0.1",
-		WebInterfaceCert:  "",
-		WebInterfaceKey:   "",
-		WebInterfaceHTTPS: false,
-		EnabledAPISets: strings.Join([]string{
-			api.EndpointsRead,
-			api.EndpointsTransaction,
-		}, ","),
-		DisabledAPISets:  "",
-		EnableAllAPISets: false,
-
-		LaunchBrowser: false,
-		// Data directory holds app data
-		DataDirectory: node.DataDirectory,
-		// Web GUI static resources
-		GUIDirectory: "./src/gui/static/",
-		// Logging
-		ColorLog:        true,
-		LogLevel:        "INFO",
-		LogToFile:       false,
-		DisablePingPong: false,
-
-		VerifyDB:       false,
-		ResetCorruptDB: false,
-
-		// Blockchain/transaction validation
-		UnconfirmedVerifyTxn: params.VerifyTxn{
-			BurnFactor:          node.UnconfirmedBurnFactor,
-			MaxTransactionSize:  node.UnconfirmedMaxTransactionSize,
-			MaxDropletPrecision: node.UnconfirmedMaxDropletPrecision,
-		},
-		CreateBlockVerifyTxn: params.VerifyTxn{
-			BurnFactor:          node.CreateBlockBurnFactor,
-			MaxTransactionSize:  node.CreateBlockMaxTransactionSize,
-			MaxDropletPrecision: node.CreateBlockMaxDropletPrecision,
-		},
-		MaxBlockTransactionsSize: node.MaxBlockTransactionsSize,
-
-		// Wallets
-		WalletDirectory:  "",
-		WalletCryptoType: string(wallet.CryptoTypeScryptChacha20poly1305),
-
-		// Key-value storage
-		KVStorageDirectory: "",
-		EnabledStorageTypes: []kvstorage.Type{
-			kvstorage.TypeTxIDNotes,
-			kvstorage.TypeGeneral,
-		},
-
-		// Timeout settings for http.Server
-		// https://blog.cloudflare.com/the-complete-guide-to-golang-net-http-timeouts/
-		HTTPReadTimeout:  time.Second * 10,
-		HTTPWriteTimeout: time.Second * 60,
-		HTTPIdleTimeout:  time.Second * 120,
-
-		RunBlockPublisher: false,
-
-		// Enable cpu profiling
-		ProfileCPU: false,
-		// Where the file is written to
-		ProfileCPUFile: "cpu.prof",
-		// HTTP profiling interface (see http://golang.org/pkg/net/http/pprof/)
-		HTTPProf:     false,
-		HTTPProfHost: "localhost:6060",
-
-		Fiber: readable.FiberConfig{
-			Name:            node.CoinName,
-			DisplayName:     node.DisplayName,
-			Ticker:          node.Ticker,
-			CoinHoursName:   node.CoinHoursName,
-			CoinHoursTicker: node.CoinHoursTicker,
-			ExplorerURL:     node.ExplorerURL,
-		},
-	}
-
-	nodeConfig.applyConfigMode(mode)
-
-	return nodeConfig
 }
 
 func (c *Config) postProcess(fs *flag.FlagSet) error {

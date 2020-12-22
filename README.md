@@ -41,7 +41,7 @@ $ cx-tracker
 
 Generate new chain spec.
 ```bash
-$ cxchain-cli new ./examples/blockchain/counter-bc.cx
+$ cxchain-cli new ./cx/examples/counter-bc.cx
 ```
 
 Run publisher node with generated chain spec.
@@ -58,12 +58,12 @@ $ cxchain -enable-all-api-sets -data-dir "$HOME/.cxchain/skycoin_client" -port 6
 
 Run transaction against publisher node.
 ```bash
-$ cxchain-cli run ./examples/blockchain/counter-txn.cx
+$ cxchain-cli run ./cx/examples/counter-tx.cx
 ```
 
 Run transaction against client node and inject.
 ```bash
-$ CXCHAIN_GEN_SK={genesis_secret_key} cxchain-cli run -n "http://127.0.0.1:6422" -i ./examples/blockchain/counter-txn.cx
+$ CXCHAIN_GEN_SK={genesis_secret_key} cxchain-cli run -n "http://127.0.0.1:6422" -i ./cx/examples/counter-tx.cx
 ```
 
 ## Resources

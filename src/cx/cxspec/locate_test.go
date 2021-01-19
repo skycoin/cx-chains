@@ -1,10 +1,12 @@
 package cxspec
 
 import (
+	"flag"
 	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestLocate(t *testing.T) {
@@ -62,5 +64,21 @@ func TestLocate(t *testing.T) {
 				assert.NoError(t, err)
 			})
 		}
+	})
+
+	t.Run("temp", func(t *testing.T) {
+		flag1 := ""
+		fs1 := flag.NewFlagSet("cmd", flag.ContinueOnError)
+		fs1.Usage = func() {}
+		fs1.StringVar(&flag1, "flag1", flag1, "this is the first flag")
+
+		flag2 := ""
+		fs2 := flag.NewFlagSet("cmd", flag.ContinueOnError)
+		fs2.StringVar(&flag2, "flag2", flag2, "this is the second flag")
+
+		args := []string{"--flag2=hello"}
+
+		fs1.Parse(args)
+		require.NoError(t, fs2.Parse(args))
 	})
 }

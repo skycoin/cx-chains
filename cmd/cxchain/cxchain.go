@@ -165,9 +165,20 @@ func trackerUpdateLoop(nodeSK cipher.SecKey, nodeTCPAddr string, spec cxspec.Cha
 }
 
 func main() {
+	// Parse chain spec location.
+
+	// TODO @evanlinjin: Complete this.
+	// locateConf := cxspec.LocateConfig{
+	// 	CXChain:   "",
+	// 	CXTracker: "",
+	// }
+	// locateConf.RegisterFlags(flag.CommandLine)
+	// locateConf.Parse(os.Args)
+
 	// Parse chain spec file and secret key from envs.
 	spec := parseSpecFilepathEnv() // Chain spec file (mandatory).
 	nodeSK := parseSecretKeyEnv()  // Secret Key file (mandatory).
+
 	var nodePK cipher.PubKey
 
 	// Node config: Init.
@@ -208,7 +219,7 @@ func main() {
 		},
 	}, log)
 
-	// This is, despite the name, post-processing and not "parsing".
+	// This is post-processing and not "parsing" (despite the name).
 	// Do not get confused. I did not name this function. <3 @evanlinjin
 	if err := coin.ParseConfig(flag.CommandLine); err != nil {
 		log.Error(err)

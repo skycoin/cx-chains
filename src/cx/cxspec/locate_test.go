@@ -13,7 +13,7 @@ func TestLocate(t *testing.T) {
 	t.Run("split_loc_string", func(t *testing.T) {
 		type TestCase struct {
 			name string // test name
-			in string   // test input
+			in   string // test input
 
 			// expected outputs
 			prefix   LocPrefix
@@ -24,25 +24,25 @@ func TestLocate(t *testing.T) {
 
 		cases := []TestCase{
 			{
-				name: "0_parts",
-				in: "",
+				name:   "0_parts",
+				in:     "",
 				hasErr: true,
 			},
 			{
-				name: "1_parts",
-				in: "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+				name:   "1_parts",
+				in:     "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
 				prefix: TrackerLoc,
 				suffix: "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
 			},
 			{
-				name: "2_parts",
-				in: fmt.Sprintf("%s:%s", TrackerLoc, "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"),
+				name:   "2_parts",
+				in:     fmt.Sprintf("%s:%s", TrackerLoc, "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"),
 				prefix: TrackerLoc,
 				suffix: "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
 			},
 			{
-				name: "2_parts",
-				in: fmt.Sprintf("%s:%s", FileLoc, `this\:/is/a\:/test/file.json`),
+				name:   "2_parts",
+				in:     fmt.Sprintf("%s:%s", FileLoc, `this\:/is/a\:/test/file.json`),
 				prefix: FileLoc,
 				suffix: `this\:/is/a\:/test/file.json`,
 			},

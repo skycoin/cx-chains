@@ -28,8 +28,8 @@ const (
 
 // Possible errors when executing 'Locate'.
 var (
-	ErrEmptySpec = errors.New("empty chain spec provided")
-	ErrEmptyTracker = errors.New("tracker is not provided")
+	ErrEmptySpec        = errors.New("empty chain spec provided")
+	ErrEmptyTracker     = errors.New("tracker is not provided")
 	ErrInvalidLocPrefix = errors.New("invalid spec location prefix")
 )
 
@@ -132,7 +132,7 @@ func (c *LocateConfig) RegisterFlags(fs *flag.FlagSet) {
 func obtainFlagValue(args []string, key string) string {
 	var (
 		keyPrefix1 = "-" + key
-		keyPrefix2 = keyPrefix1 +"="
+		keyPrefix2 = keyPrefix1 + "="
 	)
 
 	for i, a := range args {

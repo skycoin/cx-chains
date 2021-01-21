@@ -22,15 +22,15 @@ import (
 )
 
 const (
-	// ENV for chain spec filepath.
-	specFileEnv          = "CXCHAIN_SPEC_FILEPATH"
-	defaultChainSpecFile = "./skycoin.chain_spec.json"
-
 	// ENV for the chain secret key (in hex).
 	secKeyEnv = "CXCHAIN_SK"
 
 	// ENVs for config modes.
 	standaloneClientConfMode = "STANDALONE_CLIENT"
+
+	// Constants for default cx spec locating.
+	defaultCXChain   = string(cxspec.FileLoc + ":skycoin.chain_spec.json")
+	defaultCXTracker = "https://127.0.0.1:9091"
 )
 
 // These values should be populated by -ldflags on compilation
@@ -41,24 +41,27 @@ var (
 	confMode = "" // valid values: "STANDALONE_CLIENT", ""
 )
 
-// Logger.
+// log contains the logger.
 var log = logging.MustGetLogger("main")
 
-// parseSpecFilepathEnv parses chain spec filename from CXCHAIN_SPEC_FILEPATH env.
-func parseSpecFilepathEnv() cxspec.ChainSpec {
-	specFilename, ok := os.LookupEnv(specFileEnv)
-	if !ok {
-		specFilename = defaultChainSpecFile
+// locateSpec locates the spec location either from a local spec file or from a
+// CX tracker instance.
+func locateSpec() cxspec.ChainSpec {
+	locateConf := cxspec.LocateConfig{
+		CXChain:   defaultCXChain,
+		CXTracker: defaultCXTracker,
 	}
+	locateConf.RegisterFlags(flag.CommandLine)
+	locateConf.Parse(os.Args)
 
-	log.WithField("filename", specFilename).Info("Reading chain spec file...")
-
-	spec, err := cxspec.ReadSpecFile(specFilename)
+	tC := cxspec.NewCXTrackerClient(log, nil, locateConf.CXTracker)
+	spec, err := cxspec.Locate(context.Background(), log, tC, locateConf.CXChain)
 	if err != nil {
-		log.WithError(err).Fatal("Failed to start node.")
+		log.WithError(err).
+			WithField("chain", locateConf.CXChain).
+			Fatal("Failed to find cx spec.")
 	}
 
-	cxspec.PopulateParamsModule(spec)
 	return spec
 }
 
@@ -165,19 +168,9 @@ func trackerUpdateLoop(nodeSK cipher.SecKey, nodeTCPAddr string, spec cxspec.Cha
 }
 
 func main() {
-	// Parse chain spec location.
-
-	// TODO @evanlinjin: Complete this.
-	// locateConf := cxspec.LocateConfig{
-	// 	CXChain:   "",
-	// 	CXTracker: "",
-	// }
-	// locateConf.RegisterFlags(flag.CommandLine)
-	// locateConf.Parse(os.Args)
-
 	// Parse chain spec file and secret key from envs.
-	spec := parseSpecFilepathEnv() // Chain spec file (mandatory).
-	nodeSK := parseSecretKeyEnv()  // Secret Key file (mandatory).
+	spec := locateSpec()          // Chain spec file (mandatory).
+	nodeSK := parseSecretKeyEnv() // Secret Key file (mandatory).
 
 	var nodePK cipher.PubKey
 

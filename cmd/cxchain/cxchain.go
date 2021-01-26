@@ -71,7 +71,9 @@ func parseSecretKeyEnv() cipher.SecKey {
 	if skStr, ok := os.LookupEnv(secKeyEnv); ok {
 		sk, err := cipher.SecKeyFromHex(skStr)
 		if err != nil {
-			log.WithError(err).WithField("ENV", secKeyEnv).Fatal("Provided secret key is invalid.")
+			log.WithError(err).
+				WithField("ENV", secKeyEnv).
+				Fatal("Provided secret key is invalid.")
 		}
 		return sk
 	}

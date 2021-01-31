@@ -15,10 +15,11 @@ CX Chain requires [Golang](https://golang.org/) to compile (version `1.14+`). De
 To build `cxchain`, the typical Golang binary build process applies. The following command builds `cxchain` and `cxchain-cli` into the target directory specified by the `GOBIN` env.
 
 ```bash
+$ git clone git@github.com:skycoin/cx-chains.git && cd cx-chains
 $ go install ./cmd/...
 ```
 
-This command is also available as a `Makefile` target.
+The `go install` command is also available as a `Makefile` target.
 
 ```bash
 $ make install
@@ -39,7 +40,7 @@ Start `cx-tracker` with default setting.
 $ cx-tracker
 ```
 
-Generate new chain spec.
+Generate new chain spec (assuming that the repository root is your working directory).
 ```bash
 $ cxchain-cli new ./cx/examples/counter-bc.cx
 ```
@@ -47,7 +48,7 @@ $ cxchain-cli new ./cx/examples/counter-bc.cx
 Run publisher node with generated chain spec.
 * Obtain the chain secret key from generated `{coin}.chain_keys.json` file.
 ```bash
-$ CXCHAIN_SK={publisher_secret_key} cxchain -enable-all-api-sets
+$ CXCHAIN_SK=publisher_secret_key cxchain -enable-all-api-sets
 ```
 
 Run client node with generated chain spec (use different data dir, and ports to publisher node).
@@ -63,7 +64,7 @@ $ cxchain-cli run ./cx/examples/counter-tx.cx
 
 Run transaction against client node and inject.
 ```bash
-$ CXCHAIN_GEN_SK={genesis_secret_key} cxchain-cli run -n "http://127.0.0.1:6422" -i ./cx/examples/counter-tx.cx
+$ CXCHAIN_GEN_SK=genesis_secret_key cxchain-cli run -n "http://127.0.0.1:6422" -i ./cx/examples/counter-tx.cx
 ```
 
 ## Resources

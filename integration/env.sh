@@ -1,44 +1,85 @@
 #!/usr/bin/env bash
 
 # Enable executed commands to be displayed.
-set -x
+#set -x
 
-# Ensure GOBIN is set.
-if [[ ! -v GOBIN ]]; then
-  GOBIN=$(go env GOBIN)
-fi
+# Initiate environment.
+function init_env() {
+  echo "<< Initiating environment. >>"
 
-# If CX tracker source dir is defined (in CX_TRACKER_SRC), compile the source.
-# The resultant binary should end up in GOBIN.
-if [[ -v CX_TRACKER_SRC ]]; then
-  ORIG_DIR=${PWD}
-  cd "${CX_TRACKER_SRC}" || exit 1
-  make install || exit 1
-  cd "${ORIG_DIR}" || exit 1
-fi
+  # Ensure GOBIN is set.
+  : "${GOBIN:="$HOME/go/bin"}"
+  echo "GOBIN=$GOBIN"
 
-# Compile cxchain.
-make install || exit 1
+  # Ensure TEMP_DIR is set.
+  : "${TEMP_DIR:=$(mktemp -d 2>/dev/null || mktemp -d -t 'cx_chains_integration')}"
+  echo "TEMP_DIR=$TEMP_DIR"
 
-# ENVs.
-TRACKER_ADDR=":9091"
+  # Ensure TRACKER_SRC is set.
+  : "${TRACKER_SRC=$(dirname "$(pwd)")/cx-tracker}"
+  echo "TRACKER_SRC=$TRACKER_SRC"
 
-# Initiate directory.
-function init_temp_dir() {
-  TEMP_DIR=$(mktemp -d 2>/dev/null || mktemp -d -t 'cx_chains_integration')
-  TRACKER_DB="$TEMP_DIR/cx_tracker.db"
+  # Ensure TRACKER_ADDR is set.
+  : "${TRACKER_ADDR:=":9091"}"
+  echo "TRACKER_ADDR=$TRACKER_ADDR"
+
+  # Ensure TRACKER_DB is set.
+  : "${TRACKER_DB:="$TEMP_DIR/cx_tracker.db"}"
+  echo "TRACKER_DB=$TRACKER_DB"
+
+  # Ensure TRACKER_LOG is set.
+  : "${TRACKER_LOG:="$TEMP_DIR/cx_tracker.log"}"
+  echo "TRACKER_LOG=$TRACKER_LOG"
+
+  # Ensure TRACKER_PID is set.
+  : "${TRACKER_PID:="$TEMP_DIR/cx_tracker.pid"}"
+  echo "TRACKER_PID=$TRACKER_PID"
+
+
 }
+
+# Initiate binaries.
+function init_bin() {
+  echo "<< Initiating binaries. >>"
+
+  # Compile cx-tracker.
+  _d=$(pwd)
+  cd "$TRACKER_SRC" || exit 1
+  echo ">> Installing 'cx-tracker'."
+  make install || exit 1
+  cd "$_d" || exit 1
+
+  # Compile cxchain.
+  echo ">> Installing 'cxchain'."
+  make install || exit 1
+}
+
+# Clean temp dir.
 function clean_temp_dir() {
+  echo "<< Cleaning temporary directory. >>"
   rm -rf "$TEMP_DIR"
 }
 
 # Start tracker.
 function start_tracker() {
-  "$GOBIN/cx-tracker" --db="$TRACKER_DB" --addr="$TRACKER_ADDR"
+  echo "<< Starting 'cx-tracker'. >>"
+  "$GOBIN/cx-tracker" --db="$TRACKER_DB" --addr="$TRACKER_ADDR" >> "$TRACKER_LOG" 2>&1 &
+  echo $$ > "$TRACKER_PID"
 }
 
-init_temp_dir;
+# Stop tracker.
+function stop_tracker() {
+  echo "<< Stopping 'cx-tracker'. >>"
+  cat "$TRACKER_PID" || xargs kill
+}
+
+init_env;
+init_bin;
 
 start_tracker;
+
+sleep 5
+
+stop_tracker;
 
 clean_temp_dir;

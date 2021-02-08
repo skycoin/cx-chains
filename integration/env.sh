@@ -35,6 +35,8 @@ function init_env() {
   : "${TRACKER_PID:="$TEMP_DIR/cx_tracker.pid"}"
   echo "TRACKER_PID=$TRACKER_PID"
 
+  # Ensure CXCHAIN_DIR is set.
+  : "${CXCHAIN_DIR:="$TEMP_DIR/cxchain"}"
 
 }
 
@@ -71,6 +73,42 @@ function start_tracker() {
 function stop_tracker() {
   echo "<< Stopping 'cx-tracker'. >>"
   cat "$TRACKER_PID" || xargs kill
+}
+
+# Start cxchain client.
+function start_cxchain_client() {
+  echo "<< Starting 'cxchain'. >>"
+  if [[ "$?" -ne 3 ]]; then echo "Needs 3 arguments." && exit 1; fi
+
+  local _index="$1"
+  local _port="$2"
+  local _web_port="$3"
+
+  "$GOBIN/cxchain" --enable-all-api-sets --client \
+    --data-dir="$CXCHAIN_DIR/$_index" \
+    --port="$_port" \
+    --web-interface-port="$_web_port" \
+    >> "$TEMP_DIR/cxchain_$_index.log" 2>&1 &
+
+  echo $$ > "$TEMP_DIR/cxchain$_index.pid"
+}
+
+# Start cxchain master.
+function start_cxchain_master() {
+  echo "<< Starting 'cxchain'. >>"
+  if [[ "$?" -ne 3 ]]; then echo "Needs 3 arguments." && exit 1; fi
+
+  local _index="$1"
+  local _port="$2"
+  local _web_port="$3"
+
+  "$GOBIN/cxchain" --enable-all-api-sets \
+    --data-dir="$CXCHAIN_DIR/$_index" \
+    --port="$_port" \
+    --web-interface-port="$_web_port" \
+    >> "$TEMP_DIR/cxchain_$_index.log" 2>&1 &
+
+  echo $$ > "$TEMP_DIR/cxchain$_index.pid"
 }
 
 init_env;

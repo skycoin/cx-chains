@@ -33,7 +33,7 @@ const (
 	defaultCXTracker = "https://127.0.0.1:9091"
 )
 
-// These values should be populated by -ldflags on compilation
+// These values should be populated by -ldflags on compilation.
 var (
 	version  = "0.0.0"
 	commit   = ""
@@ -96,6 +96,7 @@ var (
 	trackerAddr  = "http://127.0.0.1:9091"    // cx tracker address
 	dmsgDiscAddr = cxdmsg.DefaultDiscAddr     // dmsg discovery address
 	dmsgPort     = uint64(cxdmsg.DefaultPort) // dmsg listening port
+	forceClient  = false                      // more client mode (as opposed to publisher)
 )
 
 func init() {
@@ -103,6 +104,7 @@ func init() {
 	cmd.StringVar(&trackerAddr, "cx-tracker", trackerAddr, "HTTP `ADDRESS` of cx tracker")
 	cmd.StringVar(&dmsgDiscAddr, "dmsg-disc", dmsgDiscAddr, "HTTP `ADDRESS` of dmsg discovery")
 	cmd.Uint64Var(&dmsgPort, "dmsg-port", dmsgPort, "dmsg `PORT` number to listen on")
+	cmd.BoolVar(&forceClient, "client", forceClient, "force client mode (even with master sk set)")
 }
 
 func trackerUpdateLoop(nodeSK cipher.SecKey, nodeTCPAddr string, spec cxspec.ChainSpec) {
@@ -185,9 +187,8 @@ func main() {
 		log.WithError(err).Fatal("Failed to parse from chain spec file.")
 	}
 
-	// Node config: Check node secret key.
+	// Node config: Ensure node keys are set.
 	//	- If node secret key is null, randomly generate one.
-	//	- If node secret key generates spec's chain pk, it is also the chain's publisher node.
 	if nodeSK.Null() {
 		nodePK, nodeSK = cipher.GenerateKeyPair()
 		log.WithField("node_pk", nodePK.Hex()).
@@ -196,7 +197,12 @@ func main() {
 	if err := nodeSK.Verify(); err != nil {
 		log.WithError(err).Fatal("Failed to verify provided node secret key.")
 	}
-	if nodePK = cipher.MustPubKeyFromSecKey(nodeSK); nodePK == spec.ProcessedChainPubKey() {
+	nodePK = cipher.MustPubKeyFromSecKey(nodeSK)
+
+	// Node config: Enable publisher mode if conditions are met.
+	// - Skip if 'forceClient' is set.
+	// - Skip if 'nodePK' is not equal to chain spec's PK.
+	if !forceClient && nodePK == spec.ProcessedChainPubKey() {
 		conf.BlockchainSeckeyStr = nodeSK.Hex()
 		conf.RunBlockPublisher = true
 	}

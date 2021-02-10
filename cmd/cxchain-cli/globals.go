@@ -26,14 +26,11 @@ var globals = struct {
 	specFilename string           // chain spec filename
 	specErr      error            // error when obtaining chain spec
 
-	genSK    cipher.SecKey // genesis secret key obtained from SK defined in `CXCHAIN_GENESIS_SK` ENV
-	genSKErr error         // error when obtaining genesis secret key
 }{}
 
 // initGlobals initiates globals. This is called in main.
 func initGlobals() {
 	globals.spec, globals.specFilename, globals.specErr = parseSpecFileEnv()
-	globals.genSK, globals.genSKErr = parseGenesisSKEnv()
 
 	log := log.
 		WithField(specFileEnv, nil).
@@ -41,9 +38,6 @@ func initGlobals() {
 
 	if globals.specErr == nil {
 		log = log.WithField(specFileEnv, globals.specFilename)
-	}
-	if globals.genSKErr == nil {
-		log = log.WithField(genSKEnv, globals.genSK.Hex())
 	}
 
 	log.Info("Environment variables:")

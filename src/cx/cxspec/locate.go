@@ -23,7 +23,15 @@ const (
 
 // Constants.
 const (
-	defaultChainSpecFile = "./skycoin.chain_spec.json"
+	// defaultSpecFilepath is the default cx spec filepath.
+	// This is for internal use.
+	defaultSpecFilepath = "skycoin.chain_spec.json"
+
+	// DefaultSpecLocStr is the default cx spec location string.
+	DefaultSpecLocStr = string(FileLoc + ":" + defaultSpecFilepath)
+
+	// DefaultTrackerURL is the default cx tracker URL.
+	DefaultTrackerURL = "https://cxt.skycoin.com"
 )
 
 // Possible errors when executing 'Locate'.
@@ -54,7 +62,7 @@ func Locate(ctx context.Context, log logrus.FieldLogger, tracker *CXTrackerClien
 	switch prefix {
 	case FileLoc:
 		if suffix == "" {
-			suffix = defaultChainSpecFile
+			suffix = defaultSpecFilepath
 		}
 
 		return ReadSpecFile(suffix)
@@ -113,6 +121,19 @@ func splitLocString(loc string) (prefix LocPrefix, suffix string, err error) {
 type LocateConfig struct {
 	CXChain   string // CX Chain spec location string.
 	CXTracker string // CX Tracker URL.
+}
+
+// FillDefaults fills LocateConfig with default values.
+func (c *LocateConfig) FillDefaults() {
+	c.CXChain = DefaultSpecLocStr
+	c.CXTracker = DefaultTrackerURL
+}
+
+// DefaultLocateConfig returns the default LocateConfig set.
+func DefaultLocateConfig() LocateConfig {
+	var lc LocateConfig
+	lc.FillDefaults()
+	return lc
 }
 
 // Parse parses the OS args for the 'chain' flag.

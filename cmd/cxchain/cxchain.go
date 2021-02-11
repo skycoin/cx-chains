@@ -27,10 +27,6 @@ const (
 
 	// ENVs for config modes.
 	standaloneClientConfMode = "STANDALONE_CLIENT"
-
-	// Constants for default cx spec locating.
-	defaultCXChain   = string(cxspec.FileLoc + ":skycoin.chain_spec.json")
-	defaultCXTracker = "https://127.0.0.1:9091"
 )
 
 // These values should be populated by -ldflags on compilation.
@@ -41,24 +37,30 @@ var (
 	confMode = "" // valid values: "STANDALONE_CLIENT", ""
 )
 
-// log contains the logger.
+// log contains the main logger.
 var log = logging.MustGetLogger("main")
+
+// Additional flags.
+var (
+	dmsgDiscAddr = cxdmsg.DefaultDiscAddr     // dmsg discovery address
+	dmsgPort     = uint64(cxdmsg.DefaultPort) // dmsg listening port
+	forceClient  = false                      // more client mode (as opposed to publisher)
+
+	// specFlags contains default cx spec discovery flags
+	specFlags = cxspec.DefaultLocateConfig()
+)
 
 // locateSpec locates the spec location either from a local spec file or from a
 // CX tracker instance.
 func locateSpec() cxspec.ChainSpec {
-	locateConf := cxspec.LocateConfig{
-		CXChain:   defaultCXChain,
-		CXTracker: defaultCXTracker,
-	}
-	locateConf.RegisterFlags(flag.CommandLine)
-	locateConf.Parse(os.Args)
+	specFlags.RegisterFlags(flag.CommandLine)
+	specFlags.Parse(os.Args)
 
-	tC := cxspec.NewCXTrackerClient(log, nil, locateConf.CXTracker)
-	spec, err := cxspec.Locate(context.Background(), log, tC, locateConf.CXChain)
+	tC := cxspec.NewCXTrackerClient(log, nil, specFlags.CXTracker)
+	spec, err := cxspec.Locate(context.Background(), log, tC, specFlags.CXChain)
 	if err != nil {
 		log.WithError(err).
-			WithField("chain", locateConf.CXChain).
+			WithField("chain", specFlags.CXChain).
 			Fatal("Failed to find cx spec.")
 	}
 
@@ -92,25 +94,11 @@ func ensureConfMode(conf *skycoin.NodeConfig) {
 	}
 }
 
-var (
-	trackerAddr  = "http://127.0.0.1:9091"    // cx tracker address
-	dmsgDiscAddr = cxdmsg.DefaultDiscAddr     // dmsg discovery address
-	dmsgPort     = uint64(cxdmsg.DefaultPort) // dmsg listening port
-	forceClient  = false                      // more client mode (as opposed to publisher)
-)
-
-func init() {
-	cmd := flag.CommandLine
-	cmd.StringVar(&trackerAddr, "cx-tracker", trackerAddr, "HTTP `ADDRESS` of cx tracker")
-	cmd.StringVar(&dmsgDiscAddr, "dmsg-disc", dmsgDiscAddr, "HTTP `ADDRESS` of dmsg discovery")
-	cmd.Uint64Var(&dmsgPort, "dmsg-port", dmsgPort, "dmsg `PORT` number to listen on")
-	cmd.BoolVar(&forceClient, "client", forceClient, "force client mode (even with master sk set)")
-}
-
+// trackerUpdateLoop updates the cx tracker of the current node state.
 func trackerUpdateLoop(nodeSK cipher.SecKey, nodeTCPAddr string, spec cxspec.ChainSpec) {
 	log := logging.MustGetLogger("cx_tracker_client")
 
-	client := cxspec.NewCXTrackerClient(log, nil, trackerAddr)
+	client := cxspec.NewCXTrackerClient(log, nil, specFlags.CXTracker)
 	nodePK := cipher.MustPubKeyFromSecKey(nodeSK)
 
 	block, err := spec.GenerateGenesisBlock()
@@ -172,9 +160,17 @@ func trackerUpdateLoop(nodeSK cipher.SecKey, nodeTCPAddr string, spec cxspec.Cha
 }
 
 func main() {
-	// Parse chain spec file and secret key from envs.
-	spec := locateSpec()          // Chain spec file (mandatory).
-	nodeSK := parseSecretKeyEnv() // Secret Key file (mandatory).
+	// Register and parse flags for cx chain spec.
+	spec := locateSpec()
+
+	// Register additional CLI flags.
+	cmd := flag.CommandLine
+	cmd.StringVar(&dmsgDiscAddr, "dmsg-disc", dmsgDiscAddr, "HTTP `ADDRESS` of dmsg discovery")
+	cmd.Uint64Var(&dmsgPort, "dmsg-port", dmsgPort, "dmsg `PORT` number to listen on")
+	cmd.BoolVar(&forceClient, "client", forceClient, "force client mode (even with master sk set)")
+
+	// Parse ENV for node secret key.
+	nodeSK := parseSecretKeyEnv()
 
 	var nodePK cipher.PubKey
 
@@ -183,7 +179,7 @@ func main() {
 	ensureConfMode(&conf)
 
 	// Node config: Populate node config based on chain spec content.
-	if err := cxspec.PopulateNodeConfig(trackerAddr, spec, &conf); err != nil {
+	if err := cxspec.PopulateNodeConfig(specFlags.CXTracker, spec, &conf); err != nil {
 		log.WithError(err).Fatal("Failed to parse from chain spec file.")
 	}
 
@@ -207,7 +203,7 @@ func main() {
 		conf.RunBlockPublisher = true
 	}
 
-	// Node config: Parse flag set.
+	// Node config: Register node flags and parse entire flag set.
 	conf.RegisterFlags(flag.CommandLine)
 	flag.Parse()
 
@@ -231,35 +227,43 @@ func main() {
 	defer close(gwCh)
 
 	go func() {
+		// await gateway to be loaded and ready
 		gw, ok := <-gwCh
 		if !ok {
 			return
 		}
 
 		// Run cx tracker loop.
+		// - Node params are uploaded to the tracker.
+		// - Send keepalive requests on regular intervals.
+		// 'addr' is the daemon IP address
 		dConf := gw.DaemonConfig()
 		addr := fmt.Sprintf("%s:%d", dConf.Address, dConf.Port)
 		go trackerUpdateLoop(nodeSK, addr, spec)
 
+		// Prepare API to be served via dmsg.
+		dmsgAPI := &cxdmsg.API{
+			Version:   version,
+			NodeConf:  conf,
+			ChainSpec: spec,
+			Gateway:   gw,
+		}
+
+		// Prepare dmsg config.
+		dmsgConf := &cxdmsg.Config{
+			PK:       cipher2.PubKey(nodePK),
+			SK:       cipher2.SecKey(nodeSK),
+			DiscAddr: dmsgDiscAddr,
+			DmsgPort: uint16(dmsgPort),
+		}
+
 		// Run dmsg loop.
-		cxdmsg.ServeDmsg(
-			context.Background(),
-			logging.MustGetLogger("dmsgC"),
-			&cxdmsg.Config{
-				PK:       cipher2.PubKey(nodePK),
-				SK:       cipher2.SecKey(nodeSK),
-				DiscAddr: dmsgDiscAddr,
-				DmsgPort: uint16(dmsgPort),
-			},
-			&cxdmsg.API{
-				Version:   version,
-				NodeConf:  conf,
-				ChainSpec: spec,
-				Gateway:   gw,
-			},
-		)
+		dmsgCtx := context.Background()
+		dmsgLog := logging.MustGetLogger("dmsgC")
+		cxdmsg.ServeDmsg(dmsgCtx, dmsgLog, dmsgConf, dmsgAPI)
 	}()
 
+	// Run main daemon.
 	if err := coin.Run(spec.RawGenesisProgState(), gwCh); err != nil {
 		os.Exit(1)
 	}

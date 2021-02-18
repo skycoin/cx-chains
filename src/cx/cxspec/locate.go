@@ -5,6 +5,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"net/http"
 	"strings"
 
 	"github.com/sirupsen/logrus"
@@ -121,12 +122,16 @@ func splitLocString(loc string) (prefix LocPrefix, suffix string, err error) {
 type LocateConfig struct {
 	CXChain   string // CX Chain spec location string.
 	CXTracker string // CX Tracker URL.
+
+	Logger logrus.FieldLogger
+	HTTPClient *http.Client
 }
 
 // FillDefaults fills LocateConfig with default values.
 func (c *LocateConfig) FillDefaults() {
 	c.CXChain = DefaultSpecLocStr
 	c.CXTracker = DefaultTrackerURL
+	c.Logger = logging.MustGetLogger("spec_loc")
 }
 
 // DefaultLocateConfig returns the default LocateConfig set.
@@ -136,8 +141,10 @@ func DefaultLocateConfig() LocateConfig {
 	return lc
 }
 
-// Parse parses the OS args for the 'chain' flag.
-func (c *LocateConfig) Parse(args []string) {
+// SoftParse parses the OS args for the 'chain' flag.
+// It is called 'soft' parse because the existence of non-defined flags does not
+// result in failure.
+func (c *LocateConfig) SoftParse(args []string) {
 	c.CXChain = obtainFlagValue(args, "chain")
 	c.CXTracker = obtainFlagValue(args, "tracker")
 }
@@ -149,6 +156,20 @@ func (c *LocateConfig) RegisterFlags(fs *flag.FlagSet) {
 	fs.StringVar(&temp, "chain", c.CXChain, fmt.Sprintf("cx chain location. Prepend with '%s:' or '%s:' for spec location type.", FileLoc, TrackerLoc))
 	fs.StringVar(&temp, "tracker", c.CXTracker, "CX Tracker `URL`.")
 }
+
+// TrackerClient generates a CX Tracker client based on the defined config.
+func (c *LocateConfig) TrackerClient() *CXTrackerClient {
+	return NewCXTrackerClient(c.Logger, c.HTTPClient, c.CXChain)
+}
+
+// LocateWithConfig locates a spec with a given locate config.
+func LocateWithConfig(ctx context.Context, conf *LocateConfig) (ChainSpec, error) {
+	return Locate(ctx, conf.Logger, conf.TrackerClient(), conf.CXChain)
+}
+
+/*
+	<< Helper functions >>
+*/
 
 func obtainFlagValue(args []string, key string) string {
 	var (

@@ -54,10 +54,9 @@ var (
 // CX tracker instance.
 func locateSpec() cxspec.ChainSpec {
 	specFlags.RegisterFlags(flag.CommandLine)
-	specFlags.Parse(os.Args)
+	specFlags.SoftParse(os.Args)
 
-	tC := cxspec.NewCXTrackerClient(log, nil, specFlags.CXTracker)
-	spec, err := cxspec.Locate(context.Background(), log, tC, specFlags.CXChain)
+	spec, err := cxspec.LocateWithConfig(context.Background(), &specFlags)
 	if err != nil {
 		log.WithError(err).
 			WithField("chain", specFlags.CXChain).

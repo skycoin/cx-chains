@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -13,14 +14,9 @@ import (
 )
 
 func cmdPeers(args []string) {
-	// spec is the chain spec obtained from ENV
-	if err := globals.specErr; err != nil {
-		log.WithError(err).Fatal()
-	}
-	spec := globals.spec
-
 	// rootCmd is the root command of the 'peers' subcommand
 	rootCmd := flag.NewFlagSet("cxchain-cli peers", flag.ExitOnError)
+	spec := processSpecFlags(context.Background(), rootCmd, args)
 
 	// nodeAddr holds the value parsed from the flags 'node' and 'n'
 	nodeAddr := fmt.Sprintf("http://127.0.0.1:%d", spec.Node.WebInterfacePort)

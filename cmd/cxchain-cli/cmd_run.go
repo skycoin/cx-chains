@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"os"
@@ -59,19 +60,21 @@ func readRunENVs(specAddr cipher.Address) cipher.SecKey {
 }
 
 func processRunFlags(args []string) (runFlags, cxspec.ChainSpec, cipher.SecKey) {
-	if err := globals.specErr; err != nil {
-		log.WithError(err).Fatal()
-	}
-	spec := globals.spec
+	cmd := flag.NewFlagSet("cxchain-cli run", flag.ExitOnError)
+	spec := processSpecFlags(context.Background(), cmd, args)
 
 	f := runFlags{
-		cmd: flag.NewFlagSet("cxchain-cli run", flag.ExitOnError),
+		cmd: cmd,
 
 		debugLexer:   false,
 		debugProfile: 0,
 		MemoryFlags:  cxflags.DefaultMemoryFlags(),
 
-		inject:   false,
+		inject: false,
+
+		// TODO @evanlinjin: Find a way to set this later on.
+		// TODO @evanlinjin: This way, we would not need to call '.Locate' so
+		// TODO @evanlinjin: early within processSpecFlags()
 		nodeAddr: fmt.Sprintf("http://127.0.0.1:%d", spec.Node.WebInterfacePort),
 	}
 

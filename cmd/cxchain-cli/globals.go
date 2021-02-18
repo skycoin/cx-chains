@@ -1,7 +1,9 @@
 package main
 
 import (
+	"context"
 	"errors"
+	"flag"
 	"fmt"
 	"os"
 
@@ -11,54 +13,11 @@ import (
 )
 
 const (
-	// ENV for chain spec filepath.
-	specFileEnv          = "CXCHAIN_SPEC"
-	defaultChainSpecFile = "./skycoin.chain_spec.json"
-
 	// ENV for genesis secret key.
 	genSKEnv = "CXCHAIN_GEN_SK"
 )
 
 var ErrNoSKProvided = errors.New("no secret key provided")
-
-var globals = struct {
-	spec         cxspec.ChainSpec // chain spec struct obtained from file defined in `CXCHAIN_SPEC_FILE` ENV
-	specFilename string           // chain spec filename
-	specErr      error            // error when obtaining chain spec
-
-}{}
-
-// initGlobals initiates globals. This is called in main.
-func initGlobals() {
-	globals.spec, globals.specFilename, globals.specErr = parseSpecFileEnv()
-
-	log := log.
-		WithField(specFileEnv, nil).
-		WithField(genSKEnv, nil)
-
-	if globals.specErr == nil {
-		log = log.WithField(specFileEnv, globals.specFilename)
-	}
-
-	log.Info("Environment variables:")
-}
-
-// parseSpecFileEnv parses chain spec filename from CXCHAIN_SPEC_FILEPATH env.
-func parseSpecFileEnv() (cxspec.ChainSpec, string, error) {
-	specFilename, ok := os.LookupEnv(specFileEnv)
-	if !ok {
-		specFilename = defaultChainSpecFile
-	}
-
-	spec, err := cxspec.ReadSpecFile(specFilename)
-	if err != nil {
-		return cxspec.ChainSpec{}, specFilename, fmt.Errorf("failed to read chain spec from %s: %w", specFilename, err)
-	}
-
-	// log.WithField("filename", specFilename).Info("Using chain spec.")
-	cxspec.PopulateParamsModule(spec)
-	return spec, specFilename, nil
-}
 
 // parseGenesisSKEnv parses secret key from CXCHAIN_SECRET_KEY env.
 // The secret key can be null.
@@ -71,4 +30,21 @@ func parseGenesisSKEnv() (cipher.SecKey, error) {
 		return sk, nil
 	}
 	return cipher.SecKey{}, ErrNoSKProvided
+}
+
+// processSpecFlags parses the 'chain' flag which defines where to discover the
+// chain spec file.
+func processSpecFlags(ctx context.Context, cmd *flag.FlagSet, args []string) cxspec.ChainSpec {
+	conf := cxspec.DefaultLocateConfig()
+	conf.RegisterFlags(cmd)
+	conf.SoftParse(args)
+
+	spec, err := cxspec.LocateWithConfig(ctx, &conf)
+	if err != nil {
+		log.WithError(err).
+			WithField("chain", conf.CXChain).
+			Fatal("Failed to find cx spec.")
+	}
+
+	return spec
 }

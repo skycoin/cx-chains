@@ -12,15 +12,12 @@ import (
 var log = logging.MustGetLogger("cxchain-cli")
 
 func main() {
-	initGlobals()
-
 	usageMenu := cxutil.UsageFormat(func(cmd *flag.FlagSet, subcommands []string) {
 		// print: Usage
 		cxutil.PrintCmdUsage(cmd, "Usage", subcommands, []string{"args"})
 
 		// print: ENVs
 		cxutil.CmdPrintf(cmd, "ENVs:")
-		cxutil.CmdPrintf(cmd, "  $%s\n  \t%s", specFileEnv, "chain spec filepath")
 		cxutil.CmdPrintf(cmd, "  $%s\n  \t%s", genSKEnv, "genesis secret key (hex)")
 
 		// print: Flags

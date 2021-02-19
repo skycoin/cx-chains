@@ -24,12 +24,12 @@ const (
 
 // Constants.
 const (
-	// defaultSpecFilepath is the default cx spec filepath.
+	// DefaultSpecFilepath is the default cx spec filepath.
 	// This is for internal use.
-	defaultSpecFilepath = "skycoin.chain_spec.json"
+	DefaultSpecFilepath = "skycoin.chain_spec.json"
 
 	// DefaultSpecLocStr is the default cx spec location string.
-	DefaultSpecLocStr = string(FileLoc + ":" + defaultSpecFilepath)
+	DefaultSpecLocStr = string(FileLoc + ":" + DefaultSpecFilepath)
 
 	// DefaultTrackerURL is the default cx tracker URL.
 	DefaultTrackerURL = "https://cxt.skycoin.com"
@@ -63,7 +63,7 @@ func Locate(ctx context.Context, log logrus.FieldLogger, tracker *CXTrackerClien
 	switch prefix {
 	case FileLoc:
 		if suffix == "" {
-			suffix = defaultSpecFilepath
+			suffix = DefaultSpecFilepath
 		}
 
 		return ReadSpecFile(suffix)

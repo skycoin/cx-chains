@@ -29,6 +29,7 @@ func main() {
 		AddSubcommand("help", func(_ []string) { flag.CommandLine.Usage() }).
 		AddSubcommand("tokenize", cmdTokenize).
 		AddSubcommand("new", cmdNew).
+		AddSubcommand("post", cmdPost).
 		AddSubcommand("run", cmdRun).
 		AddSubcommand("state", cmdState).
 		AddSubcommand("peers", cmdPeers)

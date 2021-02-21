@@ -32,7 +32,8 @@ func main() {
 		AddSubcommand("post", cmdPost).
 		AddSubcommand("run", cmdRun).
 		AddSubcommand("state", cmdState).
-		AddSubcommand("peers", cmdPeers)
+		AddSubcommand("peers", cmdPeers).
+		AddSubcommand("print", cmdPrint)
 
 	os.Exit(root.ParseAndRun(os.Args[1:]))
 }

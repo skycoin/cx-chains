@@ -4,24 +4,25 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"os"
+
 	"github.com/skycoin/cx-chains/src/cx/cxspec"
 	"github.com/skycoin/cx-chains/src/cx/cxutil"
-	"os"
 )
 
-type printFlags struct {
+type keyFlags struct {
 	cmd *flag.FlagSet
 
 	in    string
 	field string
 }
 
-func processPrintFlags(args []string) printFlags {
+func processKeyFlags(args []string) keyFlags {
 	// Specify default flag values.
-	f := printFlags{
-		cmd:      flag.NewFlagSet("cxchain-cli print", flag.ExitOnError),
-		in:       "skycoin.chain_keys.json", // TODO @evanlinjin: Find const for this value.
-		field:    "seckey",
+	f := keyFlags{
+		cmd:   flag.NewFlagSet("cxchain-cli key", flag.ExitOnError),
+		in:    "skycoin.chain_keys.json", // TODO @evanlinjin: Find const for this value.
+		field: "seckey",
 	}
 
 	f.cmd.Usage = func() {
@@ -39,8 +40,8 @@ func processPrintFlags(args []string) printFlags {
 	return f
 }
 
-func cmdPrint(args []string) {
-	flags := processPrintFlags(args)
+func cmdKey(args []string) {
+	flags := processKeyFlags(args)
 
 	f, err := os.Open(flags.in)
 	if err != nil {

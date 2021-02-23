@@ -32,7 +32,7 @@ func processPostFlags(args []string) (postFlags, cipher.SecKey) {
 	f.cmd.Usage = func() {
 		usage := cxutil.DefaultUsageFormat("flags")
 		usage(f.cmd, nil)
-		printRunENVs(f.cmd)
+		printChainSKENV(f.cmd)
 	}
 
 	f.cmd.StringVar(&f.specInput, "spec", f.specInput, "`FILENAME` of chain spec file input")
@@ -52,10 +52,10 @@ func processPostFlags(args []string) (postFlags, cipher.SecKey) {
 	}
 
 	// Parse ENVs.
-	genSK, err := parseGenesisSKEnv()
+	genSK, err := parseSKEnv(chainSKEnv)
 	if err != nil {
 		log.WithError(err).
-			WithField(genSKEnv, genSK.Hex()).
+			WithField(chainSKEnv, genSK.Hex()).
 			Fatal("Failed to read secret key from ENV.")
 	}
 

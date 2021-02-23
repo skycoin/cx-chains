@@ -13,19 +13,22 @@ import (
 )
 
 const (
-	// ENV for genesis secret key.
+	// genSKEnv is the ENV for genesis secret key.
 	genSKEnv = "CXCHAIN_GEN_SK"
+
+	// chainSKEnv is the ENV for chain secret key.
+	chainSKEnv = "CXCHAIN_SK"
 )
 
 var ErrNoSKProvided = errors.New("no secret key provided")
 
-// parseGenesisSKEnv parses secret key from CXCHAIN_SECRET_KEY env.
+// parseSKEnv parses secret key from CXCHAIN_SECRET_KEY env.
 // The secret key can be null.
-func parseGenesisSKEnv() (cipher.SecKey, error) {
-	if skStr, ok := os.LookupEnv(genSKEnv); ok {
+func parseSKEnv(envKey string) (cipher.SecKey, error) {
+	if skStr, ok := os.LookupEnv(envKey); ok {
 		sk, err := cipher.SecKeyFromHex(skStr)
 		if err != nil {
-			return cipher.SecKey{}, fmt.Errorf("failed to parse secret key defined in ENV '%s': %w", genSKEnv, err)
+			return cipher.SecKey{}, fmt.Errorf("failed to parse secret key defined in ENV '%s': %w", envKey, err)
 		}
 		return sk, nil
 	}

@@ -29,15 +29,21 @@ type runFlags struct {
 	nodeAddr string // CX Chain node address.
 }
 
-// printRunENVs prints ENVs in the 'run' help menu
-func printRunENVs(cmd *flag.FlagSet) {
+// printGenSKENV prints the ENV help menu containing 'genSKEnv'.
+func printGenSKENV(cmd *flag.FlagSet) {
 	cxutil.CmdPrintf(cmd, "ENVs:")
 	cxutil.CmdPrintf(cmd, "  $%s\n  \t%s", genSKEnv, "genesis secret key (hex), required if '-inject' flag is set")
 }
 
+// printChainSKENV prints the ENV help menu containing 'chainSKEnv'.
+func printChainSKENV(cmd *flag.FlagSet) {
+	cxutil.CmdPrintf(cmd, "ENVs:")
+	cxutil.CmdPrintf(cmd, "  $%s\n  \t%s", chainSKEnv, "chain secret key (hex) for registering chain and publishing blocks")
+}
+
 // readRunENVs parses ENVs specified for the 'run' subcommand
 func readRunENVs(specAddr cipher.Address) cipher.SecKey {
-	genSK, err := parseGenesisSKEnv()
+	genSK, err := parseSKEnv(genSKEnv)
 	if err != nil {
 		log.WithError(err).
 			WithField(genSKEnv, genSK.Hex()).
@@ -81,7 +87,7 @@ func processRunFlags(args []string) (runFlags, cxspec.ChainSpec, cipher.SecKey) 
 	f.cmd.Usage = func() {
 		usage := cxutil.DefaultUsageFormat("flags", "cx source files")
 		usage(f.cmd, nil)
-		printRunENVs(f.cmd)
+		printGenSKENV(f.cmd)
 	}
 
 	f.cmd.BoolVar(&f.debugLexer, "debug-lexer", f.debugLexer, "enable lexer debugging by printing all scanner tokens")

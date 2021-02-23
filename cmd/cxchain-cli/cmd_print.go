@@ -20,7 +20,7 @@ func processPrintFlags(args []string) printFlags {
 	// Specify default flag values.
 	f := printFlags{
 		cmd:      flag.NewFlagSet("cxchain-cli print", flag.ExitOnError),
-		in: cxspec.DefaultSpecFilepath,
+		in:       "skycoin.chain_keys.json", // TODO @evanlinjin: Find const for this value.
 		field:    "seckey",
 	}
 

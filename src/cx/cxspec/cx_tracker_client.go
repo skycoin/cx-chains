@@ -69,6 +69,8 @@ func (c *CXTrackerClient) AllSpecs(ctx context.Context) ([]SignedChainSpec, erro
 func (c *CXTrackerClient) SpecByGenesisHash(ctx context.Context, hash cipher.SHA256) (SignedChainSpec, error) {
 	log := c.log.WithField("func", "SpecByPK")
 
+	fmt.Println("What is the c.addr?", c.addr)
+
 	addr := fmt.Sprintf("%s/api/specs/%s", c.addr, hash.Hex())
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, addr, nil)
 	if err != nil {

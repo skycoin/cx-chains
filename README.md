@@ -56,15 +56,15 @@ Run publisher node with generated chain spec.
 * Obtain the chain secret key from generated `{coin}.chain_keys.json` file.
 ```bash
 $ export CXCHAIN_SK=$(cxchain-cli key -in skycoin.chain_keys.json -field "seckey")
-$ export CXCHAIN_PK=$(cxchain-cli key -in skycoin.chain_keys.json -field "pubkey")
-$ cxchain -chain "tracker:$CXCHAIN_PK" -enable-all-api-sets -data-dir ./master_node -port 6001 -web-interface-port 6421
+$ export CXCHAIN_HASH=$(cxchain-cli genesis -in skycoin.chain_spec.json)
+$ cxchain -chain "tracker:$CXCHAIN_HASH" -tracker "http://127.0.0.1:9091" -enable-all-api-sets -data-dir ./master_node -port 6001 -web-interface-port 6421
 ```
 
 Run client node with generated chain spec (use different data dir, and ports to publisher node).
 * As no `CXCHAIN_SK` is provided, a random key pair is generated for the node.
 ```bash
-$ export CXCHAIN_PK=$(cxchain-cli key -in skycoin.chain_keys.json -field "pubkey")
-$ cxchain -chain "tracker:$CXCHAIN_PK" -client -enable-all-api-sets -data-dir ./client_node -port 6002 -web-interface-port 6422
+$ export CXCHAIN_HASH=$(cxchain-cli genesis -in skycoin.chain_spec.json)
+$ cxchain -chain "tracker:$CXCHAIN_HASH" -tracker "http://127.0.0.1:9091" -client -enable-all-api-sets -data-dir ./client_node -port 6002 -web-interface-port 6422
 ```
 
 Run transaction against publisher node.

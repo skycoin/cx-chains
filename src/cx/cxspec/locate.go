@@ -145,8 +145,12 @@ func DefaultLocateConfig() LocateConfig {
 // It is called 'soft' parse because the existence of non-defined flags does not
 // result in failure.
 func (c *LocateConfig) SoftParse(args []string) {
-	c.CXChain = obtainFlagValue(args, "chain")
-	c.CXTracker = obtainFlagValue(args, "tracker")
+	if v, ok := obtainFlagValue(args, "chain"); ok {
+		c.CXChain = v
+	}
+	if v, ok := obtainFlagValue(args, "tracker"); ok {
+		c.CXTracker = v
+	}
 }
 
 // RegisterFlags ensures that the 'help' menu contains the locate flags and that
@@ -159,7 +163,7 @@ func (c *LocateConfig) RegisterFlags(fs *flag.FlagSet) {
 
 // TrackerClient generates a CX Tracker client based on the defined config.
 func (c *LocateConfig) TrackerClient() *CXTrackerClient {
-	return NewCXTrackerClient(c.Logger, c.HTTPClient, c.CXChain)
+	return NewCXTrackerClient(c.Logger, c.HTTPClient, c.CXTracker)
 }
 
 // LocateWithConfig locates a spec with a given locate config.
@@ -171,7 +175,7 @@ func LocateWithConfig(ctx context.Context, conf *LocateConfig) (ChainSpec, error
 	<< Helper functions >>
 */
 
-func obtainFlagValue(args []string, key string) string {
+func obtainFlagValue(args []string, key string) (string, bool) {
 	var (
 		keyPrefix1 = "-" + key
 		keyPrefix2 = keyPrefix1 + "="
@@ -185,13 +189,13 @@ func obtainFlagValue(args []string, key string) string {
 
 		// If there is no '=', the flag value is the next arg.
 		if a == "-"+key && i+1 < len(args) {
-			return args[i+1]
+			return args[i+1], true
 		}
 
 		if strings.HasPrefix(a, keyPrefix2) {
-			return strings.TrimPrefix(a, keyPrefix2)
+			return strings.TrimPrefix(a, keyPrefix2), true
 		}
 	}
 
-	return ""
+	return "", false
 }

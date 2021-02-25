@@ -162,6 +162,11 @@ func main() {
 	// Register and parse flags for cx chain spec.
 	spec := locateSpec()
 
+	cxspec.PopulateParamsModule(spec)
+
+	// Print spec.
+	log.Info(spec.PrintString())
+
 	// Register additional CLI flags.
 	cmd := flag.CommandLine
 	cmd.StringVar(&dmsgDiscAddr, "dmsg-disc", dmsgDiscAddr, "HTTP `ADDRESS` of dmsg discovery")

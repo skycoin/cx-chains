@@ -204,12 +204,14 @@ func (cs ChainSpec) ProcessedChainPubKey() cipher.PubKey {
 	return cs.chainPK
 }
 
-func (cs *ChainSpec) Print() {
+// PrintString prints an indented json representation of the chain spec.
+func (cs *ChainSpec) PrintString() string {
 	b, err := json.MarshalIndent(cs, "", "\t")
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(string(b))
+
+	return string(b)
 }
 
 // SpecHash returns the hashed spec object.

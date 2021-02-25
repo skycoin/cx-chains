@@ -69,7 +69,8 @@ $ cxchain -chain "tracker:$CXCHAIN_HASH" -tracker "http://127.0.0.1:9091" -clien
 
 Run transaction against publisher node.
 ```bash
-$ cxchain-cli run ./cx/examples/counter-tx.cx
+$ export CXCHAIN_HASH=$(cxchain-cli genesis -in skycoin.chain_spec.json)
+$ cxchain-cli run -chain "tracker:$CXCHAIN_HASH" -tracker "http://127.0.0.1:9091" ./cx/examples/counter-tx.cx
 ```
 
 Run transaction against client node and inject.

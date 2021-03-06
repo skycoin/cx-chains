@@ -75,7 +75,9 @@ $ cxchain-cli run -chain "tracker:$CXCHAIN_HASH" -tracker "http://127.0.0.1:9091
 
 Run transaction against client node and inject.
 ```bash
-$ CXCHAIN_GEN_SK={genesis_secret_key} cxchain-cli run -n "http://127.0.0.1:6422" -i ./cx/examples/counter-tx.cx
+$ export CXCHAIN_GEN_SK=$(cxchain-cli key -in skycoin.genesis_keys.json -field "seckey")
+$ export CXCHAIN_HASH=$(cxchain-cli genesis -in skycoin.chain_spec.json)
+$ cxchain-cli run -chain "tracker:$CXCHAIN_HASH" -tracker "http://127.0.0.1:9091" -node "http://127.0.0.1:6422" -inject ./cx/examples/counter-tx.cx
 ```
 
 ## Resources

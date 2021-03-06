@@ -161,10 +161,7 @@ func trackerUpdateLoop(nodeSK cipher.SecKey, nodeTCPAddr string, spec cxspec.Cha
 func main() {
 	// Register and parse flags for cx chain spec.
 	spec := locateSpec()
-
 	cxspec.PopulateParamsModule(spec)
-
-	// Print spec.
 	log.Info(spec.PrintString())
 
 	// Register additional CLI flags.

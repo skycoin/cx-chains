@@ -22,10 +22,6 @@ import (
 )
 
 const (
-	// ENV for chain spec filepath.
-	specFileEnv          = "CXCHAIN_SPEC_FILEPATH"
-	defaultChainSpecFile = "./skycoin.chain_spec.json"
-
 	// ENV for the chain secret key (in hex).
 	secKeyEnv = "CXCHAIN_SK"
 
@@ -33,7 +29,7 @@ const (
 	standaloneClientConfMode = "STANDALONE_CLIENT"
 )
 
-// These values should be populated by -ldflags on compilation
+// These values should be populated by -ldflags on compilation.
 var (
 	version  = "0.0.0"
 	commit   = ""
@@ -41,24 +37,32 @@ var (
 	confMode = "" // valid values: "STANDALONE_CLIENT", ""
 )
 
-// Logger.
+// log contains the main logger.
 var log = logging.MustGetLogger("main")
 
-// parseSpecFilepathEnv parses chain spec filename from CXCHAIN_SPEC_FILEPATH env.
-func parseSpecFilepathEnv() cxspec.ChainSpec {
-	specFilename, ok := os.LookupEnv(specFileEnv)
-	if !ok {
-		specFilename = defaultChainSpecFile
-	}
+// Additional flags.
+var (
+	dmsgDiscAddr = cxdmsg.DefaultDiscAddr     // dmsg discovery address
+	dmsgPort     = uint64(cxdmsg.DefaultPort) // dmsg listening port
+	forceClient  = false                      // more client mode (as opposed to publisher)
 
-	log.WithField("filename", specFilename).Info("Reading chain spec file...")
+	// specFlags contains default cx spec discovery flags
+	specFlags = cxspec.DefaultLocateConfig()
+)
 
-	spec, err := cxspec.ReadSpecFile(specFilename)
+// locateSpec locates the spec location either from a local spec file or from a
+// CX tracker instance.
+func locateSpec() cxspec.ChainSpec {
+	specFlags.RegisterFlags(flag.CommandLine)
+	specFlags.SoftParse(os.Args)
+
+	spec, err := cxspec.LocateWithConfig(context.Background(), &specFlags)
 	if err != nil {
-		log.WithError(err).Fatal("Failed to start node.")
+		log.WithError(err).
+			WithField("chain", specFlags.CXChain).
+			Fatal("Failed to find cx spec.")
 	}
 
-	cxspec.PopulateParamsModule(spec)
 	return spec
 }
 
@@ -68,7 +72,9 @@ func parseSecretKeyEnv() cipher.SecKey {
 	if skStr, ok := os.LookupEnv(secKeyEnv); ok {
 		sk, err := cipher.SecKeyFromHex(skStr)
 		if err != nil {
-			log.WithError(err).WithField("ENV", secKeyEnv).Fatal("Provided secret key is invalid.")
+			log.WithError(err).
+				WithField("ENV", secKeyEnv).
+				Fatal("Provided secret key is invalid.")
 		}
 		return sk
 	}
@@ -87,23 +93,11 @@ func ensureConfMode(conf *skycoin.NodeConfig) {
 	}
 }
 
-var (
-	trackerAddr  = "http://127.0.0.1:9091"    // cx tracker address
-	dmsgDiscAddr = cxdmsg.DefaultDiscAddr     // dmsg discovery address
-	dmsgPort     = uint64(cxdmsg.DefaultPort) // dmsg listening port
-)
-
-func init() {
-	cmd := flag.CommandLine
-	cmd.StringVar(&trackerAddr, "cx-tracker", trackerAddr, "HTTP `ADDRESS` of cx tracker")
-	cmd.StringVar(&dmsgDiscAddr, "dmsg-disc", dmsgDiscAddr, "HTTP `ADDRESS` of dmsg discovery")
-	cmd.Uint64Var(&dmsgPort, "dmsg-port", dmsgPort, "dmsg `PORT` number to listen on")
-}
-
+// trackerUpdateLoop updates the cx tracker of the current node state.
 func trackerUpdateLoop(nodeSK cipher.SecKey, nodeTCPAddr string, spec cxspec.ChainSpec) {
 	log := logging.MustGetLogger("cx_tracker_client")
 
-	client := cxspec.NewCXTrackerClient(log, nil, trackerAddr)
+	client := cxspec.NewCXTrackerClient(log, nil, specFlags.CXTracker)
 	nodePK := cipher.MustPubKeyFromSecKey(nodeSK)
 
 	block, err := spec.GenerateGenesisBlock()
@@ -165,9 +159,20 @@ func trackerUpdateLoop(nodeSK cipher.SecKey, nodeTCPAddr string, spec cxspec.Cha
 }
 
 func main() {
-	// Parse chain spec file and secret key from envs.
-	spec := parseSpecFilepathEnv() // Chain spec file (mandatory).
-	nodeSK := parseSecretKeyEnv()  // Secret Key file (mandatory).
+	// Register and parse flags for cx chain spec.
+	spec := locateSpec()
+	cxspec.PopulateParamsModule(spec)
+	log.Info(spec.PrintString())
+
+	// Register additional CLI flags.
+	cmd := flag.CommandLine
+	cmd.StringVar(&dmsgDiscAddr, "dmsg-disc", dmsgDiscAddr, "HTTP `ADDRESS` of dmsg discovery")
+	cmd.Uint64Var(&dmsgPort, "dmsg-port", dmsgPort, "dmsg `PORT` number to listen on")
+	cmd.BoolVar(&forceClient, "client", forceClient, "force client mode (even with master sk set)")
+
+	// Parse ENV for node secret key.
+	nodeSK := parseSecretKeyEnv()
+
 	var nodePK cipher.PubKey
 
 	// Node config: Init.
@@ -175,13 +180,12 @@ func main() {
 	ensureConfMode(&conf)
 
 	// Node config: Populate node config based on chain spec content.
-	if err := cxspec.PopulateNodeConfig(trackerAddr, spec, &conf); err != nil {
+	if err := cxspec.PopulateNodeConfig(specFlags.CXTracker, spec, &conf); err != nil {
 		log.WithError(err).Fatal("Failed to parse from chain spec file.")
 	}
 
-	// Node config: Check node secret key.
+	// Node config: Ensure node keys are set.
 	//	- If node secret key is null, randomly generate one.
-	//	- If node secret key generates spec's chain pk, it is also the chain's publisher node.
 	if nodeSK.Null() {
 		nodePK, nodeSK = cipher.GenerateKeyPair()
 		log.WithField("node_pk", nodePK.Hex()).
@@ -190,12 +194,17 @@ func main() {
 	if err := nodeSK.Verify(); err != nil {
 		log.WithError(err).Fatal("Failed to verify provided node secret key.")
 	}
-	if nodePK = cipher.MustPubKeyFromSecKey(nodeSK); nodePK == spec.ProcessedChainPubKey() {
+	nodePK = cipher.MustPubKeyFromSecKey(nodeSK)
+
+	// Node config: Enable publisher mode if conditions are met.
+	// - Skip if 'forceClient' is set.
+	// - Skip if 'nodePK' is not equal to chain spec's PK.
+	if !forceClient && nodePK == spec.ProcessedChainPubKey() {
 		conf.BlockchainSeckeyStr = nodeSK.Hex()
 		conf.RunBlockPublisher = true
 	}
 
-	// Node config: Parse flag set.
+	// Node config: Register node flags and parse entire flag set.
 	conf.RegisterFlags(flag.CommandLine)
 	flag.Parse()
 
@@ -208,7 +217,7 @@ func main() {
 		},
 	}, log)
 
-	// This is, despite the name, post-processing and not "parsing".
+	// This is post-processing and not "parsing" (despite the name).
 	// Do not get confused. I did not name this function. <3 @evanlinjin
 	if err := coin.ParseConfig(flag.CommandLine); err != nil {
 		log.Error(err)
@@ -219,35 +228,43 @@ func main() {
 	defer close(gwCh)
 
 	go func() {
+		// await gateway to be loaded and ready
 		gw, ok := <-gwCh
 		if !ok {
 			return
 		}
 
 		// Run cx tracker loop.
+		// - Node params are uploaded to the tracker.
+		// - Send keepalive requests on regular intervals.
+		// 'addr' is the daemon IP address
 		dConf := gw.DaemonConfig()
 		addr := fmt.Sprintf("%s:%d", dConf.Address, dConf.Port)
 		go trackerUpdateLoop(nodeSK, addr, spec)
 
+		// Prepare API to be served via dmsg.
+		dmsgAPI := &cxdmsg.API{
+			Version:   version,
+			NodeConf:  conf,
+			ChainSpec: spec,
+			Gateway:   gw,
+		}
+
+		// Prepare dmsg config.
+		dmsgConf := &cxdmsg.Config{
+			PK:       cipher2.PubKey(nodePK),
+			SK:       cipher2.SecKey(nodeSK),
+			DiscAddr: dmsgDiscAddr,
+			DmsgPort: uint16(dmsgPort),
+		}
+
 		// Run dmsg loop.
-		cxdmsg.ServeDmsg(
-			context.Background(),
-			logging.MustGetLogger("dmsgC"),
-			&cxdmsg.Config{
-				PK:       cipher2.PubKey(nodePK),
-				SK:       cipher2.SecKey(nodeSK),
-				DiscAddr: dmsgDiscAddr,
-				DmsgPort: uint16(dmsgPort),
-			},
-			&cxdmsg.API{
-				Version:   version,
-				NodeConf:  conf,
-				ChainSpec: spec,
-				Gateway:   gw,
-			},
-		)
+		dmsgCtx := context.Background()
+		dmsgLog := logging.MustGetLogger("dmsgC")
+		cxdmsg.ServeDmsg(dmsgCtx, dmsgLog, dmsgConf, dmsgAPI)
 	}()
 
+	// Run main daemon.
 	if err := coin.Run(spec.RawGenesisProgState(), gwCh); err != nil {
 		os.Exit(1)
 	}

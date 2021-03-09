@@ -35,9 +35,9 @@ You will need to specify an address of a `cx-tracker` for a `cxchain` instance t
 
 *This local environment has two `cxchain` instances and a `cx-tracker`.*
 
-Start `cx-tracker` with default setting.
+Start `cx-tracker`.
 ```bash
-$ cx-tracker
+$ cx-tracker -addr ":9091"
 ```
 
 Generate new chain spec (assuming that the repository root is your working directory).
@@ -45,26 +45,40 @@ Generate new chain spec (assuming that the repository root is your working direc
 $ cxchain-cli new ./cx/examples/counter-bc.cx
 ```
 
+Post chain spec to `cx-tracker`.
+```bash
+$ export CXCHAIN_SK=$(cxchain-cli key -in skycoin.chain_keys.json -field "seckey")
+$ cxchain-cli post -t "http://127.0.0.1:9091" -s skycoin.chain_spec.json
+```
+
+At this point, you can head to [http://127.0.0.1:9091/api/specs](http://127.0.0.1:9091/api/specs) to see whether the spec is posted to `cx-tracker`.
+
 Run publisher node with generated chain spec.
 * Obtain the chain secret key from generated `{coin}.chain_keys.json` file.
 ```bash
-$ CXCHAIN_SK=publisher_secret_key cxchain -enable-all-api-sets
+$ export CXCHAIN_SK=$(cxchain-cli key -in skycoin.chain_keys.json -field "seckey")
+$ export CXCHAIN_HASH=$(cxchain-cli genesis -in skycoin.chain_spec.json)
+$ cxchain -chain "tracker:$CXCHAIN_HASH" -tracker "http://127.0.0.1:9091" -enable-all-api-sets -data-dir ./master_node -port 6001 -web-interface-port 6421
 ```
 
 Run client node with generated chain spec (use different data dir, and ports to publisher node).
 * As no `CXCHAIN_SK` is provided, a random key pair is generated for the node.
 ```bash
-$ cxchain -enable-all-api-sets -data-dir "$HOME/.cxchain/skycoin_client" -port 6002 -web-interface-port 6422
+$ export CXCHAIN_HASH=$(cxchain-cli genesis -in skycoin.chain_spec.json)
+$ cxchain -chain "tracker:$CXCHAIN_HASH" -tracker "http://127.0.0.1:9091" -client -enable-all-api-sets -data-dir ./client_node -port 6002 -web-interface-port 6422
 ```
 
 Run transaction against publisher node.
 ```bash
-$ cxchain-cli run ./cx/examples/counter-tx.cx
+$ export CXCHAIN_HASH=$(cxchain-cli genesis -in skycoin.chain_spec.json)
+$ cxchain-cli run -chain "tracker:$CXCHAIN_HASH" -tracker "http://127.0.0.1:9091" ./cx/examples/counter-tx.cx
 ```
 
 Run transaction against client node and inject.
 ```bash
-$ CXCHAIN_GEN_SK=genesis_secret_key cxchain-cli run -n "http://127.0.0.1:6422" -i ./cx/examples/counter-tx.cx
+$ export CXCHAIN_GEN_SK=$(cxchain-cli key -in skycoin.genesis_keys.json -field "seckey")
+$ export CXCHAIN_HASH=$(cxchain-cli genesis -in skycoin.chain_spec.json)
+$ cxchain-cli run -chain "tracker:$CXCHAIN_HASH" -tracker "http://127.0.0.1:9091" -node "http://127.0.0.1:6422" -inject ./cx/examples/counter-tx.cx
 ```
 
 ## Resources

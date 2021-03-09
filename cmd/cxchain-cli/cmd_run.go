@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"os"
@@ -28,42 +29,65 @@ type runFlags struct {
 	nodeAddr string // CX Chain node address.
 }
 
+// printGenSKENV prints the ENV help menu containing 'genSKEnv'.
+func printGenSKENV(cmd *flag.FlagSet) {
+	cxutil.CmdPrintf(cmd, "ENVs:")
+	cxutil.CmdPrintf(cmd, "  $%s\n  \t%s", genSKEnv, "genesis secret key (hex), required if '-inject' flag is set")
+}
+
+// printChainSKENV prints the ENV help menu containing 'chainSKEnv'.
+func printChainSKENV(cmd *flag.FlagSet) {
+	cxutil.CmdPrintf(cmd, "ENVs:")
+	cxutil.CmdPrintf(cmd, "  $%s\n  \t%s", chainSKEnv, "chain secret key (hex) for registering chain and publishing blocks")
+}
+
+// readRunENVs parses ENVs specified for the 'run' subcommand
+func readRunENVs(specAddr cipher.Address) cipher.SecKey {
+	genSK, err := parseSKEnv(genSKEnv)
+	if err != nil {
+		log.WithError(err).
+			WithField(genSKEnv, genSK.Hex()).
+			Fatal("Failed to read secret key from ENV.")
+	}
+
+	genAddr, err := cipher.AddressFromSecKey(genSK)
+	if err != nil {
+		log.WithError(err).
+			WithField(genSKEnv, genSK.Hex()).
+			Fatal("Failed to extract genesis address.")
+	}
+
+	if genAddr != specAddr {
+		log.WithField(genSKEnv, genSK.Hex()).
+			Fatal("Provided genesis secret key does not match genesis address from chain spec.")
+	}
+
+	return genSK
+}
+
 func processRunFlags(args []string) (runFlags, cxspec.ChainSpec, cipher.SecKey) {
-	if err := globals.specErr; err != nil {
-		log.WithError(err).Fatal()
-	}
-	spec := globals.spec
-	genSK := globals.genSK
-
-	// Check genesis secret key.
-	if !genSK.Null() {
-		genAddr, err := cipher.AddressFromSecKey(genSK)
-		if err != nil {
-			log.WithError(err).
-				WithField(genSKEnv, genSK.Hex()).
-				Fatal("Failed to extract genesis address.")
-		}
-
-		if specAddr := cipher.MustDecodeBase58Address(spec.GenesisAddr); genAddr != specAddr {
-			log.WithField(genSKEnv, genSK.Hex()).
-				Fatal("Provided genesis secret key does not match genesis address from chain spec.")
-		}
-	}
+	cmd := flag.NewFlagSet("cxchain-cli run", flag.ExitOnError)
+	spec := processSpecFlags(context.Background(), cmd, args)
 
 	f := runFlags{
-		cmd: flag.NewFlagSet("cxchain-cli run", flag.ExitOnError),
+		cmd: cmd,
 
 		debugLexer:   false,
 		debugProfile: 0,
 		MemoryFlags:  cxflags.DefaultMemoryFlags(),
 
-		inject:   false,
+		inject: false,
+
+		// TODO @evanlinjin: Find a way to set this later on.
+		// TODO @evanlinjin: This way, we would not need to call '.Locate' so
+		// TODO @evanlinjin: early within processSpecFlags()
 		nodeAddr: fmt.Sprintf("http://127.0.0.1:%d", spec.Node.WebInterfacePort),
 	}
 
 	f.cmd.Usage = func() {
 		usage := cxutil.DefaultUsageFormat("flags", "cx source files")
 		usage(f.cmd, nil)
+		printGenSKENV(f.cmd)
 	}
 
 	f.cmd.BoolVar(&f.debugLexer, "debug-lexer", f.debugLexer, "enable lexer debugging by printing all scanner tokens")
@@ -81,11 +105,10 @@ func processRunFlags(args []string) (runFlags, cxspec.ChainSpec, cipher.SecKey) 
 		os.Exit(1)
 	}
 
-	// Check stuff.
-	if f.inject && globals.genSKErr != nil {
-		log.WithError(globals.genSKErr).
-			WithField("ENV", genSKEnv).
-			Fatal("Genesis secret key should be provided to inject transaction.")
+	// Ensure genesis secret key is provided if 'inject' flag is set.
+	var genSK cipher.SecKey
+	if f.inject {
+		genSK = readRunENVs(cipher.MustDecodeBase58Address(spec.GenesisAddr))
 	}
 
 	// Log stuff.

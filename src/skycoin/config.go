@@ -39,6 +39,10 @@ type NodeConfig struct {
 	// Name of the coin
 	CoinName string
 
+	// TODO @evanlinjin: Define this in a separate struct.
+	// Location string for cx chain spec (check /src/cx/cxspec module).
+	// CXChain string
+
 	// Disable peer exchange
 	DisablePEX bool
 	// Download peer list
@@ -489,7 +493,7 @@ func validateAPISets(opt string, apiSets []string) error {
 		case "":
 			continue
 		default:
-			return fmt.Errorf("Invalid value in %s: %q", opt, k)
+			return fmt.Errorf("invalid value in %s: %q", opt, k)
 		}
 	}
 	return nil
@@ -501,6 +505,7 @@ func (c *NodeConfig) RegisterFlags(fs *flag.FlagSet) {
 		fs = flag.CommandLine
 	}
 	fs.BoolVar(&help, "help", false, "Show help")
+
 	fs.BoolVar(&c.DisablePEX, "disable-pex", c.DisablePEX, "disable PEX peer discovery")
 	fs.BoolVar(&c.DownloadPeerList, "download-peerlist", c.DownloadPeerList, "download a peers.txt from -peerlist-url")
 	fs.StringVar(&c.PeerListURL, "peerlist-url", c.PeerListURL, "with -download-peerlist=true, download a peers.txt file from this url")

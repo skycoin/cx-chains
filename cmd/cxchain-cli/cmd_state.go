@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/hex"
 	"flag"
 	"fmt"
@@ -25,13 +26,11 @@ type stateFlags struct {
 }
 
 func processStateFlags(args []string) (stateFlags, cipher.Address) {
-	if err := globals.specErr; err != nil {
-		log.WithError(err).Fatal()
-	}
-	spec := globals.spec
+	cmd := flag.NewFlagSet("cxchain-cli state", flag.ExitOnError)
+	spec := processSpecFlags(context.Background(), cmd, args)
 
 	f := stateFlags{
-		cmd:         flag.NewFlagSet("cxchain-cli state", flag.ExitOnError),
+		cmd:         cmd,
 		MemoryFlags: cxflags.DefaultMemoryFlags(),
 		nodeAddr:    fmt.Sprintf("http://127.0.0.1:%d", spec.Node.WebInterfacePort),
 		appAddr:     cipher.MustDecodeBase58Address(spec.GenesisAddr).String(),

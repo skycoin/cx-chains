@@ -15,10 +15,11 @@ CX Chain requires [Golang](https://golang.org/) to compile (version `1.14+`). De
 To build `cxchain`, the typical Golang binary build process applies. The following command builds `cxchain` and `cxchain-cli` into the target directory specified by the `GOBIN` env.
 
 ```bash
+$ git clone git@github.com:skycoin/cx-chains.git && cd cx-chains
 $ go install ./cmd/...
 ```
 
-This command is also available as a `Makefile` target.
+The `go install` command is also available as a `Makefile` target.
 
 ```bash
 $ make install
@@ -39,7 +40,7 @@ Start `cx-tracker`.
 $ cx-tracker -addr ":9091"
 ```
 
-Generate new chain spec.
+Generate new chain spec (assuming that the repository root is your working directory).
 ```bash
 $ cxchain-cli new ./cx/examples/counter-bc.cx
 ```
